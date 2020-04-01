@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+                    <div class="panel panel-info" style="margin-top:50px;">
+                        <div class="panel-heading">
+                            <h3>售后评价</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form onsubmit="return false">
+                                <div class="form-group">
+                                    <label for="comments">商品评论</label>
+                                    <input class="form-control" type="text" id="comments" />
+                                </div>
+                                <div class="form-group">
+                                    <input class="btn btn-danger" type="button" id="attck" value="会被攻击" />
+                                    <input class="btn btn-primary" type="button" id="security" value="我很安全" />
+                                </div>
+                            </form>
+                            <ul class="list-group">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/node_modules/jquery/dist/jquery.js"></script>
+<script>
+    // 反射型 XSS 攻击
+    $(document).ready(function () {
+        $('#attck').click(function () {
+            let commend = $('#comments').val();
+            //没有对输入内容进行过滤
+            if ($.trim(commend)) {
+                $('.list-group').append(`<li class="list-group-item">${commend}</li>`);
+                $('#comments').val('');
+            }
+        });
+        //Html 编码
+        function encodeHtml(str) {
+            return str.replace(/"/g, '&quot;')
+                    .replace(/'/g, '&apos;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+        }
+        $('#security').click(function () {
+            let commend = $('#comments').val();
+            //对输入内容进行转义
+            //如果是url地址，可以直接使用 encodeURIComponent 进行转义
+            if ($.trim(commend)) {
+                $('.list-group').append(`<li class="list-group-item">${encodeHtml(commend)}</li>`);
+                $('#comments').val('');
+            }
+        });
+    });
+
+</script>
+</html>
