@@ -12,20 +12,24 @@
     <script>
         // 防抖 在指定时间内连续触发会重置触发
         function fangdou (ms) {
-        	let ctime = 0
-            
+            let time = null
+
+            // 无等待任务 则设置等待任务
+            // 否则清空等待任务 重置值
             return function () {
 				return new Promise((resolve, reject) => {
-					const now = Date.now()
-
-					now - ctime >= ms ? resolve() : reject()
-
-					ctime = now
+				    if (time === null) {
+                        time = setTimeout(resolve, ms)
+                    } else {
+				        clearTimeout(time)
+                        time = null
+                        reject()
+                    }
 				})
 			}
         }
         
-        const fangdouInstance = fangdou(100)
+        const fangdouInstance = fangdou(1000)
         fd.oninput = function () {
 			fangdouInstance().then(() => {
 				console.log(1)
