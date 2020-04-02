@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>类型判断</title>
+</head>
+<body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+    <!--  getType  -->
+    <script>
+        let types = {}
+        'Date Error RegExp Number String Boolean Function Object Array Null Undefined Symbol'.split(' ').forEach(a => {
+            types[`[object ${a}]`] = a.toLocaleLowerCase()
+        })
+
+        function getType (v) {
+            if (v == null) return `${v}`
+
+            return types[Object.prototype.toString.call(v)]
+        }
+        //
+        // console.log(getType(Symbol(1)))
+        // console.log(getType(new Date))
+        // console.log(getType(new Error))
+        // console.log(getType(new RegExp('')))
+        // console.log(getType(1))
+        // console.log(getType('1'))
+        // console.log(getType(true))
+        // console.log(getType(function () {}))
+        // console.log(getType({}))
+        // console.log(getType([]))
+        // console.log(getType(null))
+        // console.log(getType(undefined))
+    </script>
+
+    <!--  isPlainObject  -->
+    <script>
+        // function isPlainObject (obj) {
+        //     const p = Object.getPrototypeOf(obj)
+        //     return !p || (p.hasOwnProperty('constructor') ?  p.constructor === Object.prototype.constructor : false)
+        // }
+
+        // function Person(name) {
+        //     this.name = name
+        // }
+        // Person.prototype.constructor = Object.prototype.constructor
+        //
+        // const test = new Person('yayu')
+        //
+        // console.log($.isPlainObject(test))
+        // console.log($.isPlainObject({})) // true
+        // console.log($.isPlainObject(new Object)) // true
+        // console.log($.isPlainObject(Object.create(null))); // true
+        // console.log($.isPlainObject(Object.assign({a: 1}, {b: 2}))); // true
+        // console.log($.isPlainObject(Object.create({}))); // false
+        // console.log($.isPlainObject(window)); // false
+        //
+        // console.log('\n---------------\n\n')
+        //
+        // console.log(isPlainObject(test))
+        // console.log(isPlainObject({})) // true
+        // console.log(isPlainObject(new Object)) // true
+        // console.log(isPlainObject(Object.create(null))); // true
+        // console.log(isPlainObject(Object.assign({a: 1}, {b: 2}))); // true
+        // console.log(isPlainObject(Object.create({}))); // false
+        // console.log(isPlainObject(window)); // false
+    </script>
+
+    <!--  EmptyObject  -->
+    <script>
+        function isEmptyObject (v) {
+            if (getType(v) !== 'object') return false
+
+            // Jquery
+            for (let a in v) {
+                return false
+            }
+
+            return true
+        }
+        console.log($.isEmptyObject({a: 1}))
+        console.log($.isEmptyObject({}))
+        console.log($.isEmptyObject([]))
+        console.log($.isEmptyObject(1))
+        console.log($.isEmptyObject(''))
+        console.log($.isEmptyObject(true))
+        console.log($.isEmptyObject(undefined))
+        console.log($.isEmptyObject(null))
+        console.log('\n-------------------\n\n')
+        console.log(isEmptyObject({a: 1}))
+        console.log(isEmptyObject({}))
+        console.log(isEmptyObject([]))
+        console.log(isEmptyObject(1))
+        console.log(isEmptyObject(''))
+        console.log(isEmptyObject(true))
+        console.log(isEmptyObject(undefined))
+        console.log(isEmptyObject(null))
+    </script>
+</body>
+</html>
