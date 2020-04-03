@@ -69,33 +69,100 @@
 
     <!--  EmptyObject  -->
     <script>
-        function isEmptyObject (v) {
-            if (getType(v) !== 'object') return false
+        // function isEmptyObject (v) {
+        //     if (getType(v) !== 'object') return false
+        //
+        //     // Jquery
+        //     for (let a in v) {
+        //         return false
+        //     }
+        //
+        //     return true
+        // }
+        // console.log($.isEmptyObject({a: 1}))
+        // console.log($.isEmptyObject({}))
+        // console.log($.isEmptyObject([]))
+        // console.log($.isEmptyObject(1))
+        // console.log($.isEmptyObject(''))
+        // console.log($.isEmptyObject(true))
+        // console.log($.isEmptyObject(undefined))
+        // console.log($.isEmptyObject(null))
+        // console.log('\n-------------------\n\n')
+        // console.log(isEmptyObject({a: 1}))
+        // console.log(isEmptyObject({}))
+        // console.log(isEmptyObject([]))
+        // console.log(isEmptyObject(1))
+        // console.log(isEmptyObject(''))
+        // console.log(isEmptyObject(true))
+        // console.log(isEmptyObject(undefined))
+        // console.log(isEmptyObject(null))
+    </script>
 
-            // Jquery
-            for (let a in v) {
-                return false
-            }
+    <!--  isArrayLike  -->
+    <script>
+        // function isArrayLike (obj) {
+        //     if (!obj || typeof obj !== 'object') return false
+        //
+        //     return obj.length === 0
+        //         || obj.length > 0
+        //         && typeof obj.length === 'number'
+        //         && (obj.length - 1 in obj)
+        // }
+        //
+        // const testItems = [
+        //     document.querySelectorAll("html"),
+        //     [1,2,undefined],
+        //     [undefined, undefined, undefined],
+        //     {"0": "aa", "1": "bb", "length": 2},
+        //     {"0": "aa", "1": undefined, "length": 2},
+        //     {"0": "aa", "1": undefined, "length": 0},
+        //     document.body.children,
+        //     document.getElementsByClassName("test"),
+        //     new Uint8Array(10),
+        //     new String("foo"),
+        //
+        //     "----------",
+        //
+        //     // the ones after here are supposed to return false
+        //     {"0": "aa", "1": "bb", "length": "2"},
+        //     {"0": "aa", "1": "bb", "length": 3},
+        //     {"0": "aa", "1": "bb", "length": "hello"},
+        //     document,
+        //     function() {},
+        //     null,
+        //     1,
+        //     "foo",
+        //     undefined
+        // ];
+        //
+        // testItems.forEach(a => {
+        //     if (a === '----------') {
+        //         console.log(a)
+        //     } else {
+        //         console.log(isArrayLike(a))
+        //     }
+        // })
+    </script>
 
-            return true
+    <!-- isElement -->
+    <script>
+        function isElement (v) {
+            return v instanceof Element
         }
-        console.log($.isEmptyObject({a: 1}))
-        console.log($.isEmptyObject({}))
-        console.log($.isEmptyObject([]))
-        console.log($.isEmptyObject(1))
-        console.log($.isEmptyObject(''))
-        console.log($.isEmptyObject(true))
-        console.log($.isEmptyObject(undefined))
-        console.log($.isEmptyObject(null))
-        console.log('\n-------------------\n\n')
-        console.log(isEmptyObject({a: 1}))
-        console.log(isEmptyObject({}))
-        console.log(isEmptyObject([]))
-        console.log(isEmptyObject(1))
-        console.log(isEmptyObject(''))
-        console.log(isEmptyObject(true))
-        console.log(isEmptyObject(undefined))
-        console.log(isEmptyObject(null))
+
+        const tests = [null, false, true, 1, 1.23, 'aaa', [], ['aaa', 'bbb'], {}, {aaa: 'bbb'}, document.body.appendChild(document.createTextNode('aaa')), document.body.appendChild(document.createDocumentFragment()), document.body.appendChild(document.createElement('div')), document.createElementNS('http://www.w3.org/2000/svg', 'svg')]
+
+        tests.forEach(a => {
+            console.log(isElement(a))
+        })
+
+        isElement = function(obj) {
+            return !!(obj && obj.nodeType === 1);
+        }
+
+        tests.forEach(a => {
+            console.log(isElement(a))
+        })
     </script>
 </body>
 </html>
