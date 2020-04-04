@@ -1,4 +1,5 @@
 import './index.less'
+import './index.jpg'
 
 const test = new Promise((resolve, reject) => {
 	setTimeout(() => {

@@ -1,7 +1,18 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const path = require('path')
 
 module.exports = {
 	mode: "development",
+
+	entry: {
+		index: './src/index.js'
+	},
+
+	output: {
+		path: path.resolve(__dirname, 'dist'),
+		filename: 'bundle.[hash].js'
+	},
 
 	devtool: 'source-map',
 
@@ -54,6 +65,21 @@ module.exports = {
 					}
 				}, 'less-loader'],
 				exclude: /node_modules/
+			},
+
+			{
+				test: /\.(png|jpg|gif|jpeg|webp|svg|eot|ttf|woff|woff2)$/,
+				use: [
+					{
+						loader: 'url-loader',
+						options: {
+							limit: 10240, //10K
+							esModule: false,
+							outputPath: 'assets'
+						}
+					}
+				],
+				exclude: /node_modules/
 			}
 		]
 	},
@@ -68,6 +94,8 @@ module.exports = {
 				collapseWhitespace: false, //是否折叠空白
 			},
 			// hash: true //是否加上hash，默认是 false
-		})
+		}),
+
+		new CleanWebpackPlugin()
 	]
 }
