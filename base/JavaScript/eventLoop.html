@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>event-loop</title>
+</head>
+<body>
+<script>
+/*	console.log('script start');
+
+	setTimeout(function() {
+		console.log('setTimeout');
+	}, 0);
+
+	Promise.resolve().then(function() {
+		console.log('promise1');
+	}).then(function() {
+		console.log('promise2');
+	});
+
+	console.log('script end');*/
+	
+	/*
+	* script start
+	* script end
+	* promise1
+	* promise2
+	* setTimeout
+	* */
+</script>
+
+<script>
+/*	console.log('script start');
+
+	setTimeout(function() {
+		console.log('setTimeout');
+	}, 0);
+
+	Promise.resolve().then(function() {
+		console.log('promise1');
+	}).then(function() {
+		console.log('promise2');
+	})
+ 
+	console.log('script end');*/
+	/*
+	* Tasks setTimeout
+	* MicroTasks promise1 promise2
+	* Js Stack script start / script end
+	*
+	* script start
+	* script end
+	* promise1
+	* promise2
+	* setTimeout
+	* */
+</script>
+
+<style>
+    .outer {
+        background: #D4D4D4;
+        padding: 25px;
+        width: 92px;
+        margin: 0 auto;
+    }
+    
+    .inner {
+        background: #ADADAD;
+        padding: 46px;
+        width: 0;
+    }
+</style>
+<div class="outer">
+    <div class="inner"></div>
+</div>
+<script>
+	// Let's get hold of those elements
+	var outer = document.querySelector('.outer');
+	var inner = document.querySelector('.inner');
+
+	// Let's listen for attribute changes on the
+	// outer element
+	new MutationObserver(function() {
+		console.log('mutate');
+	}).observe(outer, {
+		attributes: true
+	});
+
+	// Here's a click listener…
+	function onClick() {
+		console.log('click');
+
+		setTimeout(function() {
+			console.log('timeout');
+		}, 0);
+
+		Promise.resolve().then(function() {
+			console.log('promise');
+		});
+
+		outer.setAttribute('data-random', Math.random());
+	}
+
+	// …which we'll attach to both elements
+	inner.addEventListener('click', onClick);
+	outer.addEventListener('click', onClick);
+	
+	// 有事件冒泡机制 解析方式 inner - outer
+    // click promise mutate click promise mutate timeout timeout
+
+    // 这个咋解释呢
+    // click click promise mutate promise timeout timeout
+	inner.click()
+</script>
+</body>
+</html>
