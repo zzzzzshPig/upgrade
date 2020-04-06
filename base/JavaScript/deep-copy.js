@@ -1,23 +1,12 @@
-let types = {}
-'Date Error RegExp Number String Boolean Function Object Array Null Undefined Symbol'.split(' ').forEach(a => {
-	types[`[object ${a}]`] = a.toLocaleLowerCase()
-})
-
-function getType (v) {
-	if (v == null) return `${v}`
-
-	return types[Object.prototype.toString.call(v)]
-}
+const {isObject, isArray} = require('./utils')
 
 function deepCopy (obj) {
-	const type = getType(obj)
-	if (type !== 'object' && type !== 'array') return obj
+	if (!isObject(obj) && !isArray(obj)) return obj
 
-	let res = type === 'object' ? {} : []
+	let res = isObject(obj) ? {} : []
 
 	for (let k in obj) {
-		let t = getType(obj[k])
-		if (t === 'object' || t === 'array') {
+		if (isObject(obj) || isArray(obj)) {
 			res[k] = deepCopy(obj[k])
 		} else {
 			res[k] = obj[k]
@@ -38,6 +27,7 @@ let a = {
 		e: 2
 	}]
 }
+
 let b = deepCopy(a)
 a.b.c++
 a.d[0]++
