@@ -49,7 +49,7 @@ class promise {
 
 	then (res, rej) {
 		if (!isFunction(res)) {
-			res = () => {}
+			res = (v) => {return v}
 		}
 
 		if (!isFunction(rej)) {
@@ -157,35 +157,11 @@ class promise {
 Promise = promise
 
 let p = new Promise((resolve, reject) => {
-	reject(3000)
+	resolve(3000)
 })
 
-p.then(res => {
-	console.log(res, 1)
-}, rej => {
-	console.log('error', 1)
-})
-
-p.then(res => {
+p.then().then(res => {
 	console.log(res, 2)
-}, rej => {
-	console.log('error', 2)
 })
-
-p.then(res => {
-	console.log(res, 3)
-}, rej => {
-	console.log('error', 3)
-})
-
-setTimeout(() => {
-	p.then((res) => {
-		console.log(res, 5)
-	}, err => {
-		throw 1
-	}).then((res) => {
-		console.log(res, 6)
-	})
-}, 2000)
 
 
