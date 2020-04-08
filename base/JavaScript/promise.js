@@ -1,4 +1,6 @@
-const {isFunction} = require('./utils')
+const {isFunction, getType} = require('./utils')
+const promiseAplusTests = require('promises-aplus-tests')
+const assert = require('assert')
 
 class promise {
 	constructor (fn) {
@@ -10,9 +12,12 @@ class promise {
 		this.thenRej = []
 
 		const resolve = (value) => {
-			if (this.status !== 'pending') return
+			if (value instanceof promise) {
+				return value.then(resolve, reject)
+			}
 
 			process.nextTick(() => {
+				if (this.status !== 'pending') return
 				this.status = 'resolve'
 				this.value = value
 
@@ -25,9 +30,8 @@ class promise {
 		}
 
 		const reject = (error) => {
-			if (this.status !== 'pending') return
-
 			process.nextTick(() => {
+				if (this.status !== 'pending') return
 				this.status = 'reject'
 				this.value = error
 
@@ -56,22 +60,58 @@ class promise {
 			rej = (err) => {throw err}
 		}
 
+		let promise2 = null
+
+		function resolvePromise (resolve, reject, value, v) {
+			if (value === v) {
+				return reject(new TypeError('Chaining cycle detected for promise!'))
+			}
+
+			if (v instanceof promise) {
+				v.then((res) => {
+					resolve(res)
+				}, rej => {
+					reject(rej)
+				})
+			}
+
+			// 返回值有then方法 会调用then
+			const type = getType(v)
+			if (type === 'object' || type === 'function') {
+				try {
+					let then = v.then
+					let status = 'pending'
+
+					if (isFunction(then)) {
+						then.call(v, function (v1) {
+							if (status !== 'pending') return
+							status = 'resolve'
+							return resolvePromise(resolve, reject, value, v1)
+						}, function (err) {
+							if (status !== 'pending') return
+							status = 'reject'
+							return reject(err)
+						})
+					} else {
+						resolve(v)
+					}
+				} catch (e) {
+					if (status !== 'pending') return
+					status = 'reject'
+					reject(e)
+				}
+			} else {
+				resolve(v)
+			}
+		}
+
 		if (this.status === 'pending') {
-			return new promise((resolve, reject) => {
+			return promise2 = new promise((resolve, reject) => {
 				this.thenRes.push((value) => {
 					try {
 						const v = res(value)
 
-						// promise,promise.resolve,promise.reject
-						if (v instanceof promise) {
-							v.then((res1) => {
-								resolve(res1)
-							}, rej1 => {
-								reject(rej1)
-							})
-						} else {
-							resolve(v)
-						}
+						resolvePromise(resolve, reject, promise2, v)
 					} catch (e) {
 						reject(e)
 					}
@@ -81,16 +121,7 @@ class promise {
 					try {
 						const v = rej(value)
 
-						// promise,promise.resolve,promise.reject
-						if (v instanceof promise) {
-							v.then((res1) => {
-								resolve(res1)
-							}, rej1 => {
-								reject(rej1)
-							})
-						} else {
-							resolve(v)
-						}
+						resolvePromise(resolve, reject, promise2, v)
 					} catch (e) {
 						reject(e)
 					}
@@ -98,20 +129,12 @@ class promise {
 			})
 		}
 		else if (this.status === 'resolve') {
-			return new promise((resolve, reject) => {
+			return promise2 = new promise((resolve, reject) => {
 				process.nextTick(() => {
 					try {
 						const v = res(this.value)
 
-						if (v instanceof promise) {
-							v.then((res1) => {
-								resolve(res1)
-							}, rej1 => {
-								reject(rej1)
-							})
-						} else {
-							resolve(v)
-						}
+						resolvePromise(resolve, reject, promise2, v)
 					} catch (e) {
 						reject(e)
 					}
@@ -119,20 +142,12 @@ class promise {
 			})
 		}
 		else {
-			return new promise((resolve, reject) => {
+			return promise2 = new promise((resolve, reject) => {
 				process.nextTick(() => {
 					try {
 						const v = rej(this.value)
 
-						if (v instanceof promise) {
-							v.then((res1) => {
-								resolve(res1)
-							}, rej1 => {
-								reject(rej1)
-							})
-						} else {
-							resolve(v)
-						}
+						resolvePromise(resolve, reject, promise2, v)
 					} catch (e) {
 						reject(e)
 					}
@@ -140,6 +155,10 @@ class promise {
 			})
 		}
 	}
+
+	catch (rej) {
+	    return this.then(null, rej)
+    }
 
 	static resolve (res) {
 		return new promise(resolve => {
@@ -154,14 +173,49 @@ class promise {
 	}
 }
 
-Promise = promise
+Promise = Promise
 
-let p = new Promise((resolve, reject) => {
-	resolve(3000)
+function xFactory() {
+	let x =  {
+		then: function (onFulfilled, onRejected) {
+			onFulfilled({
+				then: function (onFulfilled) {
+					onFulfilled(null);
+				}
+			})
+		}
+	}
+
+	return x
+}
+
+var test = new Promise((resolve, reject) => {
+	resolve({})
+}).then(function () {
+	return xFactory()
 })
 
-p.then().then(res => {
-	console.log(res, 2)
+test.then(function (res) {
 })
 
+if (true) {
+	promiseAplusTests({
+		deferred () {
+			let reject = null
+			let resolve = null
+			const p = new promise((res, rej) => {
+				resolve = res
+				reject = rej
+			})
 
+			return {
+				promise: p,
+				resolve: resolve,
+				reject: reject
+			}
+		}
+	}, function (err) {
+		console.log(err)
+	})
+
+}
