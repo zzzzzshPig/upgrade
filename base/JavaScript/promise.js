@@ -1,94 +1,167 @@
 const {isFunction} = require('./utils')
 
-class Promise {
-    constructor (fn) {
-        if (!isFunction(fn)) throw new TypeError('Promise resolver undefined is not a function')
+class promise {
+	constructor (fn) {
+		if (!isFunction(fn)) throw TypeError('Promise resolver undefined is not a function')
 
-        this.status = 'pending'
-        this.value = undefined
-        this.thenRes = undefined
-        this.thenRej = undefined
+		this.status = 'pending'
+		this.value = undefined
+		this.thenRes = []
+		this.thenRej = []
 
-        const resolve = (res) => {
-            if (this.status !== 'pending') return
-            this.status = 'resolve'
-            this.value = res
+		const resolve = (value) => {
+			if (this.status !== 'pending') return
 
-            process.nextTick(() => {
-                if (isFunction(this.thenRes)) this.thenRes(this.value)
-            })
-        }
+			process.nextTick(() => {
+				this.status = 'resolve'
+				this.value = value
 
-        const reject = (err) => {
-            if (this.status !== 'pending') return
-            this.status = 'reject'
-            this.value = err
+				for (let res of this.thenRes) {
+					res(this.value)
+				}
 
-            process.nextTick(() => {
-                if (isFunction(this.thenRej)) this.thenRej(this.value)
-            })
-        }
+				this.thenRes = null
+			})
+		}
 
-        try {
-            fn(resolve, reject)
-        } catch (e) {
-            reject(e)
-        }
-    }
+		const reject = (error) => {
+			if (this.status !== 'pending') return
 
-    // [res], [err]
-    then (res, rej) {
-        return new Promise((resolve, reject) => {
-            this.thenRes = (value) => {
-                try {
-                    if (isFunction(res)) {
-                        let thenValue = res(value)
-                        thenValue = thenValue === undefined ? value : thenValue
+			process.nextTick(() => {
+				this.status = 'reject'
+				this.value = error
 
-                        // value is promise.reject then...
-                        resolve(thenValue)
-                    } else {
-                        resolve(value)
-                    }
-                } catch (e) {
-                    reject(e)
-                }
-            }
+				for (let rej of this.thenRej) {
+					rej(this.value)
+				}
 
-            this.thenRej = (value) => {
-                try {
-                    if (isFunction(rej)) {
-                        let thenValue = rej(value)
-                        thenValue = thenValue === undefined ? value : thenValue
+				if (this.thenRej.length === 0) throw error
+				this.thenRej = null
+			})
+		}
 
-                        // value is promise.resolve then...
-                        reject(thenValue)
-                    } else {
-                        reject(value)
-                    }
-                } catch (e) {
-                    reject(e)
-                }
-            }
-        })
-    }
+		try {
+			fn(resolve, reject)
+		} catch (e) {
+			reject(e)
+		}
+	}
+
+	then (res, rej) {
+		if (!isFunction(res)) {
+			res = (v) => {return v}
+		}
+
+		if (!isFunction(rej)) {
+			rej = (err) => {throw err}
+		}
+
+		if (this.status === 'pending') {
+			return new promise((resolve, reject) => {
+				this.thenRes.push((value) => {
+					try {
+						const v = res(value)
+
+						// promise,promise.resolve,promise.reject
+						if (v instanceof promise) {
+							v.then((res1) => {
+								resolve(res1)
+							}, rej1 => {
+								reject(rej1)
+							})
+						} else {
+							resolve(v)
+						}
+					} catch (e) {
+						reject(e)
+					}
+				})
+
+				this.thenRej.push((value) => {
+					try {
+						const v = rej(value)
+
+						// promise,promise.resolve,promise.reject
+						if (v instanceof promise) {
+							v.then((res1) => {
+								resolve(res1)
+							}, rej1 => {
+								reject(rej1)
+							})
+						} else {
+							resolve(v)
+						}
+					} catch (e) {
+						reject(e)
+					}
+				})
+			})
+		}
+		else if (this.status === 'resolve') {
+			return new promise((resolve, reject) => {
+				process.nextTick(() => {
+					try {
+						const v = res(this.value)
+
+						if (v instanceof promise) {
+							v.then((res1) => {
+								resolve(res1)
+							}, rej1 => {
+								reject(rej1)
+							})
+						} else {
+							resolve(v)
+						}
+					} catch (e) {
+						reject(e)
+					}
+				})
+			})
+		}
+		else {
+			return new promise((resolve, reject) => {
+				process.nextTick(() => {
+					try {
+						const v = rej(this.value)
+
+						if (v instanceof promise) {
+							v.then((res1) => {
+								resolve(res1)
+							}, rej1 => {
+								reject(rej1)
+							})
+						} else {
+							resolve(v)
+						}
+					} catch (e) {
+						reject(e)
+					}
+				})
+			})
+		}
+	}
+
+	static resolve (res) {
+		return new promise(resolve => {
+			resolve(res)
+		})
+	}
+
+	static reject (rej) {
+		return new promise((resolve, reject) => {
+			reject(rej)
+		})
+	}
 }
 
-const p = new Promise((resolve, reject) => {
-    resolve('resolve')
+Promise = promise
+
+let p = new Promise((resolve, reject) => {
+	resolve(3000)
 })
 
-p.then((res) => {
-    console.log(res)
-}).then((res) => {
-    console.log(res)
-}).then((res) => {
-    console.log(res)
-}).then((res) => {
-    console.log(res)
-    throw 1
+p.then().then(res => {
+	console.log(res, 2)
 })
 
-setTimeout(() => {
-    p.then(() => {}, err => {console.log(err)})
-}, 1000)
+
