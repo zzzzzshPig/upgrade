@@ -75,13 +75,15 @@ class promise {
 				})
 			}
 
-			// 返回值有then方法 会调用then
+			// 处理 thenable
 			const type = getType(v)
 			if (type === 'object' || type === 'function') {
+				let status = 'pending'
+
 				try {
 					let then = v.then
-					let status = 'pending'
 
+					// 是thenable
 					if (isFunction(then)) {
 						then.call(v, function (v1) {
 							if (status !== 'pending') return
@@ -173,32 +175,28 @@ class promise {
 	}
 }
 
-Promise = Promise
-
-function xFactory() {
-	let x =  {
-		then: function (onFulfilled, onRejected) {
-			onFulfilled({
-				then: function (onFulfilled) {
-					onFulfilled(null);
-				}
-			})
+Promise = promise
+let yFac = function (value) {
+	return {
+		then: function (onFulfilled) {
+			onFulfilled(value);
 		}
-	}
-
-	return x
+	};
 }
 
 var test = new Promise((resolve, reject) => {
 	resolve({})
-}).then(function () {
-	return xFactory()
+}).then(() => {
+	return {
+		then (res) {
+			res(Promise.reject(1))
+		}
+	}
+}).then(function (res) {
+	console.log(res)
 })
 
-test.then(function (res) {
-})
-
-if (true) {
+if (false) {
 	promiseAplusTests({
 		deferred () {
 			let reject = null
