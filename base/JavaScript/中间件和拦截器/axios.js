@@ -1,5 +1,4 @@
 // axios拦截器
-
 class Interceptor {
 	constructor () {
 		this.queue = []
