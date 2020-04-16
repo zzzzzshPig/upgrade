@@ -1,4 +1,4 @@
-const {isFunction, getType} = require('./utils')
+const {isFunction, getType} = require('../utils')
 const promiseAplusTests = require('promises-aplus-tests')
 const assert = require('assert')
 
