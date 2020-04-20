@@ -1,11 +1,7 @@
 class Vue {
 	constructor (options) {
-		this.data = options.data()
+		this.data = options.data
 		this.methods = options.methods
-
-		for (let key in this.methods) {
-			this.methods[key] = this.methods[key].bind(this)
-		}
 		// ...
 	}
 }
@@ -15,9 +11,18 @@ class Vue {
 */
 class Component {
 	constructor (Vue, options) {
-		Vue.components = options.components
-		Vue.beforeRouteEnter = options.beforeRouteEnter
-		Vue.filters = options.filters
+		this.components = options.components
+		this.beforeRouteEnter = options.beforeRouteEnter
+		this.filters = options.filters
+
+		const data = Vue.data()
+		for (let key in data) {
+			this[key] = data[key]
+		}
+
+		for (let key in Vue.methods) {
+			this[key] = Vue.methods[key]
+		}
 		// ...
 	}
 }
@@ -36,11 +41,11 @@ const app = new Vue({
 	}
 })
 
-new Component(app, {
+const app1 = new Component(app, {
 	components: {
 		modal: 'modal'
 	}
 })
 
-app.methods.changeTitle('装饰器模式真香')
-console.log(app.components.modal)
+app1.changeTitle('装饰器模式真香')
+console.log(app1, app)
