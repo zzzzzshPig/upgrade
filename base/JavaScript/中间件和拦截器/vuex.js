@@ -55,11 +55,11 @@ const store = new Store({
 
 store.subscribeAction({
     before: (action, state) => {
-        console.log(`before action ${action}, before count is ${state.count}`);
+        console.log(`before action ${action}, before count is ${state.count}`)
     },
     after: (action, state) => {
-        console.log(`after action ${action},  after count is ${state.count}`);
-    },
+        console.log(`after action ${action},  after count is ${state.count}`)
+    }
 })
 
 store.dispatch('changeCount', 2)

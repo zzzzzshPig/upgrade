@@ -1,34 +1,34 @@
-const {isObject, isArray} = require('./utils')
+const { isObject, isArray } = require('./utils')
 
 function deepCopy (obj) {
-	if (!isObject(obj) && !isArray(obj)) return obj
+    if (!isObject(obj) && !isArray(obj)) return obj
 
-	let res = isObject(obj) ? {} : []
+    const res = isObject(obj) ? {} : []
 
-	for (let k in obj) {
-		if (isObject(obj) || isArray(obj)) {
-			res[k] = deepCopy(obj[k])
-		} else {
-			res[k] = obj[k]
-		}
-	}
+    for (const k in obj) {
+        if (isObject(obj) || isArray(obj)) {
+            res[k] = deepCopy(obj[k])
+        } else {
+            res[k] = obj[k]
+        }
+    }
 
-	return res
+    return res
 }
 
-let a = {
-	b: {
-		c: 1,
-		cc: {
-			ccc: 2
-		}
-	},
-	d: [0, {
-		e: 2
-	}]
+const a = {
+    b: {
+        c: 1,
+        cc: {
+            ccc: 2
+        }
+    },
+    d: [0, {
+        e: 2
+    }]
 }
 
-let b = deepCopy(a)
+const b = deepCopy(a)
 a.b.c++
 a.d[0]++
 a.d[1].e++
