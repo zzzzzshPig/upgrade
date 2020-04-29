@@ -27,7 +27,8 @@
       "no-tabs": "off",
       "no-extend-native": "off",
       "camelcase": "off",
-      "no-new": "off"
+      "no-new": "off",
+      "no-undef-init": "off"
     },
     "extends": "standard",
     "parser": "babel-eslint"
