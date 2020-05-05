@@ -28,7 +28,8 @@
       "no-extend-native": "off",
       "camelcase": "off",
       "no-new": "off",
-      "no-undef-init": "off"
+      "no-undef-init": "off",
+      "no-unused-vars": "off"
     },
     "extends": "standard",
     "parser": "babel-eslint"
