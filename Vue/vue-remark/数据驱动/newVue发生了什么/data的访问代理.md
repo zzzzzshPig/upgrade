@@ -127,4 +127,4 @@ export function proxy (target: Object, sourceKey: string, key: string) {
 }
 ```
 
-> 这段代码将`this[key]`代理到`this[sourceKey][key]`，从而实现了将data,props,methods,computeds等挂载到this下访问
+> 这段代码将data下面的key和value挂载到了`this`下，同时将`this[key]`代理到`this[sourceKey][key]`，使得修改`this[xxx]`相当于修改`this._data[xxx]`，获取`this[xxx]`相当于获取`this._data[xxx]`，保证了data与_data的映射关系，对data的操作实际上是操作_data。
