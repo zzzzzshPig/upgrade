@@ -1,4 +1,4 @@
-> 本节我们重点关注`runtime+compiler`版本`Vue`的$mount实现，入口文件为 `entry-runtime-with-compiler`
+> 本节我们重点关注`runtime+compiler`版本`Vue`的$mount实现，入口文件为 `entry-runtime-with-compiler.js`
 
 ```
 const mount = Vue.prototype.$mount
