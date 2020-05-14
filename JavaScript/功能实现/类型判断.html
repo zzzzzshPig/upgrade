@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>类型判断</title>
+</head>
+<body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+    <!--  getType  -->
+    <script>
+        let types = {}
+        'Date Error RegExp Number String Boolean Function Object Array Null Undefined Symbol'.split(' ').forEach(a => {
+            types[`[object ${a}]`] = a.toLocaleLowerCase()
+        })
+
+        function getType (v) {
+            if (v == null) return `${v}`
+
+            return types[Object.prototype.toString.call(v)]
+        }
+
+        console.log(getType(Symbol(1)))
+        console.log(getType(new Date))
+        console.log(getType(new Error))
+        console.log(getType(new RegExp('')))
+        console.log(getType(1))
+        console.log(getType('1'))
+        console.log(getType(true))
+        console.log(getType(function () {}))
+        console.log(getType({}))
+        console.log(getType([]))
+        console.log(getType(null))
+        console.log(getType(undefined))
+    </script>
+
+    <!--  isPlainObject  -->
+    <script>
+        function isPlainObject (obj) {
+            const p = Object.getPrototypeOf(obj)
+            return !p || (p.hasOwnProperty('constructor') ?  p.constructor === Object.prototype.constructor : false)
+        }
+
+        function Person(name) {
+            this.name = name
+        }
+        Person.prototype.constructor = Object.prototype.constructor
+
+        const test = new Person('yayu')
+
+        console.log($.isPlainObject(test))
+        console.log($.isPlainObject({})) // true
+        console.log($.isPlainObject(new Object)) // true
+        console.log($.isPlainObject(Object.create(null))); // true
+        console.log($.isPlainObject(Object.assign({a: 1}, {b: 2}))); // true
+        console.log($.isPlainObject(Object.create({}))); // false
+        console.log($.isPlainObject(window)); // false
+
+        console.log('\n---------------\n\n')
+
+        console.log(isPlainObject(test))
+        console.log(isPlainObject({})) // true
+        console.log(isPlainObject(new Object)) // true
+        console.log(isPlainObject(Object.create(null))); // true
+        console.log(isPlainObject(Object.assign({a: 1}, {b: 2}))); // true
+        console.log(isPlainObject(Object.create({}))); // false
+        console.log(isPlainObject(window)); // false
+    </script>
+
+    <!--  EmptyObject  -->
+    <script>
+        function isEmptyObject (v) {
+            if (getType(v) !== 'object') return false
+
+            // Jquery
+            for (let a in v) {
+                return false
+            }
+
+            return true
+        }
+        console.log($.isEmptyObject({a: 1}))
+        console.log($.isEmptyObject({}))
+        console.log($.isEmptyObject([]))
+        console.log($.isEmptyObject(1))
+        console.log($.isEmptyObject(''))
+        console.log($.isEmptyObject(true))
+        console.log($.isEmptyObject(undefined))
+        console.log($.isEmptyObject(null))
+        console.log('\n-------------------\n\n')
+        console.log(isEmptyObject({a: 1}))
+        console.log(isEmptyObject({}))
+        console.log(isEmptyObject([]))
+        console.log(isEmptyObject(1))
+        console.log(isEmptyObject(''))
+        console.log(isEmptyObject(true))
+        console.log(isEmptyObject(undefined))
+        console.log(isEmptyObject(null))
+    </script>
+
+    <!--  isArrayLike  -->
+    <script>
+        function isArrayLike (obj) {
+            if (!obj || typeof obj !== 'object') return false
+
+            return obj.length === 0
+                || obj.length > 0
+                && typeof obj.length === 'number'
+                && (obj.length - 1 in obj)
+        }
+
+        const testItems = [
+            document.querySelectorAll("html"),
+            [1,2,undefined],
+            [undefined, undefined, undefined],
+            {"0": "aa", "1": "bb", "length": 2},
+            {"0": "aa", "1": undefined, "length": 2},
+            {"0": "aa", "1": undefined, "length": 0},
+            document.body.children,
+            document.getElementsByClassName("test"),
+            new Uint8Array(10),
+            new String("foo"),
+
+            "----------",
+
+            // the ones after here are supposed to return false
+            {"0": "aa", "1": "bb", "length": "2"},
+            {"0": "aa", "1": "bb", "length": 3},
+            {"0": "aa", "1": "bb", "length": "hello"},
+            document,
+            function() {},
+            null,
+            1,
+            "foo",
+            undefined
+        ];
+
+        testItems.forEach(a => {
+            if (a === '----------') {
+                console.log(a)
+            } else {
+                console.log(isArrayLike(a))
+            }
+        })
+    </script>
+
+    <!-- isElement -->
+    <script>
+        function isElement (v) {
+            return v instanceof Element
+        }
+
+        const tests = [null, false, true, 1, 1.23, 'aaa', [], ['aaa', 'bbb'], {}, {aaa: 'bbb'}, document.body.appendChild(document.createTextNode('aaa')), document.body.appendChild(document.createDocumentFragment()), document.body.appendChild(document.createElement('div')), document.createElementNS('http://www.w3.org/2000/svg', 'svg')]
+
+        tests.forEach(a => {
+            console.log(isElement(a))
+        })
+
+        isElement = function(obj) {
+            return !!(obj && obj.nodeType === 1);
+        }
+
+        tests.forEach(a => {
+            console.log(isElement(a))
+        })
+    </script>
+</body>
+</html>
