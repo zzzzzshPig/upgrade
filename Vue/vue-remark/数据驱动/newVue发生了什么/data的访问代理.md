@@ -1,6 +1,6 @@
 ### vm.data的访问
 
-```
+```javascript
 new Vue({
 	mounted () {
 		console.log(this.msg)
@@ -15,7 +15,7 @@ new Vue({
 
 > 在以上代码中，我们访问了vm.msg，那么其实我们的msg是在data下的，我们是怎么通过vm.msg访问到data.msg的呢？在initMixin中的initState函数中，对data进行了处理。
 
-```
+```javascript
 if (opts.data) {
 	initData(vm)
 } else {
@@ -25,7 +25,7 @@ if (opts.data) {
 
 > 这里分析一下initData
 
-```
+```javascript
   let data = vm.$options.data
   data = vm._data = typeof data === 'function'
     ? getData(data, vm)
@@ -69,7 +69,7 @@ if (opts.data) {
 
 > 首先是对data是function进行处理
 
-```
+```javascript
 export function getData (data: Function, vm: Component): any {
   // #7573 disable dep collection when invoking data getters
   pushTarget()
@@ -86,7 +86,7 @@ export function getData (data: Function, vm: Component): any {
 
 > 然后对data的key进行一次遍历，不允许key和methods,props的重复，因为这些key都可以通过this访问，所以不能重名。
 
-```
+```javascript
   const keys = Object.keys(data)
   const props = vm.$options.props
   const methods = vm.$options.methods
@@ -115,7 +115,7 @@ export function getData (data: Function, vm: Component): any {
 
 > 重点看proxy
 
-```
+```javascript
 export function proxy (target: Object, sourceKey: string, key: string) {
   sharedPropertyDefinition.get = function proxyGetter () {
     return this[sourceKey][key]
