@@ -32,7 +32,8 @@
       "camelcase": "off",
       "no-new": "off",
       "no-undef-init": "off",
-      "no-unused-vars": "off"
+      "no-unused-vars": "off",
+      "@typescript-eslint/ban-ts-ignore": "off"
     },
     "extends": [
       "standard",
