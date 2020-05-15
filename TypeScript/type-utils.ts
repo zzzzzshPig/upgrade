@@ -65,6 +65,8 @@ const readOnly1: readOnly<Test> = {
         a: 0
     }
 }
+
+// @ts-ignore
 readOnly1.a = 2
 
 // 将 R 中所有的属性的值转化为 T 类型
@@ -98,10 +100,24 @@ const pick1: pick<Test, 'a' | 'b'> = {
 type exclude<T, U> = T extends U ? never : T
 const exclude1: exclude<1 | 2, 2> = 1
 
+// T取U中存在的 和上面一样拥有相同的特性
+type extract<T, U> = T extends U ? T : never
+const extract1: extract<1 | 2, 2> = 2
+
 // 删除对象指定属性
-type omit<T, key extends keyof T> = Pick<T, Exclude<keyof T, key>>
+type omit<T, key extends keyof T> = {
+    [k in Exclude<keyof T, key>]: T[k]
+}
+// Pick<T, Exclude<keyof T, key>>
 const omit1: omit<Test, 'a' | 'b' | 'f'> = {
     c: true,
     d: undefined,
     e: null
 }
+
+// 获取函数的返回类型
+type returnType<T extends (...args: any) => any> = T extends () => infer R ? R : any
+function foo (x: number, y: number) {
+    return x === y ? true : x + y
+}
+type fn = returnType<typeof foo>
