@@ -68,7 +68,7 @@ const hasHandler = {
 vm._renderProxy = new Proxy(vm, handlers)
 ```
 
-> 然后进行代理。我们现在已经走完了`vm._renderProxy`现在回到`render.js`中来，看看第二个参数`vm.$createElement`，它定义在本文件中，该方法主要是给自定义的`render`函数用的，具体我们不细看。
+> 然后进行代理。我们现在已经走完了`vm._renderProxy`现在回到`render.js`中来，看看第二个参数`vm.$createElement`，它定义在本文件中，这里我们先跳过。
 
 ```javascript
 vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
