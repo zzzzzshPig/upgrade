@@ -1,4 +1,4 @@
-> 这一节我们来看_update函数，定义在`instance/lifecycle.js`的lifecycleMixin方法中。
+> 这一节我们来看_update函数，默认的执行逻辑是第一次执行。该方法定义在`instance/lifecycle.js`的lifecycleMixin方法中。
 
 ```javascript
 Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {}
@@ -14,7 +14,7 @@ const restoreActiveInstance = setActiveInstance(vm)
 vm._vnode = vnode
 ```
 
-> vm指的是实例，preEl指的是dom节点，preVnode指的是实例所对应的vNode，第一次patch是没有的，restoreActiveInstance是setActiveInstance()的返回值，这个方法是用来设置当前正在update的vm实例，给其他地方用到的，最后是vnode赋值给_vnode，相当于已经patch过了，下次patch的时候prevVnode就有值了。
+> vm指的是实例，preEl指的是dom节点（#app），preVnode指的是实例所对应的vNode（null），第一次patch是没有的，restoreActiveInstance是setActiveInstance()的返回值，这个方法是用来设置当前正在update的vm实例，给其他地方用到的，最后是vnode赋值给_vnode，相当于已经patch过了，下次patch的时候prevVnode就有值了。
 
 ```javascript
 if (!prevVnode) {
@@ -26,7 +26,7 @@ if (!prevVnode) {
 }
 ```
 
->这里我们走prevVnode，当成第一次patch。看一下`__patch__`，定义在`platforms/web/runtime/index.js`。
+>这里我们会走prevVnode，因为它的值是null。看一下`__patch__`，定义在`platforms/web/runtime/index.js`。
 
 ```javascript
 Vue.prototype.__patch__ = inBrowser ? patch : noop
@@ -80,7 +80,7 @@ if (!isRealElement && sameVnode(oldVnode, vnode)) {
 }
 ```
 
-> isRealElement的值应该为true，因为我们第一次patch的时候oldVnode是真实dom，下面这个判断是针对oldVnode是vNode进行比较然后patch两个vNode。
+> isRealElement的值应该为true，因为此时oldVnode是#app，下面这个判断是针对oldVnode是vNode进行比较然后patch两个vNode。
 
 ```javascript
 if (oldVnode.nodeType === 1 && oldVnode.hasAttribute(SSR_ATTR)) {
@@ -109,14 +109,14 @@ if (isTrue(hydrating)) {
 oldVnode = emptyNodeAt(oldVnode)
 ```
 
-> 这个比较简单，就是根据oldVnode生成一个vNode。
+> 这个比较简单，就是根据oldVnode（#app）生成一个vNode。
 
 ```javascript
 const oldElm = oldVnode.elm
 const parentElm = nodeOps.parentNode(oldElm)
 ```
 
-> 获取父节点和本节点
+> 获取父节点（body）和本节点（#app）
 
 ```javascript
 createElm(
@@ -144,7 +144,7 @@ function createElm (
 )
 ```
 
-> vnode是render生成，insertedVnodeQueue此时是[]，parentElm是父节点，refElm引用节点也就是$el的子节点，其他三个参数暂时不讨论。
+> vnode是render生成的，insertedVnodeQueue此时是[]，parentElm是父节点，refElm是#app的下一个节点，其他三个参数都是undefined暂时不讨论。
 
 ```javascript
 if (isDef(vnode.elm) && isDef(ownerArray)) {
@@ -166,7 +166,7 @@ if (createComponent(vnode, insertedVnodeQueue, parentElm, refElm)) {
 }
 ```
 
-> isRootInsert是true，因为nested不存在。createComponent这里是Component的逻辑不会走，具体逻辑先跳过。
+> isRootInsert是true，因为nested不存在。createComponent这里是Component的逻辑，先跳过。
 
 ```javascript
 if (isDef(tag)) {
@@ -199,7 +199,7 @@ vnode.elm = vnode.ns
 setScope(vnode)
 ```
 
-> 这里会创建vnode对应的dom，ns是namescape，应该是给component用的。setScope是css scope用的。
+> 这里会走createElement来创建dom，ns是namescape，应该是给component用的，在这里是undefined。setScope是css scope用的。
 
 ```javascript
 if (__WEXX__) {...} else {
@@ -211,7 +211,7 @@ if (__WEXX__) {...} else {
 }
 ```
 
->`createChildren`这里比较重要，也不难，其实就是对vnode的children进行递归遍历生成dom然后放入insertedVnodeQueue中。节点生成完毕后就插入节点到parent（body）。
+>`createChildren`这里比较重要，也不难，其实就是对vnode的children进行递归遍历生成dom然后放入insertedVnodeQueue中。节点生成完毕后就插入节点到parent（body），此时页面有两个div#app。
 
 ```javascript
 function createChildren (vnode, children, insertedVnodeQueue) {
@@ -274,7 +274,7 @@ if (isDef(vnode.parent)) {
 }
 ```
 
-> 这一段代码是用来递归更新父节点的，因为有component的存在，所以需要递归。
+> 这一段代码不会走到，因为它是根节点，没有父级vnode，暂时跳过。
 
 ```javascript
 if (isDef(parentElm)) {
@@ -284,7 +284,7 @@ if (isDef(parentElm)) {
 }
 ```
 
-> 最后销毁掉之前的dom重新创建新的dom，如果是组件还需要destory掉然后重新创建。这里我们暂时走完了patch流程（不是很深入），回到`instance/lifecycle.js`。
+> 最后销毁掉之前的dom（上一个#app），如果是组件还需要destory掉然后重新创建。这里我们暂时走完了patch流程（不是很深入），回到`instance/lifecycle.js`。
 
 ```javascript
 restoreActiveInstance()
@@ -301,6 +301,6 @@ if (vm.$vnode && vm.$parent && vm.$vnode === vm.$parent._vnode) {
 }
 ```
 
-> 这里比较简单，因为patch完了，所以`restoreActiveInstance`，然后更新一下`__vue__`的引用，最后这段不是太清楚作用，看样子像是一个fix。
+> 这里比较简单，因为patch完了，所以`restoreActiveInstance`，然后更新一下`__vue__`的引用。最后如果parent也是组件就需要更新一下$el，但是这里因为没有parent所以不会走到。
 
 > update短暂的过了一遍，但是这个功能在Vue里面是非常重要的一个功能，里面涉及到很多知识点，比如component的处理，那么在下一章中我们就来看下component相关的知识。
