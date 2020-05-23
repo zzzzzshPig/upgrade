@@ -17,7 +17,7 @@ if (options && options._isComponent) {
 }
 ```
 
-> 上面的判断是对component的options进行优化处理，注释的意思是说，options的merge有点慢而且组件也不需要再次进行merge。我们走下面这个分支，在这里我们调用了mergeOptions，在它的参数中我们又调用了resolveConstructorOptions，它定义在本文件中。
+> 我们走下面这个分支，在这里我们调用了mergeOptions，在它的参数中我们又调用了resolveConstructorOptions，它定义在本文件中。
 
 ```javascript
 let options = Ctor.options
