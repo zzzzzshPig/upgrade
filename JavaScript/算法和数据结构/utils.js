@@ -33,7 +33,13 @@ function generateTree (nodes) {
     return c
 }
 
+function getRandomNumber (min, max, int = true) {
+    const res = Math.random() * (max - min) + min
+    return int ? Math.floor(res) : res
+}
+
 module.exports = {
+    getRandomNumber,
     generateTree,
     TreeNode
 }
