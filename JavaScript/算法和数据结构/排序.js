@@ -1,8 +1,8 @@
 const { getRandomNumber } = require('./utils')
 
 const test = []
-for (let i = 0; i < 10; i++) {
-    test.push(getRandomNumber(0, 10))
+for (let i = 0; i < 100; i++) {
+    test.push(getRandomNumber(0, 100))
 }
 
 console.log('测试数据 ----- ', test)
@@ -64,4 +64,47 @@ function guibin (arr) {
     return mergeTwoYouXuArray(guibin(arr.slice(0, len)), guibin(arr.slice(len)))
 }
 
-console.log(guibin(test))
+// console.log(guibin(test))
+
+// 快速排序
+function quick (arr) {
+    function sort (left, right) {
+        // 基准点
+        const mix = Math.floor((left + right) / 2)
+        const mid = arr[mix]
+        const i = left
+        const j = right
+        while (left <= right) {
+            // 左指针右移
+            while (arr[left] < mid) {
+                left++
+            }
+
+            // 右指针左移
+            while (arr[right] > mid) {
+                right--
+            }
+
+            // 如果小于 则左侧还有小于基准值
+            if (left <= right) {
+                [arr[left], arr[right]] = [arr[right], arr[left]]
+                left++
+                right--
+            }
+        }
+
+        // 继续排序
+        // 此时 left左侧都是小于 基准值的 右侧都是大于基准值的
+        if (left - i > 1) {
+            sort(i, left - 1)
+        }
+
+        if (j - right > 1) {
+            sort(left, j)
+        }
+    }
+
+    sort(0, arr.length - 1)
+    return arr
+}
+console.log(quick(test))
