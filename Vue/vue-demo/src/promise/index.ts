@@ -19,7 +19,7 @@ let uid = 0
 export default class Promised extends Vue {
   @Watch('promise')
   async watchPromise () {
-    // 缓存uid 在promise决策后将id传入决策函数
+    // 缓存uid 在promise决策后进行判断
     const id = ++uid
     this.refreshStatus()
 
