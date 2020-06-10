@@ -9,7 +9,7 @@ export default class App extends Vue {
   }
 
   changePromise () {
-    this.testPromise = Promise.resolve('test')
+    this.getData(0)
   }
 
   getData (status: number) {
