@@ -2,29 +2,29 @@
   <div id="app">
     <Promised :promise="testPromise" @resolve="testPromiseResolve" @reject="testPromiseReject">
       <template v-slot:rejected>
-        error
+        reject
       </template>
 
       <template v-slot>
-        default
+        resolve
       </template>
 
       <template v-slot:pending>
-        loading
+        pending
       </template>
     </Promised>
 
     <Promised2 :promise="testPromise">
       <template v-slot:rejected>
-        error
+        reject
       </template>
 
       <template v-slot>
-        default
+        resolve
       </template>
 
       <template v-slot:pending>
-        loading
+        pending
       </template>
     </Promised2>
 
