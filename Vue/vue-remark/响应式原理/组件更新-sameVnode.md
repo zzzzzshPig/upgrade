@@ -62,27 +62,43 @@ function patchVnode (
     if (isDef(i = data.hook) && isDef(i = i.update)) i(oldVnode, vnode)
   }
       
-  // 
+  // 没有文本 不是一个单纯的文本节点 则对比子节点
   if (isUndef(vnode.text)) {
+      // 新老vnode都有children 则对比更新children
     if (isDef(oldCh) && isDef(ch)) {
       if (oldCh !== ch) updateChildren(elm, oldCh, ch, insertedVnodeQueue, removeOnly)
     } else if (isDef(ch)) {
+        // 新的vnode有children，老的没有
       if (process.env.NODE_ENV !== 'production') {
+          // 检测子节点有没有重复的key
         checkDuplicateKeys(ch)
       }
+        // 如果老的vnode是一个文本节点，就把文本设置为空
       if (isDef(oldVnode.text)) nodeOps.setTextContent(elm, '')
+        // 添加新的vnode的children到elm中
       addVnodes(elm, null, ch, 0, ch.length - 1, insertedVnodeQueue)
     } else if (isDef(oldCh)) {
+        // 新的没有子节点 老的有 删除掉节点即可
       removeVnodes(oldCh, 0, oldCh.length - 1)
     } else if (isDef(oldVnode.text)) {
+        // 老的节点是文本节点，新的节点不是文本节点，也没有children（有可能是一个占位符，也有可能是一个空节点），此时清掉老节点的文本
       nodeOps.setTextContent(elm, '')
     }
   } else if (oldVnode.text !== vnode.text) {
-      // text不同 设置新的text即可
+      // 文本节点 text不同 设置新的text即可
     nodeOps.setTextContent(elm, vnode.text)
   }
+  // 调用生命周期postpatch回调（内部用到的）
   if (isDef(data)) {
     if (isDef(i = data.hook) && isDef(i = i.postpatch)) i(oldVnode, vnode)
   }
 }
 ```
+
+> 先看一下`prepatch`的逻辑。
+>
+> ```javascript
+> if (isDef(data) && isDef(i = data.hook) && isDef(i = i.prepatch)) {
+> 	i(oldVnode, vnode)
+> }
+> ```
