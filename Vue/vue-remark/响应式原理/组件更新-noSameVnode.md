@@ -115,9 +115,3 @@ if (isDef(parentElm)) {
 ```
 
 > 这一段就是用来销毁掉旧的`dom`节点的。
-
-```javascript
-invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch)
-```
-
-> 调用hook，完成insert。
