@@ -37,11 +37,13 @@ if (isDef(vnode.parent)) {
   let ancestor = vnode.parent
   const patchable = isPatchable(vnode)
   while (ancestor) {
+      // 销毁vnode相关特性 这里有很多
     for (let i = 0; i < cbs.destroy.length; ++i) {
       cbs.destroy[i](ancestor)
     }
     ancestor.elm = vnode.elm
     if (patchable) {
+      // 创建vnode相关特性，这里有很多
       for (let i = 0; i < cbs.create.length; ++i) {
         cbs.create[i](emptyNode, ancestor)
       }
@@ -103,7 +105,7 @@ while (ancestor) {
 }
 ```
 
->在递归对组件更新占位符节点的同时也会触发一系列的钩子函数，并且进行节点的插入。我们继续往下看。
+>在递归对组件更新占位符节点的同时也会触发一系列的`vnode`相关函数和insert hook，进行节点的插入。我们继续往下看。
 
 ```javascript
 // destroy old node

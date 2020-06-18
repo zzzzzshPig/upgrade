@@ -7,7 +7,28 @@ if (!isRealElement && sameVnode(oldVnode, vnode)) {
 } 
 ```
 
-> 这里的代码看起来很简单。。。
+> 这里的代码看起来很简单。。。先看一下sameVnode。
+
+```javascript
+function sameVnode (a, b) {
+  return (
+    a.key === b.key && (
+      (
+        a.tag === b.tag &&
+        a.isComment === b.isComment &&
+        isDef(a.data) === isDef(b.data) &&
+        sameInputType(a, b)
+      ) || (
+        isTrue(a.isAsyncPlaceholder) &&
+        a.asyncFactory === b.asyncFactory &&
+        isUndef(b.asyncFactory.error)
+      )
+    )
+  )
+}
+```
+
+> 首先判断`key`，这里一般是对`v-for`的判断，其他的默认是`undefined`。第二块内容是判断`tag`，也就是`div,span,img`等标签名，`isComment`基本是给`v-if`逻辑用的，两者必须都定义了data，最后判断`sameInputType`（不是input类型返回true）。第三块内容是针对异步组件的先不看，回到`patchVnode`。
 
 ```javascript
 function patchVnode (
@@ -224,7 +245,7 @@ if (isUndef(vnode.text)) {
 > 这里就只看`updateChildren`，这里是逻辑复用的核心，这里的逻辑异常复杂，我们重点理解每一个case的意思，不深究。
 
 ```javascript
-// 整体逻辑类似于快排，使用的是双指针扫描的方法进行遍历两个children数组，找到不同之处进行处理
+// 整体逻辑类似于快排，使用的是前后指针扫描的方法进行遍历两个children数组，找到不同之处进行处理
 function updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly) {
     // 这里为了方便注释，修改了变量定义顺序，无实际影响。
     
