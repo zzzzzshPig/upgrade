@@ -44,27 +44,79 @@ function coinChange (coins, amount) {
 // 不同路径 II https://leetcode-cn.com/problems/longest-palindromic-substring/
 function uniquePathsWithObstacles (obstacleGrid) {
 	if (!obstacleGrid.length) return 0
+	const m = obstacleGrid.length
+	const n = obstacleGrid[0].length
 
 	// f(n, m) = f(n - 1, m) + f(n, m - 1)
 	const left = []
-	for (let i = 0; i < obstacleGrid.length; i++) {
+	for (let i = 0; i < m; i++) {
 		left.push((obstacleGrid[i][0] === 1 || left[i - 1] === 0) ? 0 : 1)
 	}
 
 	const dp = []
-	if (obstacleGrid[0]) {
-		for (let i = 0; i < obstacleGrid[0].length; i++) {
-			dp.push((obstacleGrid[0][i] === 1 || dp[i - 1] === 0) ? 0 : 1)
-		}
+	for (let i = 0; i < n; i++) {
+		dp.push((obstacleGrid[0][i] === 1 || dp[i - 1] === 0) ? 0 : 1)
 	}
 
-	const len1 = obstacleGrid.length
-	const len2 = obstacleGrid[0].length
-	for (let i = 1; i < len1; i++) {
+	for (let i = 1; i < m; i++) {
 		dp[0] = left[i]
-		for (let j = 1; j < len2; j++) {
+		for (let j = 1; j < 2; j++) {
 			dp[j] = obstacleGrid[i][j] === 1 ? 0 : dp[j] + dp[j - 1]
 		}
 	}
 	return dp[dp.length - 1]
 }
+
+// 解码方法 https://leetcode-cn.com/problems/decode-ways/
+function numDecodings (s) {
+	// f(n) = f(n - 1) + f(n - 2)
+	// 头部是0 return 0
+	if (s[0] === '0') return 0
+
+	const dp = [1]
+	for (let i = 1; i < s.length; i++) {
+		const a = Number(s[i - 1] + s[i])
+
+		if (a < 27 && a > 9) {
+			if (s[i] === '0') {
+				dp[i] = dp[i - 2] || 1
+			} else {
+				dp[i] = dp[i - 1] + (dp[i - 2] || 1)
+			}
+		} else {
+			// 存在 00 或者 30 40 等 return 0
+			if (s[i] === '0') return 0
+			dp[i] = dp[i - 1]
+		}
+	}
+
+	return dp[s.length - 1]
+}
+/*const tests = ['1', '10', '01', '16205', '100', '101', '1001', '1010', '12', '226', '110', '1101', '1110']
+tests.forEach(a => {
+	console.log(a, numDecodings(a))
+})*/
+
+// 乘积最大子数组 https://leetcode-cn.com/problems/maximum-product-subarray/
+function maxProduct (nums) {
+	let max = nums[0]
+	let min = nums[0]
+	let res = nums[0]
+
+	for (let i = 1; i < nums.length; i++) {
+		if (nums[i] < 0) {
+			[max, min] = [min, max]
+		}
+
+		max = Math.max(nums[i] * max, nums[i])
+		min = Math.min(nums[i] * min, nums[i])
+
+		res = Math.max(max, res)
+	}
+
+	return res
+}
+const tests = [[-2,-3,7], [2,3,-2,4], [-2,0,-1], [2,-3,-2,-7], [0,-1,4,-4,5,-2,-1,-1,-2,-3,0,-3,0,1,-1,-4,4,6,2,3,0,-5,2,1,-4,-2,-1,3,-4,-6,0,2,2,-1,-5,1,1,5,-6,2,1,-3,-6,-6,-3,4,0,-2,0,2]]
+tests.forEach(a => {
+	console.log(a, maxProduct(a))
+})
