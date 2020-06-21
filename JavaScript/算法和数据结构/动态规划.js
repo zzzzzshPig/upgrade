@@ -116,7 +116,35 @@ function maxProduct (nums) {
 
 	return res
 }
+/*
 const tests = [[-2,-3,7], [2,3,-2,4], [-2,0,-1], [2,-3,-2,-7], [0,-1,4,-4,5,-2,-1,-1,-2,-3,0,-3,0,1,-1,-4,4,6,2,3,0,-5,2,1,-4,-2,-1,3,-4,-6,0,2,2,-1,-5,1,1,5,-6,2,1,-3,-6,-6,-3,4,0,-2,0,2]]
 tests.forEach(a => {
 	console.log(a, maxProduct(a))
 })
+*/
+
+// 打家劫舍 II https://leetcode-cn.com/problems/house-robber-ii/
+function rob (nums) {
+	// f(n) = Math.max(f(n - 1), f(n - 2) + nums[i])
+	let dp = []
+	let dp1 = []
+	for (let i = 0; i < nums.length - 1; i++) {
+		dp[i] = Math.max(( dp[i - 2] || 0) + nums[i], dp[i - 1] || 0)
+
+		if (i > 0) {
+			dp1[i] = Math.max((dp1[i - 2] || 0) + nums[i], dp1[i - 1] || 0)
+		}
+	}
+
+	let last = nums.length - 1
+	dp1[last] = Math.max((dp1[last - 2] || 0) + nums[last], dp1[last - 1] || 0)
+
+	return Math.max(dp[dp.length - 1] || 0, dp1[dp1.length - 1] || 0, nums[0] || 0)
+}
+/*
+const tests = [[], [1], [2,3,2], [1,2,3,1], [12,131,44124,51,512,5243,534,6547,5687,659,677,35,436,43,0,70,6,235,34763,5,135,14,2,4,5645,65346,36,25,356,47,4,37,45,364,74,746,47,46,45,456,3426,6,36,245,435,235,246,236,3467,3,7357,46,635,345,353,534,5,53,55,5,5,5,5,5,5], [2,7,9,3,1], [1,1,1,1,1,1,1,1,1,1,1,1], [2,3,2,1,23,4,245435,35356,363,44,24,256,435,363,63,2,4]]
+tests.forEach(a => {
+	console.log(a, rob(a))
+})
+console.log(rob([2,7,9,3,1]))
+*/
