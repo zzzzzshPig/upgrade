@@ -122,7 +122,7 @@ export const createCompiler = createCompilerCreator(function baseCompile (
 
 > 注释的意思是这里导出的是默认的compiler实现。在这里是用的一个高阶函数，先来看`baseCompile`。
 >
-> 它的作用是生成`ast`，对`ast`进行优化，最后把`ast`生成为`vnode`（`ast：abstract syntax tree(抽象语法树) `https://en.wikipedia.org/wiki/Abstract_syntax_tree）。
+> 它的作用是生成`ast`，对`ast`进行优化，最后把`ast`生成为render字符串（`ast：abstract syntax tree(抽象语法树) `https://en.wikipedia.org/wiki/Abstract_syntax_tree）。
 >
 > 对于以上三个步骤的具体内容先不做讨论，接下来我们看一下`createCompilerCreator`，定义在`compiler/create-compiler.js`。
 
@@ -348,3 +348,4 @@ function createFunction (code, errors) {
 
 1. 由于不同的平台特性需要不同的compiler，所以`Vue`对compiler的处理显得很绕。
 2. compiler的核心是`compiler/index.js`中的`baseCompile`，在这里生成render字符串，其他的高阶函数如`createCompilerCreator,createCompileToFunctionFn`作用类似装饰器。
+3. compiler的作用实际上是将template转化成render函数，这个render函数和自定义render没啥区别。
