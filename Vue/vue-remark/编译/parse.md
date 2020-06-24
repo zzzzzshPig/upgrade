@@ -124,12 +124,16 @@ while (html) {
 
 ### tag
 
-> 我们先来看`if (!lastTag || !isPlainTextElement(lastTag))`的情况。
+> 先看`if (!lastTag || !isPlainTextElement(lastTag))`
 
 ```javascript
 // 找到当前html第一个<
 let textEnd = html.indexOf('<')
+```
 
+#### textEnd===0
+
+```javascript
 // 0表示 处理的是标签
 if (textEnd === 0) {
   // Comment:
