@@ -182,6 +182,7 @@ function maximalSquare (matrix) {
 // 	["1","0","0","1","1","1","0","0","0"]
 // ]))
 
+// 丑数2 https://leetcode-cn.com/problems/ugly-number-ii/
 function nthUglyNumber (n)  {
 	let dp = [1]
 	let a = 0
@@ -205,9 +206,8 @@ function nthUglyNumber (n)  {
 
 	return dp[n - 1]
 }
-const tests = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-
+// const tests = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 // tests.forEach(a => {
 // 	console.log(a, nthUglyNumber(a))
 // })
-console.log(nthUglyNumber(10))
+// console.log(nthUglyNumber(10))
