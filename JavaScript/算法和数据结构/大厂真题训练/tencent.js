@@ -154,8 +154,8 @@ function findMedianSortedArrays (nums1, nums2) {
 
 
 // 粉刷房子 https://www.lintcode.com/problem/paint-house/description
-// 动态规划
-// 状态转移方程 f[i][x] = Math.min(f[i-1][x以外的索引1号], f[i-1][x以外的索引2号]) + costs[i][x]
+// 动态规划 + 滚动数组
+// 状态转移方程 f[i][x] = Math.min(f[0][x以外的索引1号], f[0][x以外的索引2号]) + costs[i][x]
 function minCost (costs) {
 	if (costs.length === 0) return 0
 
