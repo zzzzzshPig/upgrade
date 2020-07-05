@@ -211,3 +211,126 @@ function nthUglyNumber (n)  {
 // 	console.log(a, nthUglyNumber(a))
 // })
 // console.log(nthUglyNumber(10))
+
+// 完全平方数 https://leetcode-cn.com/problems/perfect-squares/
+/*
+先找到最大的不大于n的完全平方数
+f(n) = Math.min(f(n - 1) + 1, f(n - 2) + 1)
+四平方定理： 任何一个正整数都可以表示成不超过四个整数的平方之和。 推论：满足四数平方和定理的数n（四个整数的情况），必定满足 n=4^a(8b+7)
+1.任何正整数都可以拆分成不超过4个数的平方和 ---> 答案只可能是1,2,3,4
+2.如果一个数最少可以拆成4个数的平方和，则这个数还满足 n = (4^a)*(8b+7) ---> 因此可以先看这个数是否满足上述公式，如果不满足，答案就是1,2,3了
+3.如果这个数本来就是某个数的平方，那么答案就是1，否则答案就只剩2,3了
+4.如果答案是2，即n=a^2+b^2，那么我们可以枚举a，来验证，如果验证通过则答案是2
+5.只能是3
+* */
+function numSquares (n) {
+	// 公式版本
+	while (0 === n % 4) n /= 4
+	if (7 === n % 8) return 4
+
+	for (let i = 0; i * i < n; ++i) {
+		let j = parseInt(Math.pow(n - i * i, 0.5))
+		if (n === i * i + j * j) {
+			return !!i + !!j
+		}
+	}
+
+	return 3
+
+	// dp版本
+	/*const dp = [0]
+	let costs = []
+	let i = 1
+	while (i * i <= n) {
+		costs.unshift(i * i)
+		i++
+	}
+
+	for (i = 1; i <= n; i++) {
+		dp[i] = Infinity
+
+		for (let j = 0; j < costs.length; j++) {
+			if (i - costs[j] >= 0) {
+				dp[i] = Math.min(dp[i], dp[i - costs[j]] + 1)
+			}
+		}
+	}
+
+	if (dp[n] === Infinity) return -1
+
+	return dp[n]*/
+}
+// console.log(numSquares(155))
+
+
+// 二维区域和检索 - 矩阵不可变 https://leetcode-cn.com/problems/range-sum-query-2d-immutable/
+/*
+* 初始化 0,0到n,m点的矩形的合
+* f(n, m) = f(n - 1, m) + f(n, m - 1) + matrix(n, m) - f(n - 1, m - 1)
+* */
+function NumMatrix (matrix) {
+	const dp = []
+
+	for (let i = 0; i < matrix.length; i++) {
+		dp[i] = []
+
+		for (let j = 0; j < matrix[i].length; j++) {
+			let t = dp[i - 1] ? dp[i - 1][j] : 0
+			let l = dp[i][j - 1] || 0
+			let tl = dp[i - 1] ? dp[i - 1][j - 1] || 0 : 0
+
+			dp[i][j] = t + l + matrix[i][j] - tl
+		}
+	}
+
+	this.dp = dp
+}
+/**
+ * @param {number} row1
+ * @param {number} col1
+ * @param {number} row2
+ * @param {number} col2
+ * @return {number}
+ */
+/*
+* 取值的时候取f(row2, col2) - f(row1 - 1, col2) - f(row2, col1 - 1) + f(row1 - 1, col1 - 1)
+* */
+NumMatrix.prototype.sumRegion = function(row1, col1, row2, col2) {
+	let t = this.dp[row1 - 1] ? this.dp[row1 - 1][col2] : 0
+	let l = this.dp[row2][col1 - 1] || 0
+	let tl = this.dp[row1 - 1] ? this.dp[row1 - 1][col1 - 1] || 0 : 0
+
+	return this.dp[row2][col2] - t - l + tl
+}
+const nn = new NumMatrix([
+	[3, 0, 1, 4, 2],
+	[5, 6, 3, 2, 1],
+	[1, 2, 0, 1, 5],
+	[4, 1, 0, 1, 7],
+	[1, 0, 3, 0, 5]
+])
+/*console.log(nn.sumRegion(2,1,4,3))
+console.log(nn.sumRegion(1,1,2,2))
+console.log(nn.sumRegion(1,2,2,4))*/
+
+
+// 整数拆分 https://leetcode-cn.com/problems/integer-break/
+/*
+* 这道题动态规划没有想出来，倒是找到规律了---
+* */
+function integerBreak (n) {
+	if ( n === 2 ) return 1
+	if ( n === 3 ) return 2
+
+	let a = Math.floor(n / 3)
+	let b = n % 3
+
+	if (b === 1) {
+		return Math.pow(3, a - 1) * 4 || 4
+	} else if (b === 2) {
+		return Math.pow(3, a) * 2
+	}
+
+	return Math.pow(3, a)
+}
+console.log(integerBreak(10))
