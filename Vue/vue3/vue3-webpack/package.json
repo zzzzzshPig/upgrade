@@ -33,7 +33,10 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-mixed-spaces-and-tabs": "off",
+      "vue/no-setup-props-destructure": "off"
+    }
   },
   "browserslist": [
     "> 1%",
