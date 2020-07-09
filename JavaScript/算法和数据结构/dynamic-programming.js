@@ -326,7 +326,7 @@ function integerBreak (n) {
 	let b = n % 3
 
 	if (b === 1) {
-		return Math.pow(3, a - 1) * 4 || 4
+		return Math.pow(3, a - 1) * 4
 	} else if (b === 2) {
 		return Math.pow(3, a) * 2
 	}
