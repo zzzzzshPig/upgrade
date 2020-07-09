@@ -210,4 +210,29 @@ const tests = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 // tests.forEach(a => {
 // 	console.log(a, nthUglyNumber(a))
 // })
-console.log(nthUglyNumber(10))
+// console.log(nthUglyNumber(10))
+
+// 我能赢吗 https://leetcode-cn.com/problems/can-i-win/
+function canIWin (maxChoosableInteger, desiredTotal) {
+	if (maxChoosableInteger >= desiredTotal) return true
+	if ((1 + maxChoosableInteger) * maxChoosableInteger / 2 < desiredTotal) return false
+
+	let dp = []
+	let costs = []
+	for (let i = 1; i <= maxChoosableInteger; i++) {
+		costs.push(i)
+	}
+
+	costs.forEach((a, i) => {
+		dg(costs.slice(0, i).concat(costs.slice(i + 1)), a)
+	})
+
+	function dg (arr, sum) {}
+}
+// for (let i = 1; i <= 20; i++) {
+// 	for (let j = 0; j <= 300; j++) {
+// 		const res = canIWin(i, j)
+// 		!res && console.log(i , j)
+// 	}
+// }
+console.log(canIWin(10, 12))
