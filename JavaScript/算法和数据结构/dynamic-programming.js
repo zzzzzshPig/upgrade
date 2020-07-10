@@ -333,29 +333,41 @@ function integerBreak (n) {
 
 	return Math.pow(3, a)
 }
-console.log(integerBreak(10))
 
-// 我能赢吗 https://leetcode-cn.com/problems/can-i-win/
-function canIWin (maxChoosableInteger, desiredTotal) {
-	if (maxChoosableInteger >= desiredTotal) return true
-	if ((1 + maxChoosableInteger) * maxChoosableInteger / 2 < desiredTotal) return false
+// 矩阵区域和 https://leetcode-cn.com/problems/matrix-block-sum/
+// 其实就是求f(x1, y1, x2, y2)内的矩阵和 套用了之前求矩阵和的解法
+function matrixBlockSum (mat, K) {
+	// i - K <= r <= i + K, j - K <= c <= j + K
+	const dp = []
+	for (let i = 0; i < mat.length; i++) {
+		dp[i] = []
 
-	let dp = []
-	let costs = []
-	for (let i = 1; i <= maxChoosableInteger; i++) {
-		costs.push(i)
+		for (let j = 0; j < mat[i].length; j++) {
+			let t = dp[i - 1] ? dp[i - 1][j] : 0
+			let l = dp[i][j - 1] || 0
+			let tl = dp[i - 1] ? dp[i - 1][j - 1] || 0 : 0
+
+			dp[i][j] = t + l + mat[i][j] - tl
+		}
 	}
 
-	costs.forEach((a, i) => {
-		dg(costs.slice(0, i).concat(costs.slice(i + 1)), a)
-	})
+	let res = []
+	for (let i = 0; i < mat.length; i++) {
+		res.push([])
 
-	function dg (arr, sum) {}
+		for (let j = 0; j < mat[i].length; j++) {
+			res[i][j] = sum(Math.max(0, i - K), Math.max(0, j - K), Math.min(i + K, mat.length - 1), Math.min(j + K, mat[i].length - 1))
+		}
+	}
+
+	function sum (row1, col1, row2, col2) {
+		let t = dp[row1 - 1] ? dp[row1 - 1][col2] : 0
+		let l = dp[row2][col1 - 1] || 0
+		let tl = dp[row1 - 1] ? dp[row1 - 1][col1 - 1] || 0 : 0
+
+		return dp[row2][col2] - t - l + tl
+	}
+
+	return res
 }
-// for (let i = 1; i <= 20; i++) {
-// 	for (let j = 0; j <= 300; j++) {
-// 		const res = canIWin(i, j)
-// 		!res && console.log(i , j)
-// 	}
-// }
-console.log(canIWin(10, 12))
+console.log(matrixBlockSum([[1,2,3],[4,5,6],[7,8,9]], 0))
