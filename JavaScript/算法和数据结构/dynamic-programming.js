@@ -370,4 +370,47 @@ function matrixBlockSum (mat, K) {
 
 	return res
 }
-console.log(matrixBlockSum([[1,2,3],[4,5,6],[7,8,9]], 0))
+// console.log(matrixBlockSum([[1,2,3],[4,5,6],[7,8,9]], 0))
+
+// 统计全为 1 的正方形子矩阵 https://leetcode-cn.com/problems/count-square-submatrices-with-all-ones/
+// 和最大正方形差不多
+function countSquares (matrix) {
+	let res = 0
+	matrix.unshift(Array.from({length: matrix[0].length}).fill(0))
+	for (let i = 1; i < matrix.length; i++) {
+		for (let j = 0; j < matrix[i].length; j++) {
+			if (matrix[i][j] === 1) {
+				res++
+				matrix[i][j] = Math.min(matrix[i - 1][j], matrix[i][j - 1] || 0, matrix[i - 1][j - 1] || 0) + 1
+				res += matrix[i][j] - 1
+			}
+		}
+	}
+	return res
+}
+/*
+console.log(countSquares([
+	[1,0,1,1,1,1,1,1,1,1,1],
+	[1,1,0,1,1,1,1,1,1,1,1],
+	[1,1,0,1,1,1,1,1,1,1,1]
+]))
+*/
+
+// 不同的二叉搜索树 https://leetcode-cn.com/problems/unique-binary-search-trees/
+// dp[n] = dp[0] * dp[n - 1] + dp[1] * dp[n - 2] +  .... + dp[n - 1] * dp[n - n]
+function numTrees (n) {
+	let dp = [1]
+
+	for (let i = 0; i < n; i++) {
+		let d = 0
+		for (let j = 1; j <= dp.length; j++) {
+			d += dp[j - 1] * dp[dp.length - j]
+		}
+		dp.push(d)
+	}
+
+	return dp[n]
+}
+for (let i = 1; i < 20; i++) {
+	console.log(numTrees(i))
+}
