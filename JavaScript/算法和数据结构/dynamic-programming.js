@@ -411,6 +411,24 @@ function numTrees (n) {
 
 	return dp[n]
 }
-for (let i = 1; i < 20; i++) {
-	console.log(numTrees(i))
+// for (let i = 1; i < 20; i++) {
+// 	console.log(numTrees(i))
+// }
+
+// 三角形最小路径和 https://leetcode-cn.com/problems/triangle/
+// 原地修改，自底向下
+function minimumTotal (triangle) {
+	const len = triangle.length
+
+	for (let i = 1; i < len; i++) {
+		for (let j = 0; j < triangle[i].length; j++) {
+			let l = j < 1 ? Infinity : triangle[i - 1][j - 1]
+			let r = j >= i ? Infinity : triangle[i - 1][j]
+
+			triangle[i][j] = Math.min(l, r) + triangle[i][j]
+		}
+	}
+
+	return Math.min(...triangle[triangle.length - 1])
 }
+// console.log(minimumTotal([[1],[-5,-2],[3,6,1],[-1,2,4,-3]]))
