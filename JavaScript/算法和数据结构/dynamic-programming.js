@@ -434,22 +434,27 @@ function minimumTotal (triangle) {
 // console.log(minimumTotal([[1],[-5,-2],[3,6,1],[-1,2,4,-3]]))
 
 // 最低票价 https://leetcode-cn.com/problems/minimum-cost-for-tickets/
+// dp[ n ]=min( dp[ n-1 ] + cost[ 0 ] , dp[ n-7 ] + cost[ 1 ] , dp[ n-30 ] + cost[ 2 ] )
 function mincostTickets (days, costs) {
-	let res = 0
-	let res1 = 0
-	let se = days[0]
+	const lastDay = days[days.length - 1]
+	const dp = Array.from({length: lastDay}).fill(0)
 
-	for (let i = 0; i < days.length; i++) {
-		res1 += costs[0]
+	days.forEach(a => {
+		dp[a] = -1
+	})
 
-		if (days[i] - se >= 7) {
-			se = days[i]
-			res += Math.min(res1 - costs[0], costs[1])
-			res1 = 0
-			i--
+	for (let i = 1; i <= lastDay; i++) {
+		if (dp[i] === 0) {
+			dp[i] = dp[i - 1]
+			continue
 		}
+
+		const a =  dp[i - 1] + costs[0]
+		const b = i - 7 >= 0 ? dp[i - 7] + costs[1] : costs[1]
+		const c = i - 30 >= 0 ? dp[i - 30] + costs[2] : costs[2]
+		dp[i] = Math.min(a, b, c)
 	}
 
-	return res + Math.min(res1, costs[1], costs[2])
+	return dp[lastDay]
 }
-console.log(mincostTickets([1,2,3,4,5,6,7,8,9,10,30,31,44,66,77,123,124,125,126,127,188,189,200,300], [2, 7, 10]))
+console.log(mincostTickets([1,4,6,7,8,20,21,22,23,50],[2, 7, 15]))
