@@ -432,3 +432,24 @@ function minimumTotal (triangle) {
 	return Math.min(...triangle[triangle.length - 1])
 }
 // console.log(minimumTotal([[1],[-5,-2],[3,6,1],[-1,2,4,-3]]))
+
+// 最低票价 https://leetcode-cn.com/problems/minimum-cost-for-tickets/
+function mincostTickets (days, costs) {
+	let res = 0
+	let res1 = 0
+	let se = days[0]
+
+	for (let i = 0; i < days.length; i++) {
+		res1 += costs[0]
+
+		if (days[i] - se >= 7) {
+			se = days[i]
+			res += Math.min(res1 - costs[0], costs[1])
+			res1 = 0
+			i--
+		}
+	}
+
+	return res + Math.min(res1, costs[1], costs[2])
+}
+console.log(mincostTickets([1,2,3,4,5,6,7,8,9,10,30,31,44,66,77,123,124,125,126,127,188,189,200,300], [2, 7, 10]))
