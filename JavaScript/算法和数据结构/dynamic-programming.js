@@ -457,4 +457,25 @@ function mincostTickets (days, costs) {
 
 	return dp[lastDay]
 }
-console.log(mincostTickets([1,4,6,7,8,20,21,22,23,50],[2, 7, 15]))
+// console.log(mincostTickets([1,4,6,7,8,20,21,22,23,50],[2, 7, 15]))
+
+// 礼物的最大价值 https://leetcode-cn.com/problems/li-wu-de-zui-da-jie-zhi-lcof/
+// dp[n][m] = Math.max(dp[n - 1][m], dp[n][m - 1]) + dp[n][m]
+function maxValue (grid) {
+	for (let i = 0; i < grid.length; i++) {
+		for (let j = 0; j < grid[i].length; j++) {
+			const t = grid[i - 1] ? grid[i - 1][j] : 0
+			const l = grid[i][j - 1] || 0
+
+			grid[i][j] = Math.max(l, t) + grid[i][j]
+		}
+	}
+
+	let n = grid[grid.length - 1]
+	return n[n.length - 1]
+}
+console.log(maxValue([
+	[1,3,1],
+	[1,5,1],
+	[4,2,1]
+]))
