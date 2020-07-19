@@ -474,8 +474,25 @@ function maxValue (grid) {
 	let n = grid[grid.length - 1]
 	return n[n.length - 1]
 }
-console.log(maxValue([
-	[1,3,1],
-	[1,5,1],
-	[4,2,1]
-]))
+// console.log(maxValue([
+// 	[1,3,1],
+// 	[1,5,1],
+// 	[4,2,1]
+// ]))
+
+// 股票的最大利润 https://leetcode-cn.com/problems/gu-piao-de-zui-da-li-run-lcof/
+function maxProfit (prices) {
+	let res = 0
+	let min = Infinity
+
+	for (let i = 0; i < prices.length; i++) {
+		if (prices[i] < min) {
+			min = prices[i]
+		}
+
+		res = Math.max(prices[i] - min, res)
+	}
+
+	return res
+}
+// console.log(maxProfit([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]))
