@@ -67,4 +67,60 @@ function rangeSumBST (root, L, R) {
 
 	return res
 }
-console.log(rangeSumBST([10,5,15,3,7,null,18], 7, 15))
+
+// 合并二叉树 https://leetcode-cn.com/problems/merge-two-binary-trees/
+function mergeTrees (t1, t2) {
+	if (t1 === null) {
+		return t2
+	}
+
+	if (t2 === null) {
+		return t1
+	}
+
+	t1.val += t2.val
+
+	t1.left = mergeTrees(t1.left, t2.left)
+	t1.right = mergeTrees(t1.right, t2.right)
+
+	return t1
+}
+
+// 二叉搜索树中的搜索 https://leetcode-cn.com/problems/search-in-a-binary-search-tree/
+function searchBST (root, val) {
+	return dg(root)
+
+	function dg (node) {
+		if (!node) return null
+
+		if (node.val === val) {
+			return node
+		} else if (node.val > val) {
+			return dg(node.left)
+		} else if (node.val < val) {
+			return dg(node.right)
+		}
+	}
+}
+console.log(searchBST({
+	val: 4,
+	left: {
+		val: 2,
+		left: {
+			val: 1,
+			left: null,
+			right: null
+		},
+		right: {
+			val: 3,
+			left: null,
+			right: null
+		}
+	},
+	right: {
+		val: 7,
+		left: null,
+		right: null
+	}
+}, 2))
+
