@@ -1,19 +1,6 @@
 const utils = require('../utils')
 
-// https://leetcode-cn.com/problems/same-tree/
-// 相同的树
-// 给定两个二叉树，编写一个函数来检验它们是否相同。
-// 如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
-/*
-输入:       1         1
-          / \       / \
-         2   3     2   3
-
-        [1,2,3],   [1,2,3]
-
-输出: true
-* */
-
+// 相同的树 https://leetcode-cn.com/problems/same-tree/
 function isSameTree (p, q) {
 	if (p === null && q === null) {
 		return true
@@ -26,15 +13,7 @@ function isSameTree (p, q) {
 // console.log(isSameTree(utils.generateTree([]), utils.generateTree([])))
 
 
-// https://leetcode-cn.com/problems/symmetric-tree/
-// 对称二叉树
-// 给定一个二叉树，检查它是否是镜像对称的。
-//     1
-//    / \
-//   2   2
-//  / \ / \
-// 3  4 4  3
-
+// 对称二叉树 https://leetcode-cn.com/problems/symmetric-tree/
 function isSymmetric (root) {
 	let nodes = [root]
 	while (nodes.length) {
@@ -65,4 +44,27 @@ function isSymmetric (root) {
 
 	return true
 }
-console.log(isSymmetric(utils.generateTree([1,2,2,null,3,null,3])))
+// console.log(isSymmetric(utils.generateTree([1,2,2,null,3,null,3])))
+
+// 二叉搜索树的范围和 https://leetcode-cn.com/problems/range-sum-of-bst/
+function rangeSumBST (root, L, R) {
+	let res = 0
+	dg(root)
+
+	function dg (node) {
+		if (!node) return
+
+		if (node.val >= L && node.val <= R) {
+			res += node.val
+			dg(node.left)
+			dg(node.right)
+		} else if (node.val <= L) {
+			dg(node.right)
+		} else if (node.val >= R) {
+			dg(node.left)
+		}
+	}
+
+	return res
+}
+console.log(rangeSumBST([10,5,15,3,7,null,18], 7, 15))
