@@ -102,25 +102,111 @@ function searchBST (root, val) {
 		}
 	}
 }
-console.log(searchBST({
-	val: 4,
-	left: {
-		val: 2,
-		left: {
-			val: 1,
-			left: null,
-			right: null
-		},
-		right: {
-			val: 3,
-			left: null,
-			right: null
-		}
-	},
-	right: {
-		val: 7,
-		left: null,
-		right: null
-	}
-}, 2))
+// console.log(searchBST({
+// 	val: 4,
+// 	left: {
+// 		val: 2,
+// 		left: {
+// 			val: 1,
+// 			left: null,
+// 			right: null
+// 		},
+// 		right: {
+// 			val: 3,
+// 			left: null,
+// 			right: null
+// 		}
+// 	},
+// 	right: {
+// 		val: 7,
+// 		left: null,
+// 		right: null
+// 	}
+// }, 2))
 
+// 二叉树的最大深度 https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/
+function maxDepth (root) {
+	function dg (node) {
+		if (!node) return 0
+
+		return Math.max(dg(node.left), dg(node.right)) + 1
+	}
+
+	return dg(root)
+}
+
+// 二叉树的最小深度 https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/
+function minDepth (root) {
+	function dg (node) {
+		if (!node) return 0
+
+		const left = dg(node.left)
+		const right = dg(node.right)
+
+		if (left === 0) {
+			return right + 1
+		} else if (right === 0) {
+			return left + 1
+		} else {
+			return Math.min(left, right) + 1
+		}
+	}
+
+	return dg(root)
+}
+
+// N叉树的后序遍历 https://leetcode-cn.com/problems/n-ary-tree-postorder-traversal/
+function postorder (root) {
+	const res = []
+
+	dg(root)
+	function dg (node) {
+		if (!node) return
+
+		for (let j = 0; j < node.children.length; j++) {
+			dg(node.children[j])
+		}
+
+		res.push(node.val)
+	}
+
+	return res
+}
+
+// N叉树的前序遍历 https://leetcode-cn.com/problems/n-ary-tree-postorder-traversal/
+function postorder (root) {
+	const res = []
+
+	dg(root)
+	function dg (node) {
+		if (!node) return
+
+		res.push(node.val)
+
+		for (let j = 0; j < node.children.length; j++) {
+			dg(node.children[j])
+		}
+	}
+
+	return res
+}
+
+// 递增顺序查找树 https://leetcode-cn.com/problems/increasing-order-search-tree/
+function increasingBST (root) {
+	let res = new TreeNode()
+	let cur = res
+
+	dg(root)
+	function dg (node) {
+		if (!node) return
+
+		dg(node.left)
+
+		node.left = null
+		cur.right = node
+		cur = node
+
+		dg(node.right)
+	}
+	return res.right
+}
