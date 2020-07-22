@@ -210,3 +210,27 @@ function increasingBST (root) {
 	}
 	return res.right
 }
+
+// N叉树的最大深度 https://leetcode-cn.com/problems/maximum-depth-of-n-ary-tree/
+function maxDepth (root) {
+	if (!root) return 0
+
+	let v = []
+	for (let i = 0; i < root.children.length; i++) {
+		v.push(maxDepth(root.children[i]))
+	}
+	return (v.length ? Math.max(...v) : 0) + 1
+}
+
+// 单值二叉树 https://leetcode-cn.com/problems/univalued-binary-tree/
+function isUnivalTree (root) {
+	const val = root.val
+
+	return dg(root)
+	function dg (root) {
+		if (!root) return true
+		if (root.val !== val) return false
+
+		return dg(root.left) && dg(root.right)
+	}
+}
