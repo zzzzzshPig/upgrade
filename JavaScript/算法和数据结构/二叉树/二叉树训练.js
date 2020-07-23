@@ -12,7 +12,6 @@ function isSameTree (p, q) {
 }
 // console.log(isSameTree(utils.generateTree([]), utils.generateTree([])))
 
-
 // 对称二叉树 https://leetcode-cn.com/problems/symmetric-tree/
 function isSymmetric (root) {
 	let nodes = [root]
@@ -233,4 +232,29 @@ function isUnivalTree (root) {
 
 		return dg(root.left) && dg(root.right)
 	}
+}
+
+// 修剪二叉搜索树 https://leetcode-cn.com/problems/trim-a-binary-search-tree/
+function trimBST (root, L, R) {
+	if (!root) return null
+
+	if (root.val < L) {
+		root = trimBST(root.right, L ,R)
+	} else if (root.val > R) {
+		root = trimBST(root.left, L ,R)
+	} else {
+		if (root.val > L) {
+			root.left = trimBST(root.left, L, R)
+		} else {
+			root.left = null
+		}
+
+		if (root.val < R) {
+			root.right = trimBST(root.right, L, R)
+		} else {
+			root.right = null
+		}
+	}
+
+	return root
 }
