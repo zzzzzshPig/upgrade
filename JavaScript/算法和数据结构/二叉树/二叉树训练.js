@@ -338,3 +338,29 @@ function lowestCommonAncestor (root, p, q) {
 
 	return dg(root)
 }
+
+// 二叉树的所有路径 https://leetcode-cn.com/problems/binary-tree-paths/
+function binaryTreePaths (root) {
+	if (!root) return []
+
+	let res = []
+
+	function dg (root, path) {
+		path += root.val
+
+		if (root.left === null && root.right === null) {
+			res.push(path)
+		}
+
+		if (root.left) {
+			dg(root.left, path + '->')
+		}
+
+		if (root.right) {
+			dg(root.right, path + '->')
+		}
+	}
+
+	dg(root, '')
+	return res
+}
