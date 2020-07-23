@@ -285,3 +285,56 @@ function levelOrderBottom (root) {
 
 	return res
 }
+
+// 二叉树的层平均值 https://leetcode-cn.com/problems/average-of-levels-in-binary-tree/
+// bfs
+function averageOfLevels (root) {
+	if (!root) return []
+
+	let bfs = [root]
+	const res = []
+
+	while (bfs.length) {
+		const b = []
+		let r = 0
+		let r1 = 0 // 平均数
+
+		for (let i = 0; i < bfs.length; i++) {
+			let bfs_i = bfs[i]
+
+			r += bfs_i.val
+			r1 = r / (i + 1)
+			if (bfs_i.left) b.push(bfs_i.left)
+			if (bfs_i.right) b.push(bfs_i.right)
+		}
+
+		res.push(r1)
+		bfs = b
+	}
+
+	return res
+}
+
+// 二叉搜索树的最近公共祖先 https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+// 不满足 root.val < L || root.val > R 则代表 p q节点分别在root的左右两侧 所以直接返回root即可
+function lowestCommonAncestor (root, p, q) {
+	let L = p.val
+	let R = q.val
+	if (L > R) {
+		[L, R] = [R, L]
+	}
+
+	function dg (root) {
+		if (!root) return root
+
+		if (root.val < L) {
+			return dg(root.right)
+		} else if (root.val > R) {
+			return dg(root.left)
+		} else {
+			return root
+		}
+	}
+
+	return dg(root)
+}
