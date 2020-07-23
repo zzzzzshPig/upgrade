@@ -198,7 +198,8 @@ function genSlot (el: ASTElement, state: CodegenState): string {
 "with(this){return _c('div',{staticClass:"content"},[_c('header',[_t("header",[_v("这是header slot")])],2),_v(" "),_c('main',[_t("default",[_v("这是default slot")])],2),_v(" "),_c('footer',[_t("footer",[_v("这是footer slot")])],2)])}"
 ```
 
-# 总结
+## 总结
 
 1. 编译部分的处理相对简单，在父级里就是多了几个属性，而在子级中则是使用不同的render方法去进行处理。
 2. 重点的部分应该是runtime阶段，下一节更精彩。
+
