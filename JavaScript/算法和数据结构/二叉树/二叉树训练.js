@@ -258,3 +258,30 @@ function trimBST (root, L, R) {
 
 	return root
 }
+
+// 二叉树的层次遍历 II https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii/
+// 标准的bfs
+function levelOrderBottom (root) {
+	if (!root) return []
+
+	let bfs = [root]
+	const res = []
+
+	while (bfs.length) {
+		const b = []
+		const r = []
+		res.unshift(r)
+
+		for (let i = 0; i < bfs.length; i++) {
+			let bfs_i = bfs[i]
+
+			r.push(bfs_i.val)
+			if (bfs_i.left) b.push(bfs_i.left)
+			if (bfs_i.right) b.push(bfs_i.right)
+		}
+
+		bfs = b
+	}
+
+	return res
+}
