@@ -392,3 +392,45 @@ function sumRootToLeaf (root) {
 	return res
 }
 
+// 叶子相似的树 https://leetcode-cn.com/problems/leaf-similar-trees/
+function leafSimilar (root1, root2) {
+	let res1 = dg(root1)
+	let res2 = dg(root2)
+	function dg (root) {
+		if (!root) return root
+
+		let left = dg(root.left)
+		let right = dg(root.right)
+
+		if (left === null && right === null) return root.val + ','
+		if (left === null) return right
+		if (right === null) return left
+		return left + right
+	}
+
+	return res1 === res2
+}
+
+// 把二叉搜索树转换为累加树 https://leetcode-cn.com/problems/convert-bst-to-greater-tree/
+// 反中序遍历
+function convertBST (root) {
+	if (!root) return root
+
+	let res = 0
+	dg(root)
+
+	function dg (root) {
+		if (root.right !== null) {
+			dg(root.right)
+		}
+		res += root.val
+		root.val = res
+
+		if (root.left !== null) {
+			dg(root.left)
+		}
+		return root
+	}
+
+	return root
+}
