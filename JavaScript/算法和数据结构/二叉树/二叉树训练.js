@@ -364,3 +364,31 @@ function binaryTreePaths (root) {
 	dg(root, '')
 	return res
 }
+
+// 从根到叶的二进制数之和 https://leetcode-cn.com/problems/sum-of-root-to-leaf-binary-numbers/
+function sumRootToLeaf (root) {
+	if (!root) return 0
+
+	let res = 0
+
+	function dg (root, val) {
+		val *= 2
+		val += root.val
+
+		if (root.left === null && root.right === null) {
+			res += val
+		}
+
+		if (root.left) {
+			dg(root.left, val)
+		}
+
+		if (root.right) {
+			dg(root.right, val)
+		}
+	}
+
+	dg(root, '')
+	return res
+}
+
