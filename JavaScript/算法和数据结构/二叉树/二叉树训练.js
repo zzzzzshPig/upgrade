@@ -525,3 +525,29 @@ function sumOfLeftLeaves (root) {
 
 	return res
 }
+
+// 根据二叉树创建字符串 https://leetcode-cn.com/problems/construct-string-from-binary-tree/
+function tree2str (t) {
+	if (!t) return ''
+	let res = ''
+
+	function dg (root) {
+		res += root.val
+
+		if (root.left) {
+			res += '('
+			dg(root.left)
+			res += ')'
+		} else {
+			if (root.right) res += '()'
+		}
+
+		if (root.right) {
+			res += '('
+			dg(root.right)
+			res += ')'
+		}
+	}
+	dg(t)
+	return res
+}
