@@ -505,3 +505,23 @@ function findTilt (root) {
 	dg(root)
 	return res
 }
+
+// 左叶子之和 https://leetcode-cn.com/problems/sum-of-left-leaves/
+// 后序遍历
+// 只用判断当前叶子的左叶子是不是符合左叶子条件 符合条件就累加值
+/*
+时间复杂度：O(n)
+空间复杂度：O(n)
+* */
+function sumOfLeftLeaves (root) {
+	if (!root) return 0
+
+	let res = sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right)
+
+	// 左叶子
+	if (root.left && root.left.left === null && root.left.right === null) {
+		res += root.left.val
+	}
+
+	return res
+}
