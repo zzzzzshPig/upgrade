@@ -434,3 +434,32 @@ function convertBST (root) {
 
 	return root
 }
+
+// 二叉搜索树的最小绝对差 https://leetcode-cn.com/problems/minimum-absolute-difference-in-bst/
+// 中序遍历
+function getMinimumDifference (root) {
+	let res = null
+	let last = null
+
+	dg(root)
+	function dg (root) {
+		if (root.left) {
+			dg(root.left)
+		}
+
+		if (res === 1) {
+			return res
+		} else if (last === null) {
+			last = root.val
+		} else {
+			res = Math.min(res || Infinity, Math.abs(root.val - last))
+			last = root.val
+		}
+
+		if (root.right) {
+			dg(root.right)
+		}
+	}
+
+	return res
+}
