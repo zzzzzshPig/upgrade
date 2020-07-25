@@ -480,3 +480,28 @@ function findTarget (root, k) {
 	}
 	return dg(root)
 }
+
+// 二叉树的坡度 https://leetcode-cn.com/problems/binary-tree-tilt/
+// 后序遍历
+/*
+时间复杂度：O(n)，其中 n 是结点的数目。每个结点访问一次。
+空间复杂度：O(n)，在最糟糕的情形下，当树倾斜时，树的深度可以达到 n。平均情况下，树的深度为 logn。
+* */
+function findTilt (root) {
+	let res = 0
+
+	function dg (root) {
+		if (!root) return 0
+
+		const left = dg(root.left)
+		const right = dg(root.right)
+
+		// 所有节点的坡度之和 就是整个树的坡度
+		res += Math.abs(right - left)
+
+		return root.val + left + right
+	}
+
+	dg(root)
+	return res
+}
