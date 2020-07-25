@@ -551,3 +551,47 @@ function tree2str (t) {
 	dg(t)
 	return res
 }
+
+// 二叉树的堂兄弟节点 https://leetcode-cn.com/problems/cousins-in-binary-tree/
+// bfs
+function isCousins (root, x, y) {
+	let bfs = [root]
+
+	while (bfs.length) {
+		let b = []
+		let mark = false
+
+		for (let i = 0; i < bfs.length; i++) {
+			let m = false
+
+			if (bfs[i].left) {
+				if (bfs[i].left.val === x || bfs[i].left.val === y) {
+					m = !m
+				}
+
+				b.push(bfs[i].left)
+			}
+
+			if (bfs[i].right) {
+				if (bfs[i].right.val === x || bfs[i].right.val === y) {
+					// x y 父节点相同 不满足条件 返回false
+					if (m) return false
+					m = !m
+				}
+
+				b.push(bfs[i].right)
+			}
+
+			// 如果之前的节点中有x或y 并且当前的节点也有x或y 则返回true
+			if (mark && m) {
+				return true
+			} else {
+				mark = mark || m
+			}
+		}
+
+		bfs = b
+	}
+
+	return false
+}
