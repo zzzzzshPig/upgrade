@@ -463,3 +463,20 @@ function getMinimumDifference (root) {
 
 	return res
 }
+
+// 两数之和 IV - 输入 BST https://leetcode-cn.com/problems/two-sum-iv-input-is-a-bst/
+// 使用遍历 + map
+// 时间复杂度 O(n)，空间复杂度 O(n)
+function findTarget (root, k) {
+	let res = {}
+
+	function dg (root) {
+		if (!root) return false
+
+		if (res[k - root.val]) return true
+		else res[root.val] = true
+
+		return dg(root.left) || dg(root.right)
+	}
+	return dg(root)
+}
