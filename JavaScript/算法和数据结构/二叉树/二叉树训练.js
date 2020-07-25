@@ -595,3 +595,23 @@ function isCousins (root, x, y) {
 
 	return false
 }
+
+// 二叉树的直径 https://leetcode-cn.com/problems/diameter-of-binary-tree/
+// 后序遍历
+// 保存左右链接的最大值 返回左右的最大值
+function diameterOfBinaryTree (root) {
+	let res = 1
+
+	function dg (root) {
+		if (!root) return 0
+
+		const left = dg(root.left)
+		const right = dg(root.right)
+
+		res = Math.max(res, left + right + 1)
+
+		return Math.max(left, right) + 1
+	}
+	dg(root)
+	return res - 1
+}
