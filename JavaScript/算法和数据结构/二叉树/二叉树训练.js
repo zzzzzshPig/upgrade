@@ -615,3 +615,69 @@ function diameterOfBinaryTree (root) {
 	dg(root)
 	return res - 1
 }
+
+// 路径总和 https://leetcode-cn.com/problems/path-sum/
+// 遍历
+function hasPathSum (root, sum) {
+	if (!root) return false
+	let res = false
+
+	function dg (root, s) {
+		if (res) return
+
+		s += root.val
+
+		// 叶子节点
+		if (root.left === null && root.right === null && s === sum) {
+			res = true
+			return
+		}
+
+		root.left && dg(root.left, s)
+		root.right && dg(root.right, s)
+	}
+
+	dg(root, 0)
+	return res
+}
+
+// 另一个树的子树 https://leetcode-cn.com/problems/subtree-of-another-tree/
+// 每一个节点都与t进行比较，相同返回true即可
+function isSubtree (s, t) {
+	function dg (s) {
+		if (s === null && t === null) return true
+		else if (s === null || t === null) return false
+
+		if (isSameTree(s, t)) {
+			return true
+		} else {
+			return dg(s.left, t) || dg(s.right, t)
+		}
+	}
+
+	function isSameTree (s, t) {
+		if (s === null && t === null) return true
+		else if (s === null || t === null) return false
+		return s.val === t.val && isSameTree(s.left, t.left) && isSameTree(s.right, t.right)
+	}
+
+	return dg(s, t)
+}
+
+// 二叉树中第二小的节点 https://leetcode-cn.com/problems/second-minimum-node-in-a-binary-tree/
+function findSecondMinimumValue (root) {
+	let val = root.val
+
+	function dg (root) {
+		if (!root) return Infinity
+
+		if (root.val === val) {
+			return Math.min(dg(root.left), dg(root.right))
+		} else {
+			return root.val
+		}
+	}
+
+	const res = dg(root)
+	return res === Infinity ? -1 : res
+}
