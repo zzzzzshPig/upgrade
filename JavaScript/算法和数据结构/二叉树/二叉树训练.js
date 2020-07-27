@@ -701,3 +701,47 @@ function findMode (root) {
 	dg(root)
 	return Object.keys(map).filter(a => map[a] === max).map(a => Number(a))
 }
+
+// 最长同值路径 https://leetcode-cn.com/problems/longest-univalue-path/
+// 回溯
+// 感觉可以优化，目前暂时不会
+function longestUnivaluePath (root) {
+	if (!root) return 0
+	let res = 1
+
+	function dg (root) {
+		let res_1 = 1
+
+		if (root.left && root.right) {
+			const l = dg(root.left)
+			const r = dg(root.right)
+
+			if (root.val === root.left.val && root.val === root.right.val) {
+				res = Math.max(l + r + 1, res)
+				res_1 = Math.max(l, r) + 1
+			} else if (root.val === root.left.val) {
+				res_1 = l + 1
+			} else if (root.val === root.right.val) {
+				res_1 = r + 1
+			}
+		} else if (root.left) {
+			const l = dg(root.left) + 1
+
+			if (root.left.val === root.val) {
+				res_1 = l
+			}
+		} else if (root.right) {
+			const r = dg(root.right) + 1
+
+			if (root.left.val === root.val) {
+				res_1 = r
+			}
+		}
+
+		res = Math.max(res_1, res)
+		return res_1
+	}
+
+	dg(root)
+	return res - 1
+}
