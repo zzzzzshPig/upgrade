@@ -681,3 +681,23 @@ function findSecondMinimumValue (root) {
 	const res = dg(root)
 	return res === Infinity ? -1 : res
 }
+
+// 二叉搜索树中的众数 https://leetcode-cn.com/problems/find-mode-in-binary-search-tree/
+// 没有达到题目的进阶条件 用了map进行保存出现次数 有待加强
+function findMode (root) {
+	const map = {}
+	let max = 0
+
+	function dg (root) {
+		if (!root) return
+
+		map[root.val] = (map[root.val] + 1) || 1
+		max = map[root.val] > max ? map[root.val] : max
+
+		dg(root.left)
+		dg(root.right)
+	}
+
+	dg(root)
+	return Object.keys(map).filter(a => map[a] === max).map(a => Number(a))
+}
