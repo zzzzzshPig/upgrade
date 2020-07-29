@@ -108,3 +108,56 @@ function totalNQueens (n) {
 
     return res
 }
+
+// 二进制手表 https://leetcode-cn.com/problems/binary-watch/
+// 这道题还有O(1)解法，我是没有想到的，参考 https://leetcode-cn.com/problems/binary-watch/comments/
+function readBinaryWatch (num) {
+    const res = []
+    const light = [1, 2, 4, 8, 1, 2, 4, 8, 16, 32]
+
+    function addHour (time, h) {
+        const t = time.concat()
+        t[0] += h
+        return t
+    }
+
+    function addMinute (time, m) {
+        const t = time.concat()
+        t[1] += m
+        return t
+    }
+
+    function isValid (time) {
+        return time[0] <= 11 && time[1] <= 59
+    }
+
+    // time = [hour, minute]
+    function dg (time, index, row) {
+        // break
+        if (row === num) {
+            time[1] < 10 && (time[1] = '0' + time[1])
+            res.push(time.join(':'))
+            return
+        }
+
+        // 当前生成的是小时
+        for (index; index < 4; index++) {
+            const t = addHour(time, light[index])
+            if (isValid(t)) {
+                dg(t, index + 1,  row + 1)
+            }
+        }
+
+        // 当前生成的是分钟
+        for (index; index < 10; index++) {
+            const t = addMinute(time, light[index])
+            if (isValid(t)) {
+                dg(t, index + 1, row + 1)
+            }
+        }
+    }
+
+    dg([0, 0], 0, 0)
+    return res
+}
+console.log(readBinaryWatch(4))
