@@ -745,3 +745,29 @@ function longestUnivaluePath (root) {
 	dg(root)
 	return res - 1
 }
+
+// 二叉树的层序遍历 https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
+function levelOrder (root) {
+	if (!root) return []
+
+	let bfs = [root]
+	const res = []
+
+	while (bfs.length) {
+		const b = []
+		const r = []
+		res.push(r)
+
+		for (let i = 0; i < bfs.length; i++) {
+			let bfs_i = bfs[i]
+
+			r.push(bfs_i.val)
+			if (bfs_i.left) b.push(bfs_i.left)
+			if (bfs_i.right) b.push(bfs_i.right)
+		}
+
+		bfs = b
+	}
+
+	return res
+}
