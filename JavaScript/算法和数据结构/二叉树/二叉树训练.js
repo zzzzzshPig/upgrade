@@ -810,29 +810,3 @@ function isBalanced (root) {
 
 	return !!dg(root, 0)
 }
-
-// BiNode https://leetcode-cn.com/problems/binode-lcci/
-function convertBiNode (root) {
-
-}
-console.log(convertBiNode({
-	val: 4,
-	left: {
-		val: 2,
-		left: {
-			val: 1,
-			left: null,
-			right: null
-		},
-		right: {
-			val: 3,
-			left: null,
-			right: null
-		}
-	},
-	right: {
-		val: 5,
-		left: null,
-		right: null
-	}
-}))
