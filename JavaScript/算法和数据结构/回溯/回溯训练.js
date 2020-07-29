@@ -160,4 +160,49 @@ function readBinaryWatch (num) {
     dg([0, 0], 0, 0)
     return res
 }
-console.log(readBinaryWatch(4))
+// console.log(readBinaryWatch(4))
+
+// 无重复字符串的排列组合 https://leetcode-cn.com/problems/permutation-i-lcci/
+function permutation (S) {
+    const res = []
+
+    function dg (select, remain) {
+        // break
+        if (remain === '') {
+            res.push(select)
+            return
+        }
+
+        for (let i = 0; i < remain.length; i++) {
+            dg(select + remain[i], remain.slice(0, i) + remain.slice(i + 1), i + 1)
+        }
+    }
+
+    dg('', S, 0)
+    return res
+}
+// console.log(permutation('qwert'))
+
+// 括号 https://leetcode-cn.com/problems/bracket-lcci/
+function generateParenthesis (n) {
+    const res = []
+
+    function dg (left, right, str) {
+        // break
+        if (left === right && right === n) {
+            res.push(str)
+            return
+        }
+
+        if (left === right) {
+            dg(left + 1, right, str + '(')
+        } else if (left > right) {
+            if (left < n) dg(left + 1, right, str + '(')
+            dg(left, right + 1, str + ')')
+        }
+    }
+
+    dg(0, 0, '')
+    return res
+}
+// console.log(generateParenthesis(6))
