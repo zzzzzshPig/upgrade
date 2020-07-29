@@ -771,3 +771,68 @@ function levelOrder (root) {
 
 	return res
 }
+
+// 二叉搜索树的第k大节点 https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/
+function kthLargest (root, k) {
+	let kk = 0
+	let res
+
+	function dg (root) {
+		if (!root || res !== undefined) return
+
+		dg(root.right)
+
+		kk++
+		if (kk === k) {
+			res = root.val
+			return
+		}
+
+		dg(root.left)
+	}
+	dg(root)
+	return res
+}
+
+// 检查平衡性 https://leetcode-cn.com/problems/check-balance-lcci/
+function isBalanced (root) {
+	if (!root) return true
+
+	function dg (r, deep) {
+		if (!r) return deep
+
+		const a = dg(r.left, deep + 1)
+		const b = dg(r.right, deep + 1)
+
+		if (a === false || b === false || Math.abs(a - b) > 1) return false
+		else return Math.max(a, b)
+	}
+
+	return !!dg(root, 0)
+}
+
+// BiNode https://leetcode-cn.com/problems/binode-lcci/
+function convertBiNode (root) {
+
+}
+console.log(convertBiNode({
+	val: 4,
+	left: {
+		val: 2,
+		left: {
+			val: 1,
+			left: null,
+			right: null
+		},
+		right: {
+			val: 3,
+			left: null,
+			right: null
+		}
+	},
+	right: {
+		val: 5,
+		left: null,
+		right: null
+	}
+}))
