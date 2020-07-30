@@ -174,11 +174,11 @@ function permutation (S) {
         }
 
         for (let i = 0; i < remain.length; i++) {
-            dg(select + remain[i], remain.slice(0, i) + remain.slice(i + 1), i + 1)
+            dg(select + remain[i], remain.slice(0, i) + remain.slice(i + 1))
         }
     }
 
-    dg('', S, 0)
+    dg('', S)
     return res
 }
 // console.log(permutation('qwert'))
@@ -220,3 +220,91 @@ function subsets (nums) {
     dg([], 0)
     return res
 }
+
+// 有重复字符串的排列组合 https://leetcode-cn.com/problems/permutation-ii-lcci/
+// TODO 此题是用Set去重，有时间思考更好的解法
+function permutation (S) {
+	const res = new Set()
+
+	function dg (select, remain) {
+		// break
+		if (remain === '') {
+			res.add(select)
+			return
+		}
+
+		for (let i = 0; i < remain.length; i++) {
+			dg(select + remain[i], remain.slice(0, i) + remain.slice(i + 1))
+		}
+	}
+
+	dg('', S)
+	return Array.from(res)
+}
+// console.log(permutation('qqe'))
+
+// 长度为 n 的开心字符串中字典序第 k 小的字符串 https://leetcode-cn.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/
+function getHappyString (n, k) {
+	let res = ''
+	const rule = ['a', 'b', 'c']
+
+	function dg (s) {
+		if (s.length === n || res) {
+			k--
+
+			if (k === 0) {
+				res = s
+			}
+			return
+		}
+
+		for (let i = 0; i < rule.length; i++) {
+			if (rule[i] !== s[s.length - 1]) {
+				dg(s + rule[i])
+			}
+		}
+	}
+
+	dg('')
+	return res
+}
+// console.log(getHappyString(30, 100000000))
+
+// 分割回文串 https://leetcode-cn.com/problems/palindrome-partitioning/
+function partition (s) {
+	let res = []
+
+	function inValid (str) {
+		let left = 0
+		let right = str.length - 1
+
+		while (left < right) {
+			if (str[left] !== str[right]) return false
+			left++
+			right--
+		}
+
+		return true
+	}
+
+	function dg (arr, i) {
+		if (i === s.length) {
+			res.push(arr.slice(0))
+			return
+		}
+
+		let str = ''
+		for (i; i < s.length; i++) {
+			str += s[i]
+			if (inValid(str)) {
+				arr.push(str)
+				dg(arr, i + 1)
+				arr.pop()
+			}
+		}
+	}
+
+	dg([], 0)
+	return res
+}
+// console.log(partition('aaaaaaaaa'))
