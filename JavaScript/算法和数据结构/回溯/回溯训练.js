@@ -206,3 +206,17 @@ function generateParenthesis (n) {
     return res
 }
 // console.log(generateParenthesis(6))
+
+// 幂集 https://leetcode-cn.com/problems/power-set-lcci/
+function subsets (nums) {
+    const res = []
+
+    function dg(arr, i) {
+        res.push(arr)
+        for (i; i < nums.length; i++) {
+            dg(arr.concat(nums[i]), i + 1)
+        }
+    }
+    dg([], 0)
+    return res
+}
