@@ -308,3 +308,33 @@ function partition (s) {
 	return res
 }
 // console.log(partition('aaaaaaaaa'))
+
+// 组合总和 II https://leetcode-cn.com/problems/combination-sum-ii/
+function combinationSum2 (candidates, target) {
+	candidates.sort((a, b) => a - b)
+
+	const res = []
+	const arr = []
+
+	function dg (index, sum) {
+		if (sum >= target) {
+			if (sum === target) {
+				res.push(arr.slice(0))
+			}
+			return
+		}
+
+		for (let i = index; i < candidates.length; i++) {
+			// 1,1,1第三个1 会和第二个1重复 所以需要排除
+			// 1,2,2 第二个2和第一个2 也是会重复 也需要排除
+			if (i > index && candidates[i] === candidates[i - 1]) continue
+
+			arr.push(candidates[i])
+			dg(i + 1, sum + candidates[i])
+			arr.pop()
+		}
+	}
+	dg( 0,0)
+	return res
+}
+console.log(combinationSum2([1,1,1,1,1], 5))
