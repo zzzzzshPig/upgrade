@@ -337,4 +337,136 @@ function combinationSum2 (candidates, target) {
 	dg( 0,0)
 	return res
 }
-console.log(combinationSum2([1,1,1,1,1], 5))
+// console.log(combinationSum2([1,1,1,1,1], 5))
+
+// 优美的排列 https://leetcode-cn.com/problems/beautiful-arrangement/
+function countArrangement (N) {
+	let res = 0
+	let arr = []
+	let deep = 1
+
+	function dg () {
+		if (deep > N) {
+			res++
+			return
+		}
+
+		for (let i = 1; i <= N; i++) {
+			if (arr[i]) continue
+
+			// 是否是优美排列
+			if (i % deep === 0 || deep % i === 0) {
+				arr[i] = true
+				deep++
+				dg(1)
+				deep--
+				arr[i] = false
+			}
+		}
+	}
+
+	dg()
+	return res
+}
+// console.log(countArrangement(15))
+
+// 黄金矿工 https://leetcode-cn.com/problems/path-with-maximum-gold/
+// 注释是自己写的，性能上有点问题
+// 没有注释的 是参考 https://leetcode-cn.com/submissions/detail/93601601/ 排名第一的人写的
+// 思路是一致的，不过快点的少了一部分dg
+function getMaximumGold (grid) {
+	/*
+	* 	let res = 0
+	let walk_map = {}
+
+	for (let i = 0; i < grid.length; i++) {
+		for (let j = 0; j < grid[i].length; j++) {
+			// 从任意一个有黄金的单元格出发
+			if (grid[i][j] !== 0) dg(i, j, grid[i][j])
+		}
+	}
+
+	function dg (i, j, sum) {
+		const geo = `${i}${j}`
+		if (walk_map[geo]) return
+
+		// 上下左右都能走，给走过的做标记
+		walk_map[geo] = true
+
+		// 上
+		if (grid[i - 1] && grid[i - 1][j]) dg(i - 1, j, sum + grid[i - 1][j])
+		// 右
+		if (grid[i][j + 1]) dg(i, j + 1, sum + grid[i][j + 1])
+		// 下
+		if (grid[i + 1] && grid[i + 1][j]) dg(i + 1, j, sum + grid[i + 1][j])
+		// 左
+		if (grid[i][j - 1]) dg(i, j - 1, sum + grid[i][j - 1])
+
+		res = Math.max(res, sum)
+
+		walk_map[geo] = false
+	}
+
+	return res
+	* */
+
+	let res = 0
+	const m = grid.length
+	const n = grid[0].length
+	const used = new Array(m).fill(0).map(() => new Array(n).fill(false));
+
+	for (let i = 0; i < m; i++) {
+		for (let j = 0; j < n; j++) {
+			// 从任意一个有黄金的单元格出发
+			dg(i, j, grid[i][j])
+		}
+	}
+
+	function dg (i, j, sum) {
+		if (grid[i][j] !== 0) {
+			// 上下左右都能走，给走过的做标记
+			used[i][j] = true
+
+			// 上
+			if (i - 1 >= 0 && !used[i - 1][j]) dg(i - 1, j, sum + grid[i - 1][j])
+			// 右
+			if (j + 1 < n && !used[i][j + 1]) dg(i, j + 1, sum + grid[i][j + 1])
+			// 下
+			if (i + 1 < m && !used[i + 1][j]) dg(i + 1, j, sum + grid[i + 1][j])
+			// 左
+			if (j - 1 >= 0 && !used[i][j - 1]) dg(i, j - 1, sum + grid[i][j - 1])
+
+			res = Math.max(res, sum)
+			used[i][j] = false
+		}
+	}
+
+	return res
+}
+// console.log(getMaximumGold([[1,1,1],[1,1,1],[1,1,1],[1,1,1],[1,1,1],[1,1,1],[1,1,1],[1,1,1],[1,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]]))
+
+// 子集 II https://leetcode-cn.com/problems/subsets-ii/submissions/
+// 思路和组合总和 II 一致
+function subsetsWithDup (nums) {
+	nums.sort((a, b) => a - b)
+
+	const res = []
+	const arr = []
+
+	function dg (index) {
+		res.push(arr.slice(0))
+
+		for (let i = index; i < nums.length; i++) {
+			// 1,1,1第三个1 会和第二个1重复 所以需要排除
+			// 1,2,2 第二个2和第一个2 也是会重复 也需要排除
+			if (i > index && nums[i] === nums[i - 1]) continue
+
+			arr.push(nums[i])
+			dg(i + 1)
+			arr.pop()
+		}
+	}
+	dg( 0,0)
+	return res
+}
+// console.log(subsetsWithDup([1,2,2,1,1,1,11,1,1,1,1,11,1,1,1,1,1,1,1,11,1,1,1]))
