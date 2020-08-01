@@ -45,7 +45,7 @@
 
 ## parse
 
-上一节讲普通slot的compiler的时候提到过scope slot，这里就直接说了，parse阶段的处理在processSlotContent中。
+上一节讲普通slot的compiler的时候提到过scopedSlots，这里就直接说了，parse阶段的处理在processSlotContent中。
 
 ### processSlotContent
 
@@ -168,7 +168,7 @@ function genScopedSlot (
 
 ```js
 {
-	key: "props",
+	key: "footer",
 	fn: function(props){
     return _c('div',{},[_v("我是"+_s(props.text))])
   }
@@ -189,14 +189,14 @@ return `scopedSlots:_u([${generatedSlots}]${
 
 ```js
 scopedSlots:_u([{
-	key: "props",
+	key: "footer",
 	fn: function(props){
     return _c('div',{},[_v("我是"+_s(props.text))])
   }
 }])
 ```
 
-需要注意的是，这里使用的是_u，对应的render方法是resolveScopedSlots，详细的在runtime中再讲，这里只需要了解即可。这里对于父级的scopeslots就处理完毕了，那么在子组件中的slot有什么不一样的呢，处理方法在genSlot中。
+需要注意的是，这里使用的是_u，对应的render方法是resolveScopedSlots，详细的在runtime中再讲，这里只需要了解即可。这里对于父级的scopedSlots就处理完毕了，那么在子组件中的slot有什么不一样的呢，处理方法在genSlot中。
 
 ### genSlot
 
@@ -239,6 +239,226 @@ function genSlot (el: ASTElement, state: CodegenState): string {
 
 ## 总结
 
-1. 对于父组件来说，在parse阶段scopeSlots将scopedSlots挂载到了父级中，父级在generate阶段会新增scopedSlots属性，调用_u方法创建scopedSlots。
+1. 对于父组件来说，在parse阶段scopedSlots挂载到了父级中，父级在generate阶段会新增scopedSlots属性，调用_u方法创建scopedSlots。
 2. 对于子组件来说，parse阶段无特别的内容，在generate阶段会对attrs进行处理，处理后的值当作_t的第三个参数传入，也就是props。
+
+# runtime
+
+先来看父级的scopedSlots
+
+```js
+scopedSlots:_u([{
+	key: "footer",
+	fn: function(props){
+    return _c('div',{},[_v("我是"+_s(props.text))])
+  }
+}])
+```
+
+_u对应的render方法是resolveScopedSlots
+
+## resolveScopedSlots
+
+```js
+export function resolveScopedSlots (
+  fns: ScopedSlotsData, // see flow/vnode
+  res?: Object,
+  // the following are added in 2.6
+  hasDynamicKeys?: boolean,
+  contentHashKey?: number
+): { [key: string]: Function, $stable: boolean } {
+  res = res || { $stable: !hasDynamicKeys }
+  for (let i = 0; i < fns.length; i++) {
+    const slot = fns[i]
+    if (Array.isArray(slot)) {
+      resolveScopedSlots(slot, res, hasDynamicKeys)
+    } else if (slot) {
+      xxx
+      res[slot.key] = slot.fn
+    }
+  }
+  if (contentHashKey) {
+    (res: any).$key = contentHashKey
+  }
+  return res
+}
+```
+
+这里，res，hasDynamicKeys，contentHashKey都是没有传的，`res = {$stable: true}`。slot是Array不是Array最后也都是调用resolveScopedSlots，Array的情况会递归调用，最后还是单个slot，所以这里只需要看else的情况。if(contentHashKey)`也是false不需要看，所以最后的返回值如下
+
+```js
+{
+	footer: function(props){
+    return _c('div',{},[_v("我是"+_s(props.text))])
+  }
+}
+```
+
+那么这里对于_u的处理就完毕了，scopedSlots的值是
+
+```js
+scopedSlots: {
+	footer: function(props){
+    return _c('div',{},[_v("我是"+_s(props.text))])
+  }
+}
+```
+
+接下来是对于子组件的处理，common章节讲到过，这里直接看renderSlot
+
+## renderSlot-start
+
+```js
+export function renderSlot (
+  name: string,
+  fallback: ?Array<VNode>,
+  props: ?Object,
+  bindObject: ?Object
+): ?Array<VNode> {
+  const scopedSlotFn = this.$scopedSlots[name]
+  xxx
+}
+```
+
+这里我们需要先了解this.$scopedSlots从哪里来，定义在`core/instance/render.js`。
+
+### Vue.prototype._render
+
+```js
+const vm: Component = this
+const { render, _parentVnode } = vm.$options
+
+if (_parentVnode) {
+  vm.$scopedSlots = normalizeScopedSlots(
+    _parentVnode.data.scopedSlots,
+    vm.$slots,
+    vm.$scopedSlots
+  )
+}
+```
+
+这里我们看一下normalizeScopedSlots方法
+
+### normalizeScopedSlots-start
+
+```js
+res = {}
+for (const key in slots) {
+  if (slots[key] && key[0] !== '$') {
+    res[key] = normalizeScopedSlot(normalSlots, key, slots[key])
+  }
+}
+```
+
+首先对scopedSlots进行处理，`res[key] = normalizeScopedSlot(normalSlots, key, slots[key])`
+
+#### normalizeScopedSlot
+
+```js
+function normalizeScopedSlot(normalSlots, key, fn) {
+  const normalized = function () {
+    let res = arguments.length ? fn.apply(null, arguments) : fn({})
+    res = res && typeof res === 'object' && !Array.isArray(res)
+      ? [res] // single vnode
+      : normalizeChildren(res)
+    return res && (
+      res.length === 0 ||
+      (res.length === 1 && res[0].isComment) // #9658
+    ) ? undefined
+      : res
+  }
+  xxx
+  return normalized
+}
+```
+
+这里的三个参数是针对`v-slot`的。最后返回了一个函数，先不看具体内容
+
+### normalizeScopedSlots-end
+
+```js
+// expose normal slots on scopedSlots
+for (const key in normalSlots) {
+  if (!(key in res)) {
+  	res[key] = proxyNormalSlot(normalSlots, key)
+  }
+}
+```
+
+这里看一下proxyNormalSlot
+
+#### proxyNormalSlot
+
+```js
+function proxyNormalSlot(slots, key) {
+  return () => slots[key]
+}
+```
+
+也是返回一个函数
+
+### normalizeScopedSlots-end
+
+```js
+if (slots && Object.isExtensible(slots)) {
+  (slots: any)._normalized = res
+}
+```
+
+增加_normalized属性，相当于缓存。
+
+这里normalizeScopedSlots处理完毕，vm.$scopedSlots最后的返回值如下
+
+```js
+{
+  default: ƒ (),
+  footer: ƒ (),
+  header: ƒ ()
+}
+```
+
+## renderSlot-end
+
+this.$scopedSlots的值已经知道了，继续往下看。
+
+```js
+const scopedSlotFn = this.$scopedSlots[name]
+let nodes
+if (scopedSlotFn) { // scoped slot
+  props = props || {}
+  // 不处理先不看
+  xxx
+  nodes = scopedSlotFn(props) || fallback
+}
+```
+
+scopedSlotFn我们可以知道，它对应的是上面三个函数。对于default和header来说，由于他们不是scopedSlot所以调用scopedSlotFn直接返回对于的vnode，这里对应proxyNormalSlot返回的方法。对于footer，他会走normalizeScopedSlot返回的方法，这里看一下
+
+```js
+const normalized = function () {
+  let res = arguments.length ? fn.apply(null, arguments) : fn({})
+  res = res && typeof res === 'object' && !Array.isArray(res)
+    ? [res] // single vnode
+  : normalizeChildren(res)
+  return res && (
+    res.length === 0 ||
+    (res.length === 1 && res[0].isComment) // #9658
+  ) ? undefined
+  : res
+}
+```
+
+这里我们会传入props，对应到`fn.apply`的arguments。props是`{text:"footer"}`，也就是子组件中定义的属性。fn对应的就是
+
+```js
+function(props){
+  return _c('div',{},[_v("我是"+_s(props.text))])
+}
+```
+
+这里就会创建对应的vnode然后返回
+
+## 总结
+
+1. scopedSlot相对于普通的插槽在处理上多了一个props，其他的和普通插槽差不多。
 
