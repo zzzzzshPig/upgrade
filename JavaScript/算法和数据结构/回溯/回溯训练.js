@@ -466,7 +466,106 @@ function subsetsWithDup (nums) {
 			arr.pop()
 		}
 	}
-	dg( 0,0)
+	dg(0, 0)
 	return res
 }
 // console.log(subsetsWithDup([1,2,2,1,1,1,11,1,1,1,1,11,1,1,1,1,1,1,1,11,1,1,1]))
+
+// 字母组合迭代器 https://leetcode-cn.com/problems/iterator-for-combination/
+function CombinationIterator (characters, combinationLength) {
+	this.dp = Array.from({length: combinationLength}).map((a, i) => i)
+	this.characters = characters
+	this.has = true
+}
+CombinationIterator.prototype.next = function() {
+	let res = ''
+	for (let i = 0; i < this.dp.length; i++) {
+		res += this.characters[this.dp[i]]
+	}
+
+	// 更新dp
+	let j = this.characters.length - 1
+	let i = this.dp.length - 1
+
+	// 向前寻值
+	while (this.dp[i] === j) {
+		i--
+		j--
+	}
+
+	if (i < 0) {
+		this.has = false
+	} else {
+		let v = this.dp[i]
+		for (i; i < this.dp.length; i++) {
+			v++
+			this.dp[i] = v
+		}
+	}
+
+	return res
+}
+CombinationIterator.prototype.hasNext = function() {
+	return this.has
+}
+
+// 全排列 II https://leetcode-cn.com/problems/permutations-ii/
+function permuteUnique (nums) {
+	nums.sort((a, b) => a - b)
+
+	const res = []
+	const mark = {}
+
+	function dg (n) {
+		if (n.length === nums.length) {
+			res.push(n.slice(0))
+			return
+		}
+
+		for (let i = 0; i < nums.length; i++) {
+			if (mark[i]) continue
+			// 这一个最重要 参考 https://leetcode-cn.com/problems/permutations-ii/solution/hui-su-suan-fa-python-dai-ma-java-dai-ma-by-liwe-2/
+			if (i > 0 && nums[i] === nums[i - 1] && mark[i - 1]) continue
+
+			mark[i] = true
+			n.push(nums[i])
+
+			dg(n)
+
+			mark[i] = false
+			n.pop()
+		}
+	}
+
+	dg([])
+	return res
+}
+// console.log(permuteUnique([1,1,2,2,3,3]))
+
+// 电话号码的字母组合 https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/
+function letterCombinations (digits) {
+	if (digits.length === 0) return []
+
+	const rule = ['', '', 'abc', 'def', 'ghi', 'jkl', 'mno', 'pqrs', 'tuv', 'wxyz']
+	const res = []
+	const LEN = digits.length
+
+	function dfs (s, deep) {
+		// 终止条件
+		if (deep === LEN) {
+			res.push(s)
+			return
+		}
+
+		// 获取当前电话号码对应的字母
+		const r = rule[digits[deep]]
+		for (let i = 0; i < r.length; i++) {
+			// 穷举
+			dfs(s + r[i], deep + 1)
+		}
+	}
+
+	dfs('', 0)
+	return res
+}
+console.log(letterCombinations(''))
