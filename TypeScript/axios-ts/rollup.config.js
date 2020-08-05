@@ -5,10 +5,10 @@ import commonjs from '@rollup/plugin-commonjs'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 
 export default {
-    input: 'src/index.ts',
+    input: 'src/app.ts',
     output: {
         dir: 'dist',
-        name: 'index.js',
+        name: 'app.js',
         format: 'umd',
         sourcemap: true
     },
@@ -17,7 +17,7 @@ export default {
         commonjs(),
         typescript(),
         serve({
-            open: true,
+            open: false,
             port: 8000,
             contentBase: ''
         }),

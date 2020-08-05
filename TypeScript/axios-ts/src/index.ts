@@ -1,9 +1,8 @@
-const a = 123
+import { AxiosRequestConfig } from './types/index'
+import xhr from './xhr'
 
-function sleep (ms: number) {
-    return new Promise(resolve => {
-        setTimeout(resolve, ms)
-    })
+function axios (config: AxiosRequestConfig): void {
+    xhr(config)
 }
 
-sleep(1000).then(() => console.log(a))
+export default axios

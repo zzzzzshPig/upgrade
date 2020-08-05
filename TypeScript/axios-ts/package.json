@@ -4,9 +4,12 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "rollup -c -w"
+    "dev": "npm-run-all --parallel devServer devRollup",
+    "devServer": "node server/app.js",
+    "devRollup": "rollup -c -w"
   },
   "devDependencies": {
+    "@koa/router": "^9.3.1",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
     "@rollup/plugin-typescript": "^5.0.2",
@@ -19,7 +22,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "koa": "^2.13.0",
     "lib": "^4.3.0",
+    "npm-run-all": "^4.1.5",
     "rollup": "^2.23.0",
     "rollup-plugin-livereload": "^1.3.0",
     "rollup-plugin-serve": "^1.0.3",
