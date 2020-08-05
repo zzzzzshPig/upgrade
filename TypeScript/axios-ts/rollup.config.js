@@ -8,6 +8,7 @@ export default {
     input: 'src/index.ts',
     output: {
         dir: 'dist',
+        name: 'index.js',
         format: 'umd',
         sourcemap: true
     },
