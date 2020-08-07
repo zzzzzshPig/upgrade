@@ -221,7 +221,7 @@ function subsets (nums) {
     return res
 }
 
-// 有重复字符串的排列组合 https://leetcode-cn.com/problems/permutation-ii-lcci/
+// 有重复字符串的排列组合 https://leetcode-cn.com/problems/permutation-ii-lcci/ 和 https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof/submissions/
 function permutation (S) {
 	S = S.split('').sort((a, b) => a.localeCompare(b)).join('')
 
@@ -247,7 +247,7 @@ function permutation (S) {
 		}
 	}
 
-	dg([])
+	dg('')
 	return res
 }
 // console.log(permutation('qqe'))
@@ -577,4 +577,31 @@ function letterCombinations (digits) {
 	dfs('', 0)
 	return res
 }
-console.log(letterCombinations(''))
+
+// 计算各个位数不同的数字个数 https://leetcode-cn.com/problems/count-numbers-with-unique-digits/
+// 有其他解法更简单，暂时不会
+function countNumbersWithUniqueDigits (n) {
+	let r = '0123456789'
+	let res = 0
+	let mark = {}
+
+	function dg (deep) {
+		if (deep === n) {
+			return
+		}
+
+		let i = deep ? 0 : 1
+		for (i; i < r.length; i++) {
+			if (mark[i]) continue
+			res++
+
+			mark[i] = true
+			dg(deep + 1)
+			mark[i] = false
+		}
+	}
+
+	dg(0)
+	return res + 1
+}
+// console.log(countNumbersWithUniqueDigits(10))
