@@ -222,24 +222,33 @@ function subsets (nums) {
 }
 
 // 有重复字符串的排列组合 https://leetcode-cn.com/problems/permutation-ii-lcci/
-// TODO 此题是用Set去重，有时间思考更好的解法
 function permutation (S) {
-	const res = new Set()
+	S = S.split('').sort((a, b) => a.localeCompare(b)).join('')
 
-	function dg (select, remain) {
-		// break
-		if (remain === '') {
-			res.add(select)
+	const res = []
+	const mark = {}
+
+	function dg (n) {
+		if (n.length === S.length) {
+			res.push(n)
 			return
 		}
 
-		for (let i = 0; i < remain.length; i++) {
-			dg(select + remain[i], remain.slice(0, i) + remain.slice(i + 1))
+		for (let i = 0; i < S.length; i++) {
+			if (mark[i]) continue
+			// 这一个最重要 参考 https://leetcode-cn.com/problems/permutations-ii/solution/hui-su-suan-fa-python-dai-ma-java-dai-ma-by-liwe-2/
+			if (i > 0 && S[i] === S[i - 1] && mark[i - 1]) continue
+
+			mark[i] = true
+
+			dg(n + S[i])
+
+			mark[i] = false
 		}
 	}
 
-	dg('', S)
-	return Array.from(res)
+	dg([])
+	return res
 }
 // console.log(permutation('qqe'))
 
