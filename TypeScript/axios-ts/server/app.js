@@ -5,7 +5,7 @@ const app = new Koa()
 const router = new Router()
 
 router.get('/getCustomer', (ctx, next) => {
-    ctx.body = 'zzh'
+    ctx.body = ctx.query
 })
 
 app.use(async (ctx, next) => {
