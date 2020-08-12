@@ -180,11 +180,11 @@ return rawChild
 
 对于vnode的创建会调用cbs.create，具体逻辑不细述，这里会在vnode create完毕之后调用transition的`create`函数
 
-## create
+## create & active
 
 create实际上就是enter
 
-## enter
+### enter
 
 ```js
 // call leave callback now
@@ -194,7 +194,7 @@ if (isDef(el._leaveCb)) {
 }
 ```
 
-上一个动画未完成时调用enter，会设置` el._leaveCb.cancelled = true`，然后调用`_leaveCb`直接结束
+上一个过渡未完成时调用enter，会设置` el._leaveCb.cancelled = true`，然后调用`_leaveCb`直接结束
 
 ```js
 const data = resolveTransition(vnode.data.transition)
@@ -202,7 +202,7 @@ const data = resolveTransition(vnode.data.transition)
 
 这里比较关键的是resolveTransition
 
-### resolveTransition-start
+#### resolveTransition-start
 
 ```js
 export function resolveTransition (def?: string | Object): ?Object {
@@ -225,7 +225,7 @@ export function resolveTransition (def?: string | Object): ?Object {
 
 这里的作用其实就是设置过度class的名称
 
-#### autoCssTransition
+##### autoCssTransition
 
 ```js
 const autoCssTransition: (name: string) => Object = cached(name => {
@@ -240,7 +240,7 @@ const autoCssTransition: (name: string) => Object = cached(name => {
 })
 ```
 
-### resolveTransition-end
+#### resolveTransition-end
 
 ```js
 if (isUndef(data)) {
@@ -310,4 +310,305 @@ if (isAppear && !appear && appear !== '') {
 }
 ```
 
-如果是第一次渲染，并且没有配置appear prop，则不进行动画渲染
+如果是第一次渲染，并且没有配置appear prop，则不使用过渡效果
+
+```js
+const startClass = isAppear && appearClass
+  ? appearClass
+  : enterClass
+const activeClass = isAppear && appearActiveClass
+  ? appearActiveClass
+  : enterActiveClass
+const toClass = isAppear && appearToClass
+  ? appearToClass
+  : enterToClass
+```
+
+获取class，具体看transition的props https://cn.vuejs.org/v2/api/#transition
+
+```js
+const beforeEnterHook = isAppear
+  ? (beforeAppear || beforeEnter)
+  : beforeEnter
+const enterHook = isAppear
+  ? (typeof appear === 'function' ? appear : enter)
+  : enter
+const afterEnterHook = isAppear
+  ? (afterAppear || afterEnter)
+  : afterEnter
+const enterCancelledHook = isAppear
+  ? (appearCancelled || enterCancelled)
+  : enterCancelled
+```
+
+获取自定义事件，具体看transition的自定义事件https://cn.vuejs.org/v2/api/#transition
+
+```js
+const explicitEnterDuration: any = toNumber(
+  isObject(duration)
+    ? duration.enter
+    : duration
+)
+
+if (process.env.NODE_ENV !== 'production' && explicitEnterDuration != null) {
+  checkDuration(explicitEnterDuration, 'enter', vnode)
+}
+```
+
+获取duration，校验duration
+
+```js
+const expectsCSS = css !== false && !isIE9
+const userWantsControl = getHookArgumentsLength(enterHook)
+```
+
+expectsCSS用于是否显示过渡类，userWantsControl的作用是判断是否自动控制元素的显示隐藏逻辑，默认是自动添加和删除class
+
+#### getHookArgumentsLength-start
+
+```js
+function getHookArgumentsLength (fn: Function): boolean {
+  if (isUndef(fn)) {
+    return false
+  }
+  const invokerFns = fn.fns
+  if (isDef(invokerFns)) {
+    // invoker
+    return getHookArgumentsLength(
+      Array.isArray(invokerFns)
+        ? invokerFns[0]
+        : invokerFns
+    )
+  } else {
+    return (fn._length || fn.length) > 1
+  }
+}
+```
+
+判断enterHook的参数是否超过一个，第二个参数是(done)，超过一个则表示用户手动控制过渡的结束
+
+#### getHookArgumentsLength-end
+
+```js
+const cb = el._enterCb = once(() => {
+  if (expectsCSS) {
+    removeTransitionClass(el, toClass)
+    removeTransitionClass(el, activeClass)
+  }
+  if (cb.cancelled) {
+    if (expectsCSS) {
+      removeTransitionClass(el, startClass)
+    }
+    enterCancelledHook && enterCancelledHook(el)
+  } else {
+    afterEnterHook && afterEnterHook(el)
+  }
+  el._enterCb = null
+})
+```
+
+定义enter结束后的回调函数，cancelled为true表示enter未结束，leave执行了
+
+```js
+if (!vnode.data.show) {
+  // remove pending leave element on enter by injecting an insert hook
+  mergeVNodeHook(vnode, 'insert', () => {
+    const parent = el.parentNode
+    const pendingNode = parent && parent._pending && parent._pending[vnode.key]
+    if (pendingNode &&
+      pendingNode.tag === vnode.tag &&
+      pendingNode.elm._leaveCb
+    ) {
+      pendingNode.elm._leaveCb()
+    }
+    enterHook && enterHook(el, cb)
+  })
+}
+```
+
+调用enterHook，cb就是done
+
+```js
+// start enter transition
+beforeEnterHook && beforeEnterHook(el)
+if (expectsCSS) {
+  addTransitionClass(el, startClass)
+  addTransitionClass(el, activeClass)
+  nextFrame(() => {
+    removeTransitionClass(el, startClass)
+    if (!cb.cancelled) {
+      addTransitionClass(el, toClass)
+      if (!userWantsControl) {
+        if (isValidDuration(explicitEnterDuration)) {
+          setTimeout(cb, explicitEnterDuration)
+        } else {
+          whenTransitionEnds(el, type, cb)
+        }
+      }
+    }
+  })
+}
+```
+
+调用beforeEnterHook，如果使用css控制过渡，则添加class，这里是控制enter相关的class 的添加和删除。whenTransitionEnds是获取transition属性的持续时间用来结束enter状态
+
+```js
+if (vnode.data.show) {
+  toggleDisplay && toggleDisplay()
+  enterHook && enterHook(el, cb)
+}
+```
+
+v-show相关，用来控制显示与隐藏
+
+```js
+if (!expectsCSS && !userWantsControl) {
+  cb()
+}
+```
+
+如果是纯js控制的话，调用enter
+
+## remove
+
+对于v-if控制的transition来说，remove调用的是leave
+
+### leave
+
+leave逻辑和enter差不多，大致上看一下
+
+```js
+const el: any = vnode.elm
+
+// call enter callback now
+if (isDef(el._enterCb)) {
+  el._enterCb.cancelled = true
+  el._enterCb()
+}
+```
+
+leave的时候enter还未结束，调用_enterCb，结束enter状态
+
+```js
+const data = resolveTransition(vnode.data.transition)
+  
+if (isUndef(data) || el.nodeType !== 1) {
+  return rm()
+}
+
+/* istanbul ignore if */
+if (isDef(el._leaveCb)) {
+  return
+}
+```
+
+边界情况处理
+
+```js
+const {
+  css,
+  type,
+  leaveClass,
+  leaveToClass,
+  leaveActiveClass,
+  beforeLeave,
+  leave,
+  afterLeave,
+  leaveCancelled,
+  delayLeave,
+  duration
+} = data
+```
+
+用到的属性
+
+```js
+const expectsCSS = css !== false && !isIE9
+const userWantsControl = getHookArgumentsLength(leave)
+
+const explicitLeaveDuration: any = toNumber(
+  isObject(duration)
+    ? duration.leave
+    : duration
+)
+```
+
+是否css控制transition，是否手动控制过渡流程，获取过渡持续时间
+
+```js
+const cb = el._leaveCb = once(() => {
+  if (el.parentNode && el.parentNode._pending) {
+    el.parentNode._pending[vnode.key] = null
+  }
+  if (expectsCSS) {
+    removeTransitionClass(el, leaveToClass)
+    removeTransitionClass(el, leaveActiveClass)
+  }
+  if (cb.cancelled) {
+    if (expectsCSS) {
+      removeTransitionClass(el, leaveClass)
+    }
+    leaveCancelled && leaveCancelled(el)
+  } else {
+    rm()
+    afterLeave && afterLeave(el)
+  }
+  el._leaveCb = null
+})
+```
+
+leave完成的回调
+
+```js
+if (delayLeave) {
+  delayLeave(performLeave)
+} else {
+  performLeave()
+}
+```
+
+fix，见`platforms/web/runtime/components/transition.js`
+
+```js
+function performLeave () {
+  // the delayed leave may have already been cancelled
+  if (cb.cancelled) {
+    return
+  }
+  // record leaving element
+  if (!vnode.data.show && el.parentNode) {
+    (el.parentNode._pending || (el.parentNode._pending = {}))[(vnode.key: any)] = vnode
+  }
+  beforeLeave && beforeLeave(el)
+  if (expectsCSS) {
+    addTransitionClass(el, leaveClass)
+    addTransitionClass(el, leaveActiveClass)
+    nextFrame(() => {
+      removeTransitionClass(el, leaveClass)
+      if (!cb.cancelled) {
+        addTransitionClass(el, leaveToClass)
+        if (!userWantsControl) {
+          if (isValidDuration(explicitLeaveDuration)) {
+            setTimeout(cb, explicitLeaveDuration)
+          } else {
+            whenTransitionEnds(el, type, cb)
+          }
+        }
+      }
+    })
+  }
+  leave && leave(el, cb)
+  if (!expectsCSS && !userWantsControl) {
+    cb()
+  }
+}
+```
+
+leave效果控制流程
+
+
+
+# 总结
+
+1. transition的自动控制其实是控制class的添加和删除，手动控制其实是控制hooks的调用
+
