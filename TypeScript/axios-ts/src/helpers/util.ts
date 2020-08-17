@@ -5,6 +5,6 @@ export function isDate (val: any): val is Date {
 }
 
 // not use object in val
-export function isObject (val: any) {
-    return val !== null && typeof val === 'object'
+export function isPlainObject (val: any) {
+    return toString.call(val) === '[object Object]'
 }

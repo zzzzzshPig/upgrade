@@ -1,12 +1,8 @@
 const Koa = require('koa')
-const Router = require('@koa/router')
+const bodyParser = require('koa-bodyparser')
+const { getAllRouters } = require('./helpers/router')
 
 const app = new Koa()
-const router = new Router()
-
-router.get('/getCustomer', (ctx, next) => {
-    ctx.body = ctx.query
-})
 
 app.use(async (ctx, next) => {
     ctx.set('Access-Control-Allow-Origin', '*')
@@ -20,7 +16,11 @@ app.use(async (ctx, next) => {
     }
 })
 
-app.use(router.routes()).use(router.allowedMethods())
+app.use(bodyParser())
+
+getAllRouters().forEach(a => {
+    app.use(a.routes()).use(a.allowedMethods())
+})
 
 app.listen(3000, () => {
     console.log('listen on the 3000 port')

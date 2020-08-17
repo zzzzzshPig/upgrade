@@ -5,7 +5,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 
 export default {
-    input: 'src/app.ts',
+    input: 'app.ts',
     output: {
         dir: 'dist',
         name: 'app.js',
