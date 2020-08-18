@@ -6,7 +6,10 @@ import xhr from './xhr'
 
 function axios (config: AxiosRequestConfig): AxiosPromise {
     processConfig(config)
-    return xhr(config)
+    return xhr(config).then(res => {
+        res.headers = parseHeader(res.headers)
+        return res
+    })
 }
 
 function processConfig (config: AxiosRequestConfig): void {
@@ -27,6 +30,19 @@ function transformRequestData (config: AxiosRequestConfig): any {
 function transformUrl (config: AxiosRequestConfig): string {
     const { url, params } = config
     return buildURL(url, params)
+}
+
+function parseHeader (headers: string) {
+    headers = headers.slice(0, -1)
+
+    const res: any = {}
+    headers.split('\r\n').forEach(a => {
+        const [key, value] = a.split(': ')
+        if (!key || !value) return
+
+        res[key.toLowerCase()] = value
+    })
+    return res
 }
 
 export default axios
