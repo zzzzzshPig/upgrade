@@ -50,7 +50,8 @@
       "camelcase": "off",
       "no-new": "off",
       "no-mixed-spaces-and-tabs": "off",
-      "@typescript-eslint/camelcase": "off"
+      "@typescript-eslint/camelcase": "off",
+      "no-empty": "off"
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
