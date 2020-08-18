@@ -7,7 +7,8 @@ import xhr from './xhr'
 function axios (config: AxiosRequestConfig): AxiosPromise {
     processConfig(config)
     return xhr(config).then(res => {
-        res.headers = parseHeader(res.headers)
+        res.headers = transformResponseHeader(res.headers)
+        res.data = transformResponseData(res.data, res.request)
         return res
     })
 }
@@ -32,7 +33,7 @@ function transformUrl (config: AxiosRequestConfig): string {
     return buildURL(url, params)
 }
 
-function parseHeader (headers: string) {
+function transformResponseHeader (headers: string) {
     headers = headers.slice(0, -1)
 
     const res: any = {}
@@ -43,6 +44,15 @@ function parseHeader (headers: string) {
         res[key.toLowerCase()] = value
     })
     return res
+}
+
+function transformResponseData (data: any, request: XMLHttpRequest) {
+    if (typeof data === 'string') {
+        try {
+            data = JSON.parse(data)
+        } catch (e) {}
+    }
+    return data
 }
 
 export default axios
