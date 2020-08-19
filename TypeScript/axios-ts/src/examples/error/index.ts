@@ -1,5 +1,6 @@
 import axios from '../../index'
 import config from '../config'
+import { AxiosError } from '../../helpers/error'
 
 export default function start () {
     axios({
@@ -7,8 +8,8 @@ export default function start () {
         url: `${config.baseUrl}/error/get1`
     }).then((res) => {
         console.log(res)
-    }).catch((e) => {
-        console.log(e)
+    }).catch((e: AxiosError) => {
+        console.dir(e)
     })
 
     axios({
@@ -38,6 +39,6 @@ export default function start () {
     }).then((res) => {
         console.log(res)
     }).catch((e) => {
-        console.log(e.message)
+        console.log(e)
     })
 }

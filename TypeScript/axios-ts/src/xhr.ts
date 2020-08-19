@@ -1,4 +1,5 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types/index'
+import { createError } from './helpers/error'
 
 export default function xhr (config: AxiosRequestConfig): AxiosPromise {
     return new Promise((resolve, reject) => {
@@ -20,7 +21,12 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
             request.timeout = timeout
         }
         request.ontimeout = () => {
-            reject(new Error(`Timeout of ${timeout} ms exceeded`))
+            reject(createError(
+                `Timeout of ${timeout} ms exceeded`,
+                config,
+                undefined,
+                request
+            ))
         }
 
         request.send(data)
@@ -45,7 +51,13 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
             // error
             // TODO 304状态码应该resolve
             if (response.status < 200 || response.status >= 300) {
-                reject(new Error(`Request failed with status code ${response.status}`))
+                reject(createError(
+                    `Request failed with status code ${response.status}`,
+                    config,
+                    undefined,
+                    request,
+                    response
+                ))
             } else {
                 resolve(response)
             }
@@ -53,7 +65,12 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
 
         // error
         request.onerror = () => {
-            reject(new Error('Network Error'))
+            reject(createError(
+                'Network Error',
+                config,
+                undefined,
+                request
+            ))
         }
     })
 }
