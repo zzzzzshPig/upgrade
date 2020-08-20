@@ -1,6 +1,6 @@
 <template>
   <div class="setup-component">
-	  setup
+	  {{ setup }}
   </div>
 </template>
 
