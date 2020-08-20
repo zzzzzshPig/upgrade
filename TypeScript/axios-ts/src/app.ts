@@ -1,4 +1,8 @@
-import base from './examples/base/index'
-// base.url()
+// import base from './examples/base/index'
+import error from './examples/error/index'
 
-base.body()
+// base.url()
+// base.body()
+// base.header()
+// base.response()
+error()
