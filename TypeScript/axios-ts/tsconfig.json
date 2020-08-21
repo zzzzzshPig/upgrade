@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -11,7 +12,10 @@
       "esnext",
       "dom"
     ],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": [
     "src/**/*.ts",

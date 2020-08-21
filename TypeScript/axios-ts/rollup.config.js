@@ -3,6 +3,7 @@ import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import commonjs from '@rollup/plugin-commonjs'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
+import alias from '@rollup/plugin-alias'
 
 export default {
     input: 'src/app.ts',
@@ -21,6 +22,11 @@ export default {
             port: 8000,
             contentBase: ''
         }),
-        livereload()
+        livereload(),
+        alias({
+            entries: [
+                { find: '@', replacement: './src' }
+            ]
+        })
     ]
 }
