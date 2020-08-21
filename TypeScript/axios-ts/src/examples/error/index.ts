@@ -1,6 +1,6 @@
-import axios from '../../index'
-import config from '../config'
-import { AxiosError } from '../../helpers/error'
+import axios from '@/index'
+import config from '@/examples/config'
+import { AxiosError } from '@/helpers/error'
 
 export default function start () {
     axios({

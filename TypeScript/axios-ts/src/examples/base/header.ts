@@ -1,5 +1,5 @@
-import axios from '../../index'
-import config from '../config'
+import axios from '@/index'
+import config from '@/examples/config'
 
 export default function start () {
     axios({
