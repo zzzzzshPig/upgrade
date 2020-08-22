@@ -10,13 +10,28 @@ export default function start () {
         }
     })
 
+    axios(`${config.baseUrl}/extend/post`, {
+        method: 'post',
+        data: {
+            msg: 'hello'
+        }
+    })
+
+    /*    axios({
+        url: `${config.baseUrl}/extend/post`,
+        method: 'post',
+        data: {
+            msg: 'hi'
+        }
+    })
+
     axios.request({
         url: `${config.baseUrl}/extend/post`,
         method: 'post',
         data: {
             msg: 'hello'
         }
-    })
+    }) */
 
     axios.get(`${config.baseUrl}/extend/get`)
 

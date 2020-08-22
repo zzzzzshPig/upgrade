@@ -1,10 +1,18 @@
 import xhr from '@/core/xhr'
-import { AxiosRequestConfig } from '@/types/index.ts'
+import { AxiosRequestConfig, BaseFunction } from '@/types/index.ts'
 import { processConfig, transformResponseHeader, transformResponseData } from '@/helpers/config'
 
 export default function getBase () {
-    function Base (config: AxiosRequestConfig) {
-        return Base.request(config)
+    const Base: BaseFunction = function (url: string | AxiosRequestConfig, config?: Omit<AxiosRequestConfig, 'url'>) {
+        let conf = (config || {}) as AxiosRequestConfig
+
+        if (typeof url === 'string') {
+            conf.url = url
+        } else {
+            conf = url
+        }
+
+        return Base.request(conf)
     }
 
     Base.create = function () {
