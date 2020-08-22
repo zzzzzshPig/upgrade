@@ -3,7 +3,7 @@ import { processHeaders } from '@/helpers/header'
 import { transformRequest } from '@/helpers/data'
 import { buildURL } from '@/helpers/url'
 
-export function processConfig (config: AxiosRequestConfig): void {
+export function processConfig (config: AxiosRequestConfig) {
     config.url = transformUrl(config)
     config.headers = transformHeaders(config)
     config.data = transformRequestData(config)
@@ -14,11 +14,11 @@ export function transformHeaders (config: AxiosRequestConfig) {
     return processHeaders(headers, data)
 }
 
-export function transformRequestData (config: AxiosRequestConfig): any {
+export function transformRequestData (config: AxiosRequestConfig) {
     return transformRequest(config.data)
 }
 
-function transformUrl (config: AxiosRequestConfig): string {
+function transformUrl (config: AxiosRequestConfig) {
     const { url, params } = config
     return buildURL(url, params)
 }

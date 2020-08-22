@@ -29,4 +29,11 @@ router.patch('/extend/patch', function (ctx) {
     ctx.body = ctx.request.body
 })
 
+router.get('/extend/user', function (ctx) {
+    ctx.body = {
+        name: 'zzh',
+        age: 18
+    }
+})
+
 module.exports = router
