@@ -1,5 +1,6 @@
 <template>
-	<Setup setup="ooooook"></Setup>
+<!--	<Setup setup="ooooook"></Setup>-->
+	<BaseReactiveApi></BaseReactiveApi>
 </template>
 
 <script lang="ts" src="./app.ts"></script>
