@@ -1,6 +1,12 @@
 import xhr from '@/core/xhr'
-import { AxiosRequestConfig, BaseFunction } from '@/types/index.ts'
+import { AxiosRequestConfig, BaseFunction, AxiosResponse, ResolvedFn, AxiosPromise, RejectedFn } from '@/types/index.ts'
 import { processConfig, transformResponseHeader, transformResponseData } from '@/helpers/config'
+import InterceptorManager from './interceptor'
+
+interface PromiseChain {
+    resolved: ResolvedFn | ((config: AxiosRequestConfig) => AxiosPromise)
+    rejected?: RejectedFn
+}
 
 export default function getBase () {
     const Base: BaseFunction = function (url: string | AxiosRequestConfig, config?: Omit<AxiosRequestConfig, 'url'>) {
@@ -12,7 +18,32 @@ export default function getBase () {
             conf = url
         }
 
-        return Base.request(conf)
+        const chain: PromiseChain[] = [{
+            resolved: Base.request,
+            rejected: undefined
+        }]
+
+        Base.interceptors.request.forEach(interceptor => {
+            chain.unshift(interceptor)
+        })
+
+        Base.interceptors.response.forEach(interceptor => {
+            chain.push(interceptor)
+        })
+
+        let promise = Promise.resolve(conf)
+
+        while (chain.length) {
+            const { resolved, rejected } = chain.shift()!
+            promise = promise.then(resolved, rejected)
+        }
+
+        return promise as any
+    }
+
+    Base.interceptors = {
+        request: new InterceptorManager<AxiosRequestConfig>(),
+        response: new InterceptorManager<AxiosResponse>()
     }
 
     Base.create = function () {

@@ -2,7 +2,8 @@
 // import error from '@/examples/error/index'
 // import extend from '@/examples/extend/extend'
 // import reload from '@/examples/extend/reload'
-import response from '@/examples/extend/response'
+// import response from '@/examples/extend/response'
+import interceptor from '@/examples/interceptor/index'
 
 // base.url()
 // base.body()
@@ -11,4 +12,5 @@ import response from '@/examples/extend/response'
 // error()
 // extend()
 // reload()
-response()
+// response()
+interceptor()

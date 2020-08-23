@@ -1,3 +1,5 @@
+import InterceptorManager from '@/core/interceptor'
+
 export interface AxiosRequestConfig {
     url: string
     headers?: any
@@ -27,10 +29,31 @@ export type Method = 'get' | 'GET'
     | 'put' | 'PUT'
     | 'patch' | 'PATCH'
 
+export interface AxiosInterceptorManager<T> {
+    use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
+
+    eject(id: number): void
+}
+
+export interface ResolvedFn<T=any> {
+    (val: T): T | Promise<T>
+}
+
+export interface RejectedFn {
+    (error: any): any
+}
+
+interface Interceptors {
+    request: InterceptorManager<AxiosRequestConfig>
+    response: InterceptorManager<AxiosResponse>
+}
+
 export interface BaseFunction {
     <T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
     <T = any>(url: string, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise<T>
+
+    interceptors: Interceptors
 
     create (): BaseFunction
 
