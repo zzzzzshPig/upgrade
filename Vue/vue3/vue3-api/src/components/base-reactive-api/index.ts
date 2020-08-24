@@ -98,7 +98,7 @@ function watchDemo (ref1: Ref<number>, ref2: Ref<string | number>) {
         () => {
             return ref1.value
         },
-        (n, o, clear) => {
+        (n) => {
             console.log('watch1 ' + n)
         },
         {
@@ -109,7 +109,7 @@ function watchDemo (ref1: Ref<number>, ref2: Ref<string | number>) {
     watch(
     	// 直接监听值
     	[ref1, ref2],
-        (n, o, clear) => {
+        (n) => {
             console.log('watch2 ' + n)
         }
     )
