@@ -2,7 +2,8 @@
 <!--	<Setup setup="ooooook"></Setup>-->
 <!--	<BaseReactiveApi></BaseReactiveApi>-->
 <!--	<Lifecycle></Lifecycle>-->
-	<ProvideAndInject></ProvideAndInject>
+<!--	<ProvideAndInject></ProvideAndInject>-->
+	<Refs></Refs>
 </template>
 
 <script lang="ts" src="./app.ts"></script>
