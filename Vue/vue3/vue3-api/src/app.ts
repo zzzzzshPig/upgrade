@@ -4,6 +4,7 @@ import BaseReactiveApi from '@/components/base-reactive-api/index.vue'
 import Lifecycle from '@/components/lifeCycle/index.vue'
 import ProvideAndInject from '@/components/provideAndInject/index.vue'
 import Refs from '@/components/refs/index.vue'
+import Utils from '@/components/utils/index.vue'
 
 export default defineComponent({
     components: {
@@ -11,6 +12,7 @@ export default defineComponent({
         BaseReactiveApi,
         Lifecycle,
         ProvideAndInject,
-        Refs
+        Refs,
+        Utils
     }
 })

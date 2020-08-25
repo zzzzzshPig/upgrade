@@ -3,7 +3,8 @@
 <!--	<BaseReactiveApi></BaseReactiveApi>-->
 <!--	<Lifecycle></Lifecycle>-->
 <!--	<ProvideAndInject></ProvideAndInject>-->
-	<Refs></Refs>
+<!--	<Refs></Refs>-->
+	<Utils></Utils>
 </template>
 
 <script lang="ts" src="./app.ts"></script>
