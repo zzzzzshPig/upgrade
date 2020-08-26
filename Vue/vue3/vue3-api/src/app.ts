@@ -5,6 +5,7 @@ import Lifecycle from '@/components/lifeCycle/index.vue'
 import ProvideAndInject from '@/components/provideAndInject/index.vue'
 import Refs from '@/components/refs/index.vue'
 import Utils from '@/components/utils/index.vue'
+import AdvanceReactiveApi from '@/components/advance-reactive-api/index.vue'
 
 export default defineComponent({
     components: {
@@ -13,6 +14,7 @@ export default defineComponent({
         Lifecycle,
         ProvideAndInject,
         Refs,
-        Utils
+        Utils,
+        AdvanceReactiveApi
     }
 })

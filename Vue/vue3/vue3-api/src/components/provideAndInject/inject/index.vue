@@ -2,7 +2,7 @@
 	<div>
 		injectRef: {{ injectRef }}
 
-		<button @click="changeInject">change injectRef</button> <span style="font-size: 12px;color: red;">这个特性请慎重使用</span>
+		<button @click="changeInject">change injectRef</button> <span class="tips">这个特性请慎重使用</span>
 	</div>
 
 	<div>

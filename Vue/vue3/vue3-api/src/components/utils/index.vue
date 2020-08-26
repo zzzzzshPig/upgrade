@@ -27,11 +27,11 @@
 	</div>
 
 	<div>
-		toRefs2: {{ toRefs2.a }} - {{ toRefs2.b }} <span style="font-size: 12px;color: red;">注意这里的问题，模板没有对.a和.b进行解析</span>
+		toRefs2: {{ toRefs2.a }} - {{ toRefs2.b }} <span class="tips">注意这里的问题，模板没有对.a和.b进行解析</span>
 	</div>
 
 	<div>
-		toRefs3: {{ toRefs3.a }} - {{ toRefs3.b }} <span style="font-size: 12px;color: red;">对toRefs2包裹了一层ref后可以正常解析，应该是bug</span>
+		toRefs3: {{ toRefs3.a }} - {{ toRefs3.b }} <span class="tips">对toRefs2包裹了一层ref后可以正常解析，应该是bug</span>
 	</div>
 
 	<div>
