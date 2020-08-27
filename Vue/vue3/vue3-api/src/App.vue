@@ -4,8 +4,8 @@
 <!--	<Lifecycle></Lifecycle>-->
 <!--	<ProvideAndInject></ProvideAndInject>-->
 <!--	<Refs></Refs>-->
-<!--	<Utils></Utils>-->
-	<AdvanceReactiveApi></AdvanceReactiveApi>
+	<Utils></Utils>
+<!--	<AdvanceReactiveApi></AdvanceReactiveApi>-->
 </template>
 
 <script lang="ts" src="./app.ts"></script>

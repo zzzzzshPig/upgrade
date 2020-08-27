@@ -129,7 +129,7 @@ export default defineComponent({
             ref1,
             ref2,
             ref3,
-            ...computedDemo(ref1), // TODO: type bug, readonly is not equal to ref
+            ...computedDemo(readonly(ref1)), // TODO: type bug, readonly is not equal to ref
             ...readonlyDemo(ref1, ref4)
         }
     }
