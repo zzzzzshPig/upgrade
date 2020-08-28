@@ -3,7 +3,8 @@
 // import extend from '@/examples/extend/extend'
 // import reload from '@/examples/extend/reload'
 // import response from '@/examples/extend/response'
-import interceptor from '@/examples/interceptor/index'
+// import interceptor from '@/examples/interceptor/index'
+import config from '@/examples/config/merge'
 
 // base.url()
 // base.body()
@@ -13,4 +14,5 @@ import interceptor from '@/examples/interceptor/index'
 // extend()
 // reload()
 // response()
-interceptor()
+// interceptor()
+config()

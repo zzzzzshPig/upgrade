@@ -1,16 +1,17 @@
 import xhr from '@/core/xhr'
 import { AxiosRequestConfig, BaseFunction, AxiosResponse, ResolvedFn, AxiosPromise, RejectedFn } from '@/types/index.ts'
-import { processConfig, transformResponseHeader, transformResponseData } from '@/helpers/config'
+import { mergeConfig, processConfig, transformResponseHeader, transformResponseData } from '@/helpers/config'
 import InterceptorManager from './interceptor'
+import defaults from '@/core/default'
 
 interface PromiseChain {
     resolved: ResolvedFn | ((config: AxiosRequestConfig) => AxiosPromise)
     rejected?: RejectedFn
 }
 
-export default function getBase () {
+export default function getBase (initConfig: AxiosRequestConfig) {
     const Base: BaseFunction = function (url: string | AxiosRequestConfig, config?: Omit<AxiosRequestConfig, 'url'>) {
-        let conf = (config || {}) as AxiosRequestConfig
+        let conf = config || {}
 
         if (typeof url === 'string') {
             conf.url = url
@@ -41,20 +42,24 @@ export default function getBase () {
         return promise as any
     }
 
+    Base.defaults = initConfig
+
     Base.interceptors = {
         request: new InterceptorManager<AxiosRequestConfig>(),
         response: new InterceptorManager<AxiosResponse>()
     }
 
-    Base.create = function () {
-        return getBase()
+    Base.create = function (config?: AxiosRequestConfig) {
+        return getBase(config || defaults)
     }
 
     Base.request = function (config: AxiosRequestConfig) {
+        config = mergeConfig(Base.defaults, config)
         processConfig(config)
+
         return xhr(config).then(res => {
             res.headers = transformResponseHeader(res.headers)
-            res.data = transformResponseData(res.data, res.request)
+            res.data = transformResponseData(res.data)
             return res
         })
     }

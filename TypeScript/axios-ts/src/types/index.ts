@@ -1,7 +1,8 @@
 import InterceptorManager from '@/core/interceptor'
 
 export interface AxiosRequestConfig {
-    url: string
+    [propName: string]: any
+    url?: string
     headers?: any
     method?: Method
     data?: any
@@ -52,6 +53,8 @@ export interface BaseFunction {
     <T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
     <T = any>(url: string, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise<T>
+
+    defaults: AxiosRequestConfig
 
     interceptors: Interceptors
 
