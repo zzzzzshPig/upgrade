@@ -1,5 +1,6 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '@/types/index'
 import { createError } from '@/helpers/error'
+import { transformResponseHeader } from '@/helpers/config'
 
 export default function xhr (config: AxiosRequestConfig): AxiosPromise {
     return new Promise((resolve, reject) => {
@@ -37,7 +38,7 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
             // network or timeout error
             if (request.status === 0) return
 
-            const responseHeaders = request.getAllResponseHeaders()
+            const responseHeaders = transformResponseHeader(request.getAllResponseHeaders())
             const responseData = responseType && responseType !== 'text' ? request.response : request.responseText
             const response: AxiosResponse = {
                 data: responseData,

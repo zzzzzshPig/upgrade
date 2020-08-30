@@ -1,18 +1,12 @@
 import { AxiosRequestConfig, Method } from '@/types/index.ts'
-import { processHeaders } from '@/helpers/header'
-import { transformRequest } from '@/helpers/data'
 import { buildURL } from '@/helpers/url'
 import { isPlainObject } from './util'
+import transform from '@/core/transform'
 
 export function processConfig (config: AxiosRequestConfig) {
     config.url = transformUrl(config)
-    config.headers = transformHeaders(config)
-    config.data = transformRequestData(config)
-}
-
-export function transformHeaders (config: AxiosRequestConfig) {
-    const { headers = {}, data } = config
-    return flattenHeaders(processHeaders(headers, data), config.method!)
+    config.data = transform(config.data, config.headers, config.transformRequest)
+    config.headers = flattenHeaders(config.headers, config.method!)
 }
 
 function flattenHeaders (headers: any, method: Method): any {
@@ -28,10 +22,6 @@ function flattenHeaders (headers: any, method: Method): any {
     })
 
     return headers
-}
-
-export function transformRequestData (config: AxiosRequestConfig) {
-    return transformRequest(config.data)
 }
 
 function transformUrl (config: AxiosRequestConfig) {
@@ -50,15 +40,6 @@ export function transformResponseHeader (headers: string) {
         res[key.toLowerCase()] = value
     })
     return res
-}
-
-export function transformResponseData (data: any) {
-    if (typeof data === 'string') {
-        try {
-            data = JSON.parse(data)
-        } catch (e) {}
-    }
-    return data
 }
 
 const strats: {

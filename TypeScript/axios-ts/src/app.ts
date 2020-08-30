@@ -4,7 +4,9 @@
 // import reload from '@/examples/extend/reload'
 // import response from '@/examples/extend/response'
 // import interceptor from '@/examples/interceptor/index'
-import config from '@/examples/config/merge'
+// import config from '@/examples/config/merge'
+// import resAndReq from '@/examples/config/resAndReq'
+import create from '@/examples/config/create'
 
 // base.url()
 // base.body()
@@ -15,4 +17,6 @@ import config from '@/examples/config/merge'
 // reload()
 // response()
 // interceptor()
-config()
+// config()
+// resAndReq()
+create()

@@ -9,6 +9,12 @@ export interface AxiosRequestConfig {
     params?: any
     responseType?: XMLHttpRequestResponseType
     timeout?: number
+    transformRequest?: AxiosTransformer | AxiosTransformer[]
+    transformResponse?: AxiosTransformer | AxiosTransformer[]
+}
+
+export interface AxiosTransformer {
+    (data: any, headers?: any): any
 }
 
 export interface AxiosResponse<T = any> {
@@ -58,7 +64,7 @@ export interface BaseFunction {
 
     interceptors: Interceptors
 
-    create (): BaseFunction
+    create (config?: AxiosRequestConfig): BaseFunction
 
     request <T = any> (config: AxiosRequestConfig): AxiosPromise<T>
 
