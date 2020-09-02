@@ -6,7 +6,8 @@
 // import interceptor from '@/examples/interceptor/index'
 // import config from '@/examples/config/merge'
 // import resAndReq from '@/examples/config/resAndReq'
-import create from '@/examples/config/create'
+// import create from '@/examples/config/create'
+import cancel from '@/examples/cancel/index'
 
 // base.url()
 // base.body()
@@ -19,4 +20,5 @@ import create from '@/examples/config/create'
 // interceptor()
 // config()
 // resAndReq()
-create()
+// create()
+cancel()

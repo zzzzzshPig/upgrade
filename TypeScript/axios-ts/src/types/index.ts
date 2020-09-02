@@ -1,4 +1,6 @@
 import InterceptorManager from '@/core/interceptor'
+import CancelToken from '@/core/cancel/index'
+import Cancel from '@/core/cancel/cancel'
 
 export interface AxiosRequestConfig {
     [propName: string]: any
@@ -11,6 +13,7 @@ export interface AxiosRequestConfig {
     timeout?: number
     transformRequest?: AxiosTransformer | AxiosTransformer[]
     transformResponse?: AxiosTransformer | AxiosTransformer[]
+    cancelToken?: CancelToken
 }
 
 export interface AxiosTransformer {
@@ -63,6 +66,11 @@ export interface BaseFunction {
     defaults: AxiosRequestConfig
 
     interceptors: Interceptors
+
+    // cancel
+    CancelToken: typeof CancelToken
+    Cancel: typeof Cancel
+    isCancel: (value: any) => boolean
 
     create (config?: AxiosRequestConfig): BaseFunction
 

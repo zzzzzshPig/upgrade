@@ -4,6 +4,8 @@ import { mergeConfig, processConfig } from '@/helpers/config'
 import InterceptorManager from './interceptor'
 import defaults from '@/core/default'
 import transform from './transform'
+import CancelToken from './cancel/index'
+import Cancel, { isCancel } from './cancel/cancel'
 
 interface PromiseChain {
     resolved: ResolvedFn | ((config: AxiosRequestConfig) => AxiosPromise)
@@ -43,6 +45,10 @@ export default function getBase (initConfig: AxiosRequestConfig) {
         return promise as any
     }
 
+    Base.CancelToken = CancelToken
+    Base.Cancel = Cancel
+    Base.isCancel = isCancel
+
     Base.defaults = initConfig
 
     Base.interceptors = {
@@ -55,6 +61,9 @@ export default function getBase (initConfig: AxiosRequestConfig) {
     }
 
     Base.request = function (config: AxiosRequestConfig) {
+        if (config.cancelToken) {
+            config.cancelToken.throwIfRequested()
+        }
         config = mergeConfig(Base.defaults, config)
         processConfig(config)
 
