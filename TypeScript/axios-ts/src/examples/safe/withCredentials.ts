@@ -4,7 +4,7 @@ import axios from '@/index'
 export default function start () {
     document.cookie = 'a=b'
 
-    axios.get(`${config.baseUrl}/products/more/get`, {
+    axios.get(`${config.baseUrl}/more/get`, {
         withCredentials: true
     }).then(res => {
         console.log(res)
