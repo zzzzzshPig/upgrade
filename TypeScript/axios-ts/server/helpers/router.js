@@ -1,4 +1,4 @@
-const routers = ['base/url', 'base/body', 'error/index', 'extend/index', 'interceptor/index', 'config/merge', 'cancel/index', 'safe/withCredentials', 'safe/xsrf', 'uploadAndDownload/index']
+const routers = ['base/url', 'base/body', 'error/index', 'extend/index', 'interceptor/index', 'config/merge', 'cancel/index', 'safe/withCredentials', 'safe/xsrf', 'uploadAndDownload/index', 'auth/index']
 
 function getAllRouters () {
     const routes = []

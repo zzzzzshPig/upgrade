@@ -15,6 +15,16 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
             delete headers['Content-Type']
         }
 
+        // auth
+        function auth () {
+            const { auth } = config
+
+            if (auth) {
+                headers.Authorization = 'Basic ' + btoa(auth.username + ':' + auth.password)
+            }
+        }
+        auth()
+
         function timeout () {
             const { timeout } = config
             if (timeout) {
