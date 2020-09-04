@@ -59,5 +59,5 @@ if (
 }
 ```
 
-isReadonly为falses所以后面的条件肯定是true，target[ReactiveFlags.RAW]限制target不能是
+isReadonly为false所以后面的条件肯定是true，target[ReactiveFlags.RAW]限制target不能是
 
