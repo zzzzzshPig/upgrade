@@ -9,7 +9,8 @@
 // import create from '@/examples/config/create'
 // import cancel from '@/examples/cancel/index'
 // import safe from '@/examples/safe/withCredentials'
-import safe from '@/examples/safe/xsrf'
+// import safe from '@/examples/safe/xsrf'
+import uploadAndDownload from '@/examples/uploadAndDownload/index'
 
 // base.url()
 // base.body()
@@ -24,4 +25,5 @@ import safe from '@/examples/safe/xsrf'
 // resAndReq()
 // create()
 // cancel()
-safe()
+// safe()
+uploadAndDownload()

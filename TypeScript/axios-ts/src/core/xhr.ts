@@ -1,61 +1,99 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '@/types/index'
 import { createError } from '@/helpers/error'
 import { transformResponseHeader } from '@/helpers/config'
-import { isURLSameOrigin } from '@/helpers/util'
+import { isURLSameOrigin, isFormData } from '@/helpers/util'
 import cookie from '@/helpers/cookie'
 
 export default function xhr (config: AxiosRequestConfig): AxiosPromise {
     return new Promise((resolve, reject) => {
-        const { data = null, url = '', method = 'get', headers, responseType, timeout, cancelToken, withCredentials, xsrfCookieName, xsrfHeaderName } = config
+        const { data = null, url = '', method = 'get', headers } = config
 
         const request = new XMLHttpRequest()
+        request.open(method.toUpperCase(), url, true)
 
-        // xsrf
-        if ((withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
-            const xsrfValue = cookie.read(xsrfCookieName)
-            if (xsrfValue) {
-                headers[xsrfHeaderName!] = xsrfValue
+        if (isFormData(data)) {
+            delete headers['Content-Type']
+        }
+
+        function timeout () {
+            const { timeout } = config
+            if (timeout) {
+                request.timeout = timeout
+            }
+            request.ontimeout = () => {
+                reject(createError(
+                    `Timeout of ${timeout} ms exceeded`,
+                    config,
+                    undefined,
+                    request
+                ))
             }
         }
+        timeout()
+
+        function responseType () {
+            const { responseType } = config
+            // type
+            if (responseType) {
+                request.responseType = responseType
+            }
+        }
+        responseType()
+
+        // 进度处理
+        function onprogress () {
+            const { onDownloadProgress, onUploadProgress } = config
+
+            if (onDownloadProgress) {
+                request.onprogress = onDownloadProgress
+            }
+
+            if (onUploadProgress) {
+                request.upload.onprogress = onUploadProgress
+            }
+        }
+        onprogress()
+
+        // xsrf
+        function xsrf () {
+            const { xsrfCookieName, xsrfHeaderName } = config
+
+            if ((withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
+                const xsrfValue = cookie.read(xsrfCookieName)
+                if (xsrfValue) {
+                    headers[xsrfHeaderName!] = xsrfValue
+                }
+            }
+        }
+        xsrf()
 
         // cors cookies
-        if (withCredentials) {
-            request.withCredentials = true
+        function withCredentials () {
+            const { withCredentials } = config
+            if (withCredentials) {
+                request.withCredentials = true
+            }
         }
+        withCredentials()
 
         // cancel
-        if (cancelToken) {
-            cancelToken.promise.then(reason => {
-                request.abort()
-                reject(reason)
-            })
+        function cancelToken () {
+            const { cancelToken } = config
+            if (cancelToken) {
+                cancelToken.promise.then(reason => {
+                    request.abort()
+                    reject(reason)
+                })
+            }
         }
-
-        // type
-        if (responseType) {
-            request.responseType = responseType
-        }
-
-        request.open(method.toUpperCase(), url, true)
+        cancelToken()
 
         // set request headers
         setRequestHeader(request, headers)
 
-        // timeout
-        if (timeout) {
-            request.timeout = timeout
-        }
-        request.ontimeout = () => {
-            reject(createError(
-                `Timeout of ${timeout} ms exceeded`,
-                config,
-                undefined,
-                request
-            ))
-        }
-
         request.send(data)
 
+        // onreadystatechange
         request.onreadystatechange = () => {
             if (request.readyState !== 4) return
 
@@ -63,7 +101,7 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
             if (request.status === 0) return
 
             const responseHeaders = transformResponseHeader(request.getAllResponseHeaders())
-            const responseData = responseType && responseType !== 'text' ? request.response : request.responseText
+            const responseData = request.responseType && request.responseType !== 'text' ? request.response : request.responseText
             const response: AxiosResponse = {
                 data: responseData,
                 status: request.status,

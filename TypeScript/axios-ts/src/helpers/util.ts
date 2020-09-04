@@ -4,6 +4,10 @@ export function isDate (val: any): val is Date {
     return toString.call(val) === '[object Date]'
 }
 
+export function isFormData (val: any): boolean {
+    return typeof val !== 'undefined' && val instanceof FormData
+}
+
 // not use object in val
 export function isPlainObject (val: any) {
     return toString.call(val) === '[object Object]'
