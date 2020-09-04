@@ -1,12 +1,27 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '@/types/index'
 import { createError } from '@/helpers/error'
 import { transformResponseHeader } from '@/helpers/config'
+import { isURLSameOrigin } from '@/helpers/util'
+import cookie from '@/helpers/cookie'
 
 export default function xhr (config: AxiosRequestConfig): AxiosPromise {
     return new Promise((resolve, reject) => {
-        const { data = null, url = '', method = 'get', headers, responseType, timeout, cancelToken } = config
+        const { data = null, url = '', method = 'get', headers, responseType, timeout, cancelToken, withCredentials, xsrfCookieName, xsrfHeaderName } = config
 
         const request = new XMLHttpRequest()
+
+        // xsrf
+        if ((withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
+            const xsrfValue = cookie.read(xsrfCookieName)
+            if (xsrfValue) {
+                headers[xsrfHeaderName!] = xsrfValue
+            }
+        }
+
+        // cors cookies
+        if (withCredentials) {
+            request.withCredentials = true
+        }
 
         // cancel
         if (cancelToken) {

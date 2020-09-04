@@ -7,7 +7,9 @@
 // import config from '@/examples/config/merge'
 // import resAndReq from '@/examples/config/resAndReq'
 // import create from '@/examples/config/create'
-import cancel from '@/examples/cancel/index'
+// import cancel from '@/examples/cancel/index'
+// import safe from '@/examples/safe/withCredentials'
+import safe from '@/examples/safe/xsrf'
 
 // base.url()
 // base.body()
@@ -21,4 +23,5 @@ import cancel from '@/examples/cancel/index'
 // config()
 // resAndReq()
 // create()
-cancel()
+// cancel()
+safe()

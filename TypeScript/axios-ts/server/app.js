@@ -1,20 +1,13 @@
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 const { getAllRouters } = require('./helpers/router')
+const cors = require('@koa/cors')
 
 const app = new Koa()
 
-app.use(async (ctx, next) => {
-    ctx.set('Access-Control-Allow-Origin', '*')
-    ctx.set('Access-Control-Allow-Headers', '*')
-    ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS, HEAD, PATCH')
-
-    if (ctx.method === 'OPTIONS') {
-        ctx.body = 200
-    } else {
-        await next()
-    }
-})
+app.use(cors({
+    credentials: true
+}))
 
 app.use(bodyParser())
 
