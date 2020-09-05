@@ -8,11 +8,11 @@
 // import resAndReq from '@/examples/config/resAndReq'
 // import create from '@/examples/config/create'
 // import cancel from '@/examples/cancel/index'
-// import safe from '@/examples/safe/withCredentials'
-// import safe from '@/examples/safe/xsrf'
-// import uploadAndDownload from '@/examples/uploadAndDownload/index'
-// import auth from '@/examples/auth/index'
-import httpStatus from '@/examples/httpStatus/index'
+// import safe from '@/examples/more/safe/withCredentials'
+// import safe from '@/examples/more/safe/xsrf'
+// import uploadAndDownload from '@/examples/more/uploadAndDownload/index'
+// import auth from '@/examples/more/auth/index'
+import httpStatus from '@/examples/more/httpStatus/index'
 
 // base.url()
 // base.body()
