@@ -13,7 +13,8 @@
 // import uploadAndDownload from '@/examples/more/uploadAndDownload/index'
 // import auth from '@/examples/more/auth/index'
 // import httpStatus from '@/examples/more/httpStatus/index'
-import paramsNormalize from '@/examples/more/paramsNormalize/index'
+// import paramsNormalize from '@/examples/more/paramsNormalize/index'
+import baseUrl from '@/examples/more/baseUrl/index'
 
 // base.url()
 // base.body()
@@ -32,4 +33,5 @@ import paramsNormalize from '@/examples/more/paramsNormalize/index'
 // uploadAndDownload()
 // auth()
 // httpStatus()
-paramsNormalize()
+// paramsNormalize()
+baseUrl()

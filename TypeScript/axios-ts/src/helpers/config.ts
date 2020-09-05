@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, Method } from '@/types/index.ts'
 import { buildURL } from '@/helpers/url'
-import { isPlainObject } from './util'
+import { isPlainObject, isAbsoluteURL, combineURL } from './util'
 import transform from '@/core/transform'
 
 export function processConfig (config: AxiosRequestConfig) {
@@ -25,7 +25,12 @@ function flattenHeaders (headers: any, method: Method): any {
 }
 
 function transformUrl (config: AxiosRequestConfig) {
-    const { url = '', params, paramsSerializer } = config
+    let { url = '', params, paramsSerializer, baseURL } = config
+
+    if (baseURL && !isAbsoluteURL(url)) {
+        url = combineURL(baseURL, url)
+    }
+
     return buildURL(url, params, paramsSerializer)
 }
 
