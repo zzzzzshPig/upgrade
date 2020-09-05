@@ -33,6 +33,10 @@ export function isURLSameOrigin (requestURL: string): boolean {
     )
 }
 
+export function isURLSearchParams (val: any): val is URLSearchParams {
+    return typeof val !== 'undefined' && val instanceof URLSearchParams
+}
+
 const urlParsingNode = document.createElement('a')
 const currentOrigin = resolveURL(window.location.href)
 

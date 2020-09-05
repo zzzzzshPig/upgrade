@@ -12,7 +12,8 @@
 // import safe from '@/examples/more/safe/xsrf'
 // import uploadAndDownload from '@/examples/more/uploadAndDownload/index'
 // import auth from '@/examples/more/auth/index'
-import httpStatus from '@/examples/more/httpStatus/index'
+// import httpStatus from '@/examples/more/httpStatus/index'
+import paramsNormalize from '@/examples/more/paramsNormalize/index'
 
 // base.url()
 // base.body()
@@ -30,4 +31,5 @@ import httpStatus from '@/examples/more/httpStatus/index'
 // safe()
 // uploadAndDownload()
 // auth()
-httpStatus()
+// httpStatus()
+paramsNormalize()

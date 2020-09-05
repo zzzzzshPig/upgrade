@@ -25,8 +25,8 @@ function flattenHeaders (headers: any, method: Method): any {
 }
 
 function transformUrl (config: AxiosRequestConfig) {
-    const { url = '', params } = config
-    return buildURL(url, params)
+    const { url = '', params, paramsSerializer } = config
+    return buildURL(url, params, paramsSerializer)
 }
 
 export function transformResponseHeader (headers: string) {
