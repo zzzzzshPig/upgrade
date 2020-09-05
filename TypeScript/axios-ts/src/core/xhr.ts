@@ -6,7 +6,7 @@ import cookie from '@/helpers/cookie'
 
 export default function xhr (config: AxiosRequestConfig): AxiosPromise {
     return new Promise((resolve, reject) => {
-        const { data = null, url = '', method = 'get', headers } = config
+        const { data = null, url = '', method = 'get', headers, validateStatus } = config
 
         const request = new XMLHttpRequest()
         request.open(method.toUpperCase(), url, true)
@@ -123,7 +123,9 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
 
             // error
             // TODO 304状态码应该resolve
-            if (response.status < 200 || response.status >= 300) {
+            if (!validateStatus || validateStatus(response.status)) {
+                resolve(response)
+            } else {
                 reject(createError(
                     `Request failed with status code ${response.status}`,
                     config,
@@ -131,8 +133,6 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
                     request,
                     response
                 ))
-            } else {
-                resolve(response)
             }
         }
 

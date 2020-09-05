@@ -11,7 +11,8 @@
 // import safe from '@/examples/safe/withCredentials'
 // import safe from '@/examples/safe/xsrf'
 // import uploadAndDownload from '@/examples/uploadAndDownload/index'
-import auth from '@/examples/auth/index'
+// import auth from '@/examples/auth/index'
+import httpStatus from '@/examples/httpStatus/index'
 
 // base.url()
 // base.body()
@@ -28,4 +29,5 @@ import auth from '@/examples/auth/index'
 // cancel()
 // safe()
 // uploadAndDownload()
-auth()
+// auth()
+httpStatus()
