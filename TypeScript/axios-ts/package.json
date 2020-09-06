@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
+    "test": "jest --coverage",
     "dev": "npm-run-all --parallel devServer devRollup",
     "devServer": "pm2 kill & pm2 start server/app.js --watch",
     "devRollup": "rollup -c -w"
@@ -14,6 +15,7 @@
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
     "@rollup/plugin-typescript": "^5.0.2",
+    "@types/jest": "^26.0.13",
     "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.4",
     "@typescript-eslint/eslint-plugin": "^3.8.0",
@@ -71,7 +73,37 @@
   ],
   "dependencies": {
     "@koa/cors": "^3.1.0",
+    "jest": "^26.4.2",
+    "jest-config": "^26.4.2",
     "nprogress": "^0.2.0",
-    "qs": "^6.9.4"
+    "qs": "^6.9.4",
+    "ts-jest": "^26.3.0"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testEnvironment": "jsdom",
+    "testRegex": "/test/.*\\.(test|spec)\\.(ts)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    },
+    "collectCoverageFrom": [
+      "src/*.{js,ts}",
+      "src/**/*.{js,ts}"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/boot.ts"
+    ]
   }
 }

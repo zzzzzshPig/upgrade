@@ -1,27 +1,13 @@
-import { AxiosRequestConfig, Method } from '@/types/index.ts'
-import { buildURL } from '@/helpers/url'
-import { isPlainObject, isAbsoluteURL, combineURL } from './util'
+import { AxiosRequestConfig } from '@/types/index.ts'
+import { buildURL, isAbsoluteURL, combineURL } from '@/helpers/url'
+import { isPlainObject, deepMerge } from './util'
 import transform from '@/core/transform'
+import { flattenHeaders } from './header'
 
 export function processConfig (config: AxiosRequestConfig) {
     config.url = transformUrl(config)
     config.data = transform(config.data, config.headers, config.transformRequest)
     config.headers = flattenHeaders(config.headers, config.method!)
-}
-
-function flattenHeaders (headers: any, method: Method): any {
-    if (!headers) {
-        return headers
-    }
-    headers = deepMerge(headers.common || {}, headers[method] || {}, headers)
-
-    const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common']
-
-    methodsToDelete.forEach(method => {
-        delete headers[method]
-    })
-
-    return headers
 }
 
 function transformUrl (config: AxiosRequestConfig) {
@@ -32,19 +18,6 @@ function transformUrl (config: AxiosRequestConfig) {
     }
 
     return buildURL(url, params, paramsSerializer)
-}
-
-export function transformResponseHeader (headers: string) {
-    headers = headers.slice(0, -1)
-
-    const res: any = {}
-    headers.split('\r\n').forEach(a => {
-        const [key, value] = a.split(': ')
-        if (!key || !value) return
-
-        res[key.toLowerCase()] = value
-    })
-    return res
 }
 
 const strats: {
@@ -107,28 +80,4 @@ function deepMergeStrat (val1: any, val2: any) {
     } else if (typeof val1 !== 'undefined') {
         return val1
     }
-}
-
-export function deepMerge (...objs: any[]) {
-    const result = Object.create(null)
-
-    objs.forEach(obj => {
-        if (!obj) { return }
-
-        Object.keys(obj).forEach(key => {
-            const val = obj[key]
-
-            if (isPlainObject(val)) {
-                if (isPlainObject(result[key])) {
-                    result[key] = deepMerge(result[key], val)
-                } else {
-                    result[key] = deepMerge({}, val)
-                }
-            } else {
-                result[key] = val
-            }
-        })
-    })
-
-    return result
 }
