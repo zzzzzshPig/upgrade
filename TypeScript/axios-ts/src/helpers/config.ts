@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from '@/types/index.ts'
+import { AxiosRequestConfig, Method } from '@/types/index.ts'
 import { buildURL, isAbsoluteURL, combineURL } from '@/helpers/url'
 import { isPlainObject, deepMerge } from './util'
 import transform from '@/core/transform'
@@ -8,6 +8,7 @@ export function processConfig (config: AxiosRequestConfig) {
     config.url = transformUrl(config)
     config.data = transform(config.data, config.headers, config.transformRequest)
     config.headers = flattenHeaders(config.headers, config.method!)
+    config.method = config.method && config.method.toLowerCase() as Method
 }
 
 function transformUrl (config: AxiosRequestConfig) {

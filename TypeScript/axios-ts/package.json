@@ -15,6 +15,7 @@
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
     "@rollup/plugin-typescript": "^5.0.2",
+    "@types/jasmine-ajax": "^3.3.1",
     "@types/jest": "^26.0.13",
     "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.4",
@@ -27,6 +28,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "jasmine-ajax": "^4.0.0",
+    "jasmine-core": "^3.6.0",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",
     "koa-bodyparser": "^4.3.0",
@@ -58,7 +61,8 @@
       "no-mixed-spaces-and-tabs": "off",
       "@typescript-eslint/camelcase": "off",
       "no-empty": "off",
-      "@typescript-eslint/no-var-requires": "off"
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/ban-ts-comment": "off"
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -104,6 +108,9 @@
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/test/boot.ts"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
   }
 }
