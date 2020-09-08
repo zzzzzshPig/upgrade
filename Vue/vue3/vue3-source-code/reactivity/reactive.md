@@ -111,7 +111,7 @@ function getTargetType(value: Target) {
 }
 ```
 
-带有ReactiveFlags.SKIP标识的对象会跳过，不是可扩展的对象会返回`TargetType.INVALID`，否则判断数据类型。
+带有ReactiveFlags.SKIP标识的对象或不可扩展的对象会返回`TargetType.INVALID`，否则判断数据类型
 
 ### targetTypeMap
 
