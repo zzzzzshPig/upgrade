@@ -22,27 +22,7 @@ export default function getBase (initConfig: AxiosRequestConfig) {
             conf = url
         }
 
-        const chain: PromiseChain[] = [{
-            resolved: Base.request,
-            rejected: undefined
-        }]
-
-        Base.interceptors.request.forEach(interceptor => {
-            chain.unshift(interceptor)
-        })
-
-        Base.interceptors.response.forEach(interceptor => {
-            chain.push(interceptor)
-        })
-
-        let promise = Promise.resolve(conf)
-
-        while (chain.length) {
-            const { resolved, rejected } = chain.shift()!
-            promise = promise.then(resolved, rejected)
-        }
-
-        return promise as any
+        return Base.request(conf)
     }
 
     Base.CancelToken = CancelToken
@@ -56,11 +36,7 @@ export default function getBase (initConfig: AxiosRequestConfig) {
         response: new InterceptorManager<AxiosResponse>()
     }
 
-    Base.create = function (config: AxiosRequestConfig) {
-        return getBase(mergeConfig(defaults, config))
-    }
-
-    Base.request = function (config: AxiosRequestConfig) {
+    function dispatchRequest (config: AxiosRequestConfig) {
         if (config.cancelToken) {
             config.cancelToken.throwIfRequested()
         }
@@ -71,6 +47,36 @@ export default function getBase (initConfig: AxiosRequestConfig) {
             res.data = transform(res.data, res.headers, res.config.transformResponse)
             return res
         })
+    }
+
+    Base.create = function (config: AxiosRequestConfig) {
+        return getBase(mergeConfig(defaults, config))
+    }
+
+    Base.request = function (config: AxiosRequestConfig) {
+        const chain: PromiseChain[] = [{
+            resolved () {
+                return dispatchRequest(config)
+            },
+            rejected: undefined
+        }]
+
+        Base.interceptors.request.forEach(interceptor => {
+            chain.unshift(interceptor)
+        })
+
+        Base.interceptors.response.forEach(interceptor => {
+            chain.push(interceptor)
+        })
+
+        let promise = Promise.resolve(config)
+
+        while (chain.length) {
+            const { resolved, rejected } = chain.shift()!
+            promise = promise.then(resolved, rejected)
+        }
+
+        return promise as any
     }
 
     Base.delete = function (url: string, config?: AxiosRequestConfig) {
