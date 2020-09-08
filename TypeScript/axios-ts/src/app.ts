@@ -8,8 +8,13 @@
 // import resAndReq from '@/examples/config/resAndReq'
 // import create from '@/examples/config/create'
 // import cancel from '@/examples/cancel/index'
-// import safe from '@/examples/safe/withCredentials'
-import safe from '@/examples/safe/xsrf'
+// import safe from '@/examples/more/safe/withCredentials'
+// import safe from '@/examples/more/safe/xsrf'
+// import uploadAndDownload from '@/examples/more/uploadAndDownload/index'
+// import auth from '@/examples/more/auth/index'
+// import httpStatus from '@/examples/more/httpStatus/index'
+// import paramsNormalize from '@/examples/more/paramsNormalize/index'
+import baseUrl from '@/examples/more/baseUrl/index'
 
 // base.url()
 // base.body()
@@ -24,4 +29,9 @@ import safe from '@/examples/safe/xsrf'
 // resAndReq()
 // create()
 // cancel()
-safe()
+// safe()
+// uploadAndDownload()
+// auth()
+// httpStatus()
+// paramsNormalize()
+baseUrl()

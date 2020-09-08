@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
+    "test": "jest --coverage",
     "dev": "npm-run-all --parallel devServer devRollup",
     "devServer": "pm2 kill & pm2 start server/app.js --watch",
     "devRollup": "rollup -c -w"
@@ -14,6 +15,9 @@
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
     "@rollup/plugin-typescript": "^5.0.2",
+    "@types/jasmine-ajax": "^3.3.1",
+    "@types/jest": "^26.0.13",
+    "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.4",
     "@typescript-eslint/eslint-plugin": "^3.8.0",
     "@typescript-eslint/parser": "^3.8.0",
@@ -24,7 +28,10 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "jasmine-ajax": "^4.0.0",
+    "jasmine-core": "^3.6.0",
     "koa": "^2.13.0",
+    "koa-body": "^4.2.0",
     "koa-bodyparser": "^4.3.0",
     "lib": "^4.3.0",
     "npm-run-all": "^4.1.5",
@@ -54,7 +61,8 @@
       "no-mixed-spaces-and-tabs": "off",
       "@typescript-eslint/camelcase": "off",
       "no-empty": "off",
-      "@typescript-eslint/no-var-requires": "off"
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/ban-ts-comment": "off"
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -69,6 +77,40 @@
   ],
   "dependencies": {
     "@koa/cors": "^3.1.0",
-    "qs": "^6.9.4"
+    "jest": "^26.4.2",
+    "jest-config": "^26.4.2",
+    "nprogress": "^0.2.0",
+    "qs": "^6.9.4",
+    "ts-jest": "^26.3.0"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testEnvironment": "jsdom",
+    "testRegex": "/test/.*\\.(test|spec)\\.(ts)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    },
+    "collectCoverageFrom": [
+      "src/*.{js,ts}",
+      "src/**/*.{js,ts}"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/boot.ts"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
   }
 }

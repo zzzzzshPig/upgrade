@@ -1,7 +1,35 @@
 const toString = Object.prototype.toString
 
+export function deepMerge (...objs: any[]) {
+    const result = Object.create(null)
+
+    objs.forEach(obj => {
+        if (!obj) { return }
+
+        Object.keys(obj).forEach(key => {
+            const val = obj[key]
+
+            if (isPlainObject(val)) {
+                if (isPlainObject(result[key])) {
+                    result[key] = deepMerge(result[key], val)
+                } else {
+                    result[key] = deepMerge({}, val)
+                }
+            } else {
+                result[key] = val
+            }
+        })
+    })
+
+    return result
+}
+
 export function isDate (val: any): val is Date {
     return toString.call(val) === '[object Date]'
+}
+
+export function isFormData (val: any): boolean {
+    return typeof val !== 'undefined' && val instanceof FormData
 }
 
 // not use object in val
@@ -17,27 +45,6 @@ export function extend <T, U> (a: T, b: U): T & U {
     return a as T & U
 }
 
-interface URLOrigin {
-    protocol: string
-    host: string
-}
-
-export function isURLSameOrigin (requestURL: string): boolean {
-    const parsedOrigin = resolveURL(requestURL)
-    return (
-        parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host === currentOrigin.host
-    )
-}
-
-const urlParsingNode = document.createElement('a')
-const currentOrigin = resolveURL(window.location.href)
-
-function resolveURL (url: string): URLOrigin {
-    urlParsingNode.setAttribute('href', url)
-    const { protocol, host } = urlParsingNode
-
-    return {
-        protocol,
-        host
-    }
+export function isURLSearchParams (val: any): val is URLSearchParams {
+    return typeof val !== 'undefined' && val instanceof URLSearchParams
 }

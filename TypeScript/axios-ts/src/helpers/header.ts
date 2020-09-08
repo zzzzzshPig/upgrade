@@ -1,7 +1,38 @@
-import { isPlainObject } from './util'
+import { deepMerge, isPlainObject } from './util'
+import { Method } from '@/types/index.ts'
 
 export const HeaderName = {
     CONTENT_TYPE: 'Content-Type'
+}
+
+export function flattenHeaders (headers: any, method: Method): any {
+    if (!headers) {
+        return headers
+    }
+    headers = deepMerge(headers.common || {}, headers[method] || {}, headers)
+
+    const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common']
+
+    methodsToDelete.forEach(method => {
+        delete headers[method]
+    })
+
+    return headers
+}
+
+export function transformResponseHeader (headers: string) {
+    headers = headers.slice(0, -1)
+
+    const res: any = {}
+    headers.split('\r\n').forEach(a => {
+        let [key, ...values] = a.split(':')
+        key = key.trim().toLowerCase()
+
+        if (!key) return
+
+        res[key.toLowerCase()] = values.join(':').trim()
+    })
+    return res
 }
 
 function normalizeHeaderName (headers: any, normalizedName: string): void {
@@ -19,7 +50,7 @@ function normalizeHeaderName (headers: any, normalizedName: string): void {
 }
 
 export function processHeaders (headers: any, data: any) {
-    if (!headers) return
+    if (!headers) return headers
 
     normalizeHeaderName(headers, HeaderName.CONTENT_TYPE)
 

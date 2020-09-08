@@ -17,6 +17,17 @@ export interface AxiosRequestConfig {
     withCredentials?: boolean
     xsrfCookieName?: string
     xsrfHeaderName?: string
+    onDownloadProgress?: (e: ProgressEvent) => void
+    onUploadProgress?: (e: ProgressEvent) => void
+    auth?: AxiosBasicCredentials
+    validateStatus?: (status: number) => boolean
+    paramsSerializer?: (params: any) => string
+    baseURL?: string
+}
+
+export interface AxiosBasicCredentials {
+    username: string
+    password: string
 }
 
 export interface AxiosTransformer {
@@ -41,12 +52,6 @@ export type Method = 'get' | 'GET'
     | 'post' | 'POST'
     | 'put' | 'PUT'
     | 'patch' | 'PATCH'
-
-export interface AxiosInterceptorManager<T> {
-    use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
-
-    eject(id: number): void
-}
 
 export interface ResolvedFn<T=any> {
     (val: T): T | Promise<T>
