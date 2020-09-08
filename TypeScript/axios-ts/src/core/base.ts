@@ -15,7 +15,7 @@ interface PromiseChain {
 
 export default function getBase (initConfig: AxiosRequestConfig) {
     const Base: BaseFunction = function (url: string | AxiosRequestConfig, config?: AxiosRequestConfig) {
-        let conf = config || {}
+        let conf = config || initConfig || {}
 
         if (typeof url === 'string') {
             conf.url = url
@@ -58,9 +58,7 @@ export default function getBase (initConfig: AxiosRequestConfig) {
 
     Base.request = function (config: AxiosRequestConfig) {
         const chain: PromiseChain[] = [{
-            resolved () {
-                return dispatchRequest(config)
-            },
+            resolved: dispatchRequest,
             rejected: undefined
         }]
 

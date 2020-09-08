@@ -12,7 +12,7 @@ export function processConfig (config: AxiosRequestConfig) {
 }
 
 function transformHeaders (config: AxiosRequestConfig) {
-    const headers = flattenHeaders(config.headers, config.method!)
+    const headers = flattenHeaders(config.headers, config.method!) || {}
 
     if (config.data === undefined) {
         delete headers['Content-Type']
