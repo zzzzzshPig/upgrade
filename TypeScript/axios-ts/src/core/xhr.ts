@@ -1,4 +1,4 @@
-import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '@/types/index'
+import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '@/types/index.ts'
 import { createError } from '@/helpers/error'
 import { isFormData } from '@/helpers/util'
 import cookie from '@/helpers/cookie'

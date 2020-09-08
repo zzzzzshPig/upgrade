@@ -6,6 +6,7 @@ import defaults from '@/core/default'
 import transform from './transform'
 import CancelToken from './cancel/index'
 import Cancel, { isCancel } from './cancel/cancel'
+import { getUri } from '@/helpers/url'
 
 interface PromiseChain {
     resolved: ResolvedFn | ((config: AxiosRequestConfig) => AxiosPromise)
@@ -30,6 +31,8 @@ export default function getBase (initConfig: AxiosRequestConfig) {
     Base.isCancel = isCancel
 
     Base.defaults = initConfig
+
+    Base.getUri = (config) => getUri(config)
 
     Base.interceptors = {
         request: new InterceptorManager<AxiosRequestConfig>(),

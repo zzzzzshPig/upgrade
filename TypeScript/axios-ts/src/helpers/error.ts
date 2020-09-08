@@ -1,4 +1,4 @@
-import { AxiosRequestConfig, AxiosResponse } from '@/types/index'
+import { AxiosRequestConfig, AxiosResponse } from '@/types/index.ts'
 
 export class AxiosError extends Error {
     isAxiosError: boolean

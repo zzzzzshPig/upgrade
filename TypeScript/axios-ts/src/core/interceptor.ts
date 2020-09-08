@@ -1,4 +1,4 @@
-import { ResolvedFn, RejectedFn } from '@/types/index'
+import { ResolvedFn, RejectedFn } from '@/types/index.ts'
 
 interface Interceptor<T> {
     resolved: ResolvedFn<T>

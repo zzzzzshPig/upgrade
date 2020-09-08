@@ -1,4 +1,12 @@
 import { isDate, isPlainObject, isURLSearchParams } from './util'
+import { AxiosRequestConfig } from '@/types/index.ts'
+
+export function getUri (config: AxiosRequestConfig) {
+    let { baseURL = '', url = '' } = config
+    baseURL[baseURL.length - 1] === '/' && (baseURL = baseURL.slice(0, -1))
+    url[0] === '/' && (url = url.slice(1))
+    return buildURL(`${baseURL}/${url}`, config.params)
+}
 
 export function isAbsoluteURL (url: string): boolean {
     return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url)

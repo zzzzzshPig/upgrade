@@ -1,6 +1,6 @@
-import $ from '../../src/index'
-import { getAjaxRequest } from '../helper'
-import config from '../../src/examples/config'
+import $ from '../src/index'
+import { getAjaxRequest } from './helper'
+import config from '../src/examples/config'
 
 const axios = $.create({
     baseURL: config.baseUrl + '/test'

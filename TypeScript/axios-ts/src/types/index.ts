@@ -79,6 +79,7 @@ export interface BaseFunction {
     CancelToken: typeof CancelToken
     Cancel: typeof Cancel
     isCancel: (value: any) => boolean
+    getUri: (config: AxiosRequestConfig) => string
 
     create (config?: AxiosRequestConfig): BaseFunction
 

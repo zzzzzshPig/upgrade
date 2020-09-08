@@ -9,6 +9,26 @@ router.post('/test/foo', function (ctx) {
     ctx.body = 'success'
 })
 
+router.put('/test/foo', function (ctx) {
+    ctx.body = 'success'
+})
+
+router.patch('/test/foo', function (ctx) {
+    ctx.body = 'success'
+})
+
+router.head('/test/foo', function (ctx) {
+    ctx.body = 'success'
+})
+
+router.delete('/test/foo', function (ctx) {
+    ctx.body = 'success'
+})
+
+router.options('/test/foo', function (ctx) {
+    ctx.body = 'success'
+})
+
 router.post('/test/foo/bar', function (ctx) {
     ctx.body = 'success'
 })
