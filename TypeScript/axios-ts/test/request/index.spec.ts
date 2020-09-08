@@ -1,5 +1,5 @@
 import $ from '../../src/index'
-import { getAjaxRequest } from './helper'
+import { getAjaxRequest } from '../helper'
 import { AxiosError } from '../../src/helpers/error'
 import { AxiosResponse } from '../../src/types'
 import config from '../../src/examples/config'

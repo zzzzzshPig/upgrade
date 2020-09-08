@@ -9,6 +9,10 @@ router.post('/test/foo', function (ctx) {
     ctx.body = 'success'
 })
 
+router.post('/test/foo/bar', function (ctx) {
+    ctx.body = 'success'
+})
+
 router.get('/test/foo/reject', function (ctx) {
     ctx.status = 500
 })

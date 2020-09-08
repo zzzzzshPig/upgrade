@@ -1,7 +1,7 @@
 const toString = Object.prototype.toString
 
 export function deepMerge (...objs: any[]) {
-    const result = Object.create(null)
+    const result = {} as any
 
     objs.forEach(obj => {
         if (!obj) { return }
