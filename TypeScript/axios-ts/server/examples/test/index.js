@@ -29,6 +29,10 @@ router.options('/test/foo', function (ctx) {
     ctx.body = 'success'
 })
 
+router.get('/test/foo/bar', function (ctx) {
+    ctx.body = 'success'
+})
+
 router.post('/test/foo/bar', function (ctx) {
     ctx.body = 'success'
 })
