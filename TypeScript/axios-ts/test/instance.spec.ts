@@ -22,7 +22,7 @@ describe('instance', () => {
         instance('/foo')
 
         return getAjaxRequest().then(request => {
-            expect(request.url).toBe('/foo')
+            expect(request.url).toBe(`${config.baseUrl}/test/foo`)
         })
     })
 
@@ -32,7 +32,7 @@ describe('instance', () => {
         instance.get('/foo')
 
         return getAjaxRequest().then(request => {
-            expect(request.url).toBe('/foo')
+            expect(request.url).toBe(`${config.baseUrl}/test/foo`)
             expect(request.method).toBe('GET')
         })
     })

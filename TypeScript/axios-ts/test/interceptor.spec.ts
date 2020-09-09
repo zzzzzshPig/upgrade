@@ -45,7 +45,7 @@ describe('interceptors', () => {
 
         return getAjaxRequest().then(request => {
             expect(request.method).toBe('POST')
-            expect(request.url).toBe('/bar')
+            expect(request.url).toBe(`${config.baseUrl}/test/bar`)
         })
     })
 

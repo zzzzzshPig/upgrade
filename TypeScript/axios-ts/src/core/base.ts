@@ -2,7 +2,6 @@ import xhr from '@/core/xhr'
 import { AxiosRequestConfig, BaseFunction, AxiosResponse, ResolvedFn, AxiosPromise, RejectedFn } from '@/types/index.ts'
 import { mergeConfig, processConfig } from '@/helpers/config'
 import InterceptorManager from './interceptor'
-import defaults from '@/core/default'
 import transform from './transform'
 import CancelToken from './cancel/index'
 import Cancel, { isCancel } from './cancel/cancel'
@@ -53,7 +52,7 @@ export default function getBase (initConfig: AxiosRequestConfig) {
     }
 
     Base.create = function (config: AxiosRequestConfig) {
-        return getBase(mergeConfig(defaults, config))
+        return getBase(mergeConfig(Base.defaults, config))
     }
 
     Base.request = function (config: AxiosRequestConfig) {
