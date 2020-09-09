@@ -65,19 +65,6 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
         }
         onprogress()
 
-        // xsrf
-        function xsrf () {
-            const { xsrfCookieName, xsrfHeaderName } = config
-
-            if ((withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
-                const xsrfValue = cookie.read(xsrfCookieName)
-                if (xsrfValue) {
-                    headers[xsrfHeaderName!] = xsrfValue
-                }
-            }
-        }
-        xsrf()
-
         // cors cookies
         function withCredentials () {
             const { withCredentials } = config
@@ -86,6 +73,19 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
             }
         }
         withCredentials()
+
+        // xsrf
+        function xsrf () {
+            const { xsrfCookieName, xsrfHeaderName } = config
+
+            if ((request.withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
+                const xsrfValue = cookie.read(xsrfCookieName)
+                if (xsrfValue) {
+                    headers[xsrfHeaderName!] = xsrfValue
+                }
+            }
+        }
+        xsrf()
 
         // cancel
         function cancelToken () {
@@ -101,7 +101,6 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
 
         // set request headers
         setRequestHeader(request, headers)
-
         request.send(data)
 
         // onreadystatechange
