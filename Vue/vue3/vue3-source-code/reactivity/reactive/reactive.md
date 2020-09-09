@@ -1,5 +1,9 @@
 文件定义在`packages/reactivity/src/reactive.ts`
 
+# 作用
+
+接收一个普通对象然后返回该普通对象的响应式代理。等同于 2.x 的 `Vue.observable()`
+
 # demo
 
 ```js

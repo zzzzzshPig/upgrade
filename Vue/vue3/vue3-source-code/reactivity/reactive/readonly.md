@@ -1,5 +1,9 @@
 文件定义在`packages/reactivity/src/reactive.ts`
 
+# 作用
+
+传入一个对象（响应式或普通）或 ref，返回一个原始对象的**只读**代理。一个只读的代理是“深层的”，对象内部任何嵌套的属性也都是只读的
+
 # demo
 
 ```js
@@ -35,7 +39,7 @@ export function readonly<T extends object>(
 
 ## createReactiveObject
 
-和reactive的区别在于isReadonly，baseHandlers，collectionHandlers这三个参数不一样，这里只看有影响的地方
+和reactive的区别在于isReadonly，readonlyHandlers，readonlyCollectionHandlers这三个参数不一样，这里只看有影响的地方
 
 ```js
 const proxyMap = isReadonly ? readonlyMap : reactiveMap
