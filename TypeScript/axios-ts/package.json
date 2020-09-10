@@ -107,6 +107,10 @@
       "src/*.{js,ts}",
       "src/**/*.{js,ts}"
     ],
+    "coveragePathIgnorePatterns": [
+      "app.ts",
+      "src/examples"
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/test/boot.ts"
     ],
