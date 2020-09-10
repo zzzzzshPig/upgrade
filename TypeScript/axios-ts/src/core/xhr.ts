@@ -7,7 +7,7 @@ import { isURLSameOrigin } from '@/helpers/url'
 
 export default function xhr (config: AxiosRequestConfig): AxiosPromise {
     return new Promise((resolve, reject) => {
-        const { data = null, url = '', method = 'get', headers, validateStatus } = config
+        const { data = null, url = '', method = 'get', headers, validateStatus, responseType } = config
 
         const request = new XMLHttpRequest()
         request.open(method.toUpperCase(), url, true)
@@ -42,14 +42,13 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
         }
         timeout()
 
-        function responseType () {
-            const { responseType } = config
+        function setResponseType () {
             // type
             if (responseType) {
                 request.responseType = responseType
             }
         }
-        responseType()
+        setResponseType()
 
         // 进度处理
         function onprogress () {
@@ -111,7 +110,7 @@ export default function xhr (config: AxiosRequestConfig): AxiosPromise {
             if (request.status === 0) return
 
             const responseHeaders = transformResponseHeader(request.getAllResponseHeaders())
-            const responseData = request.responseType && request.responseType !== 'text' ? request.response : request.responseText
+            const responseData = responseType !== 'text' ? request.response : request.responseText
             const response: AxiosResponse = {
                 data: responseData,
                 status: request.status,
