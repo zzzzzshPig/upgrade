@@ -12,7 +12,7 @@ reactive({
 })
 ```
 
-# 类型定义
+# 类型
 
 ```js
 export function reactive<T extends object>(target: T): UnwrapNestedRefs<T>
@@ -20,7 +20,7 @@ export function reactive<T extends object>(target: T): UnwrapNestedRefs<T>
 
 使用的是泛型，参数只能object，返回的类型是UnwrapNestedRefs。
 
-# 具体实现
+# 实现
 
 ```js
 export function reactive(target: object) {

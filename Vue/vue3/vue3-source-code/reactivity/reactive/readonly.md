@@ -12,7 +12,7 @@ readonly({
 })
 ```
 
-# 类型定义
+# 类型
 
 ```js
 export function readonly<T extends object>(
@@ -22,7 +22,7 @@ export function readonly<T extends object>(
 
 传入一个`object`，返回`DeepReadonly<UnwrapNestedRefs<T>>`
 
-# 具体实现
+# 实现
 
 ```js
 export function readonly<T extends object>(

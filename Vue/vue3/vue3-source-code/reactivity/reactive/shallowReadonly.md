@@ -12,7 +12,7 @@ shallowReadonly({
 })
 ```
 
-# 类型定义
+# 类型
 
 ```js
 export function shallowReadonly<T extends object>(
@@ -22,7 +22,7 @@ export function shallowReadonly<T extends object>(
 
 传入一个`object`，返回`Readonly<{ [K in keyof T]: UnwrapNestedRefs<T[K]> }>`
 
-# 具体实现
+# 实现
 
 ```js
 export function shallowReadonly<T extends object>(

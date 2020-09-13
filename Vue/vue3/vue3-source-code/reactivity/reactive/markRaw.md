@@ -4,7 +4,7 @@
 
 显式标记一个对象为“永远不会转为响应式代理”，函数返回这个对象本身。
 
-# 类型定义
+# 类型
 
 ```js
 export function markRaw<T extends object>(value: T): T
@@ -12,7 +12,7 @@ export function markRaw<T extends object>(value: T): T
 
 传入`object`，返回`object`
 
-# 具体实现
+# 实现
 
 ```js
 export function markRaw<T extends object>(value: T): T {

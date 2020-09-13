@@ -4,7 +4,7 @@
 
 检查一个对象是否是由 `readonly` 创建的只读代理。
 
-# 类型定义
+# 类型
 
 ```js
 export function isReadonly(value: unknown): boolean 
@@ -12,7 +12,7 @@ export function isReadonly(value: unknown): boolean
 
 传入任意类型，返回`boolean`
 
-# 具体实现
+# 实现
 
 ```js
 export function isReadonly(value: unknown): boolean {
