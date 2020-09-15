@@ -100,7 +100,7 @@ get value() {
 }
 ```
 
-track是debug相关，暂时不看，这里对value的get直接就返回`this._value`
+track是追踪依赖，暂时不看，这里对value的get直接就返回`this._value`
 
 ### set
 

@@ -20,7 +20,7 @@ export type CustomRefFactory<T> = (
 }
 ```
 
-参数是一个工厂函数，有两个参数，`track,trigger`，debug用的先不讨论，工厂函数返回一个有`get,set`属性的对象用以替换默认行为
+参数是一个工厂函数，有两个参数，`track,trigger`，工厂函数返回一个有`get,set`属性的对象用以替换默认行为
 
 # 实现
 
