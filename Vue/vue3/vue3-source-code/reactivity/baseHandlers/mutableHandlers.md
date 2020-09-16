@@ -94,7 +94,7 @@ function createGetter(isReadonly = false, shallow = false) {
 }
 ```
 
-一点点分析，先看开始的判断
+从set函数开始，一点点分析
 
 ```js
 if (key === ReactiveFlags.IS_REACTIVE) {
@@ -205,4 +205,62 @@ if (isObject(res)) {
 ```
 
 如果res是对象，则需要再次进行响应式监听，也就是说只有在用到响应式对象的某个属性的时候才会把属性值转为响应式对象，这是一个`lazyLoad`的概念
+
+## set
+
+### createSetter
+
+```js
+function createSetter(shallow = false) {
+  return function set(
+    target: object,
+    key: string | symbol,
+    value: unknown,
+    receiver: object
+  ): boolean {
+    const oldValue = (target as any)[key]
+    if (!shallow) {
+      value = toRaw(value)
+      if (!isArray(target) && isRef(oldValue) && !isRef(value)) {
+        oldValue.value = value
+        return true
+      }
+    } else {
+      // in shallow mode, objects are set as-is regardless of reactive or not
+    }
+
+    const hadKey =
+      isArray(target) && isIntegerKey(key)
+        ? Number(key) < target.length
+        : hasOwn(target, key)
+    const result = Reflect.set(target, key, value, receiver)
+    // don't trigger if target is something up in the prototype chain of original
+    if (target === toRaw(receiver)) {
+      if (!hadKey) {
+        trigger(target, TriggerOpTypes.ADD, key, value)
+      } else if (hasChanged(value, oldValue)) {
+        trigger(target, TriggerOpTypes.SET, key, value, oldValue)
+      }
+    }
+    return result
+  }
+}
+```
+
+从set函数开始，一点一点分析
+
+```js
+const oldValue = (target as any)[key]
+if (!shallow) {
+  value = toRaw(value)
+  if (!isArray(target) && isRef(oldValue) && !isRef(value)) {
+    oldValue.value = value
+    return true
+  }
+} else {
+  // in shallow mode, objects are set as-is regardless of reactive or not
+}
+```
+
+先获取set之前的值，也就是`oldValue`，对于非shallow的proxy对象来说，先获取`value`的原始值（因为value有可能是一个Vue的响应式对象）
 
