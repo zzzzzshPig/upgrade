@@ -2,12 +2,12 @@
 
 # 作用
 
-做为`createReactiveObject`创建的`proxy`对象的handler
+做为`reactive`中`createReactiveObject`创建的`proxy`对象的handler
 
 # 类型
 
 ```js
-export const mutableHandlers: ProxyHandler<object>ProxyHandler<object>
+export const mutableHandlers: ProxyHandler<object>
 ```
 
 类型是Proxy的第二个参数的类型

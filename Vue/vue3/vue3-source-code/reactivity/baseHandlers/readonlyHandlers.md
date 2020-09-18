@@ -2,7 +2,11 @@
 
 # 作用
 
-做为`createReactiveObject`创建的`proxy`对象的handler
+做为`readonly`中`createReactiveObject`创建的`proxy`对象的handler
+
+# 前言
+
+这里只对比和mutableHandlers的区别，具体的可以查看mutableHandlers.md
 
 # 类型
 
@@ -45,8 +49,6 @@ const readonlyGet = /*#__PURE__*/ createGetter(true)
 ```
 
 ### createGetter
-
-这里只对比和mutableHandlers的区别，具体的可以查看mutableHandlers.md
 
 ```js
 if (!isReadonly) {
