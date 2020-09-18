@@ -31,7 +31,7 @@ export const shallowReactiveHandlers: ProxyHandler<object> = extend(
 
 使用extend继承自mutableHandlers，实际上是
 
-```
+```js
 {
 	get: shallowGet,
   set: shallowSet,
@@ -70,7 +70,7 @@ if (isObject(res)) {
 }
 ```
 
-在这里直接将res进行返回，意思是不自动结构ref，也不进行子对象的代理，符合shallow的特性
+在这里直接将res进行返回，意思是不自动解构ref，也不进行子对象的代理，符合shallow的特性
 
 > 只为某个对象的私有（第一层）属性创建浅层的响应式代理，不会对“属性的属性”做深层次、递归地响应式代理，而只是保留原样。
 
