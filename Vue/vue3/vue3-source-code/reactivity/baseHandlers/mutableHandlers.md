@@ -1,14 +1,8 @@
 定义在`packages/reactivity/src/baseHandlers.ts`
 
-# demo
-
-```js
-reactive({a: 1})
-```
-
 # 作用
 
-在reactive下的`createReactiveObject`中使用，在为`object,array`类型进行`proxy`的时候使用
+做为`createReactiveObject`创建的`proxy`对象的handler
 
 # 类型
 
