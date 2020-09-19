@@ -2,7 +2,7 @@
 
 # 作用
 
-做为`shallowReactive`中`createReactiveObject`创建的`proxy`对象的handler
+做为`shallowReactive`中`createReactiveObject`创建的`proxy`对象的handler，针对`Object，Array`类型
 
 # 前言
 
