@@ -1,4 +1,4 @@
-定义在`packages/reactivity/src/collectionHandlers.ts`
+​	定义在`packages/reactivity/src/collectionHandlers.ts`
 
 # 作用
 
@@ -315,4 +315,109 @@ function add(this: SetTypes, value: unknown) {
 ```
 
 set的add方法，告诉依赖有ADD操作触发
+
+##### delete
+
+```js
+function deleteEntry(this: CollectionTypes, key: unknown) {
+  const target = toRaw(this)
+  const { has, get, delete: del } = getProto(target)
+  let hadKey = has.call(target, key)
+  if (!hadKey) {
+    key = toRaw(key)
+    hadKey = has.call(target, key)
+  } else if (__DEV__) {
+    checkIdentityKeys(target, has, key)
+  }
+
+  const oldValue = get ? get.call(target, key) : undefined
+  // forward the operation before queueing reactions
+  const result = del.call(target, key)
+  if (hadKey) {
+    trigger(target, TriggerOpTypes.DELETE, key, undefined, oldValue)
+  }
+  return result
+}
+```
+
+hadKey部分的逻辑和set的一样，跳过。看下半部分
+
+```js
+const oldValue = get ? get.call(target, key) : undefined
+// forward the operation before queueing reactions
+const result = del.call(target, key)
+if (hadKey) {
+  trigger(target, TriggerOpTypes.DELETE, key, undefined, oldValue)
+}
+return result
+```
+
+通知依赖有DELETE操作触发
+
+##### clear
+
+```js
+function clear(this: IterableCollections) {
+  const target = toRaw(this)
+  const hadItems = target.size !== 0
+  const oldTarget = __DEV__
+    ? target instanceof Map
+      ? new Map(target)
+      : new Set(target)
+    : undefined
+  // forward the operation before queueing reactions
+  const result = getProto(target).clear.call(target)
+  if (hadItems) {
+    trigger(target, TriggerOpTypes.CLEAR, undefined, undefined, oldTarget)
+  }
+  return result
+}
+```
+
+`oldTarget`是调试用的可以不用看，hadItems表示当前clear操作的时候，Map或Set中还有元素，如果存在则通知依赖有CLEAR操作触发
+
+##### forEach
+
+```js
+forEach: createForEach(false, false)
+```
+
+```js
+function createForEach(isReadonly: boolean, isShallow: boolean) {
+  return function forEach(
+    this: IterableCollections,
+    callback: Function,
+    thisArg?: unknown
+  ) {
+    const observed = this as any
+    const target = observed[ReactiveFlags.RAW]
+    const rawTarget = toRaw(target)
+    const wrap = isReadonly ? toReadonly : isShallow ? toShallow : toReactive
+    !isReadonly && track(rawTarget, TrackOpTypes.ITERATE, ITERATE_KEY)
+    return target.forEach((value: unknown, key: unknown) => {
+      // important: make sure the callback is
+      // 1. invoked with the reactive map as `this` and 3rd arg
+      // 2. the value received should be a corresponding reactive/readonly.
+      return callback.call(thisArg, wrap(value), wrap(key), observed)
+    })
+  }
+}
+```
+
+```js
+!isReadonly && track(rawTarget, TrackOpTypes.ITERATE, ITERATE_KEY)
+```
+
+追踪依赖
+
+```js
+return target.forEach((value: unknown, key: unknown) => {
+  // important: make sure the callback is
+  // 1. invoked with the reactive map as `this` and 3rd arg
+  // 2. the value received should be a corresponding reactive/readonly.
+  return callback.call(thisArg, wrap(value), wrap(key), observed)
+})
+```
+
+将子对象变成响应式对象，value和key都尝试转换
 
