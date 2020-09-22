@@ -160,7 +160,7 @@ const rawTarget = toRaw(target)
 const rawKey = toRaw(key)
 ```
 
-获取原始target和key，因为它们有可能是Vue的响应式对象，key也需要toRaw是因为它们有可能是对象
+获取原始target和key，因为它们有可能是Vue的响应式对象，对于`Map`来说，`key`也需要toRaw是因为它们有可能是对象
 
 ```js
 if (key !== rawKey) {
