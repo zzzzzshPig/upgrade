@@ -152,7 +152,7 @@ return vnode.component!.proxy
 
 返回组件对应的代理
 
-## 返回值类型
+## 返回值类型ComponentPublicInstance
 
 返回值就是`vnode.component!.proxy`
 
@@ -210,4 +210,5 @@ return proxy
 # 总结
 
 1. mount中最重要的有两个步骤，一个是`createVnode`，一个是render，第一个是组件对应的`vnode`，第二个是根据`vnode`进行`dom`的渲染，这里我们只了解过程不看具体代码，以后都会看的
+2. 在mount过程中用于创建vnode的`rootComponent`是通过definedComponent定义的，下一节我们来看一下definedComponent
 
