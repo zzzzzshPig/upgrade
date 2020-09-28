@@ -1,4 +1,4 @@
-定义组件的逻辑层所用
+在mount中第一个重要的部分是`createVnode`，而`createVnode`需要用到component，而component是render和逻辑层的组合，render放后面看，先来看看`defineComponent`
 
 定义在`runtime-core/src/apiDefineComponent`
 
@@ -337,6 +337,5 @@ export default defineComponent({
 
 # 总结
 
-1. `defineComponent`作用是为了更好的利用`typescript`进行类型推导，之所以使用函数而不是对象在`Vue3`的[征求意见稿](https://composition-api.vuejs.org/zh/#%E6%9B%B4%E5%A5%BD%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC)中给出了很好的解释
-2. 知道了`rootComponent`后，`createVnode`中最重要的就是创建`vnode`，下一节我们了解`vnode`是怎么生成的
+1. `defineComponent`作用是为了更好的利用`typescript`进行类型推导，之所以使用函数而不是类在`Vue3`的[征求意见稿](https://composition-api.vuejs.org/zh/#%E6%9B%B4%E5%A5%BD%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC)中给出了很好的解释
 

@@ -205,6 +205,4 @@ return app
 # 总结
 
 1. `createApp`会创建一个新的`Vue`实例，在`create`的过程中会创建patch，render，update等等函数，最后在mount中调用render函数从而调用创建的众多函数
-2. `creataApp`第一次调用会创建`render`，后续调用会返回之前的`render`，但是返回的`vue`实例都是新的
-3. 对于`app`的初始化操作完成后，之后内容就在mount被触发的时候才会被调用，下一节看一下mount
 
