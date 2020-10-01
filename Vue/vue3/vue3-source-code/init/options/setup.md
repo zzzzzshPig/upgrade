@@ -194,5 +194,5 @@ setupRenderEffect(
 
 # 总结
 
-2. setup函数，在执行期间会暂停`track`，相当于是一个小优化。setup的返回值会被设置为reactive对象，放到`instance.setupState`中
-
+1. 对于defineComponent返回值的处理大部分是在render函数中，里面有对vue2.x的兼容
+2. 对于setup函数，在执行期间会暂停`track`，相当于是一个小优化，setup的返回值会被设置为reactive对象，放到`instance.setupState`中
