@@ -102,7 +102,7 @@ export function setupComponent(
 }
 ```
 
-isInSSRComponentSetup为false，`shapeFlag`是`ShapeFlags.STATEFUL_COMPONENT`，initProps和initSlots是对props和slots进行处理，这里的slots其实就是组件的children，具体代码先不讨论，继续往下看
+isInSSRComponentSetup为false，`shapeFlag`是`ShapeFlags.STATEFUL_COMPONENT`，initProps和initSlots是对components的props和slots进行处理，具体代码先不讨论，继续往下看
 
 ```js
 const setupResult = isStateful
