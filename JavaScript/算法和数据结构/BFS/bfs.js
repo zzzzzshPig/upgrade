@@ -270,3 +270,36 @@ var largestValues = function(root) {
 
     return res
 }
+
+// 1306. 跳跃游戏 III
+var canReach = function(arr, start) {
+    const bfs = [start]
+    const visited = [start]
+
+    while (bfs.length) {
+        const len = bfs.length
+
+        for (let i = 0; i < len; i++) {
+            const cur = bfs.shift()
+
+            if (arr[cur] === 0) {
+                return true
+            }
+
+            // i + arr[i]
+            const advance = cur + arr[cur]
+            if (advance < arr.length && !visited.includes(advance)) {
+                visited.push(advance)
+                bfs.push(advance)
+            }
+
+            const back = cur - arr[cur]
+            if (back >= 0 && !visited.includes(back)) {
+                visited.push(back)
+                bfs.push(back)
+            }
+        }
+    }
+
+    return false
+}
