@@ -245,3 +245,28 @@ var rightSideView = function(root) {
 
     return res
 }
+
+// 515. 在每个树行中找最大值
+var largestValues = function(root) {
+    if (!root) return []
+
+    const bfs = [root]
+    const res = [root.val]
+
+    while (bfs.length) {
+        const len = bfs.length
+
+        for (let i = 0; i < len; i++) {
+            const cur = bfs.shift()
+
+            cur.left && bfs.push(cur.left)
+            cur.right && bfs.push(cur.right)
+        }
+
+        if (bfs.length) {
+            res.push(Math.max(...bfs.map(a => a.val)))
+        }
+    }
+
+    return res
+}
