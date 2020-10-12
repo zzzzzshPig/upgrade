@@ -222,3 +222,26 @@ var updateBoard = function(board, click) {
 
     return board
 }
+
+// 199. 二叉树的右视图
+var rightSideView = function(root) {
+    if (!root) return []
+
+    const bfs = [root]
+    const res = [root.val]
+
+    while (bfs.length) {
+        const len = bfs.length
+
+        for (let i = 0; i < len; i++) {
+            const cur = bfs.shift()
+
+            cur.left && bfs.push(cur.left)
+            cur.right && bfs.push(cur.right)
+        }
+
+        if (bfs.length) res.push(bfs[bfs.length - 1].val)
+    }
+
+    return res
+}
