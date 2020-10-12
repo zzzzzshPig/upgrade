@@ -303,3 +303,33 @@ var canReach = function(arr, start) {
 
     return false
 }
+
+// 103. 二叉树的锯齿形层次遍历
+var zigzagLevelOrder = function(root) {
+    if (!root) return []
+
+    const bfs = [root]
+    const res = []
+
+    while (bfs.length) {
+        const len = bfs.length
+
+        const layer = []
+        for (let i = 0; i < len; i++) {
+            const cur = bfs.shift()
+
+            if (res.length % 2 === 1) {
+                layer.unshift(cur.val)
+            } else {
+                layer.push(cur.val)
+            }
+
+            cur.left && bfs.push(cur.left)
+            cur.right && bfs.push(cur.right)
+        }
+
+        res.push(layer)
+    }
+
+    return res
+}
