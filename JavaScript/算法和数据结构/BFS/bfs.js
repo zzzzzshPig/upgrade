@@ -116,3 +116,33 @@ var findBottomLeftValue = function(root) {
         }
     }
 };
+
+// 1161. 最大层内元素和
+var maxLevelSum = function(root) {
+    const bfs = [root]
+    let res_max = -Infinity
+    let res = 1
+    let step = 1
+
+    while (bfs.length) {
+        const len = bfs.length
+
+        let max = 0
+        for (let i = 0; i < len; i++) {
+            const cur = bfs.shift()
+            max += cur.val
+
+            cur.left && bfs.push(cur.left)
+            cur.right && bfs.push(cur.right)
+        }
+
+        if (max > res_max) {
+            res_max = max
+            res = step
+        }
+
+        step++
+    }
+
+    return res
+};
