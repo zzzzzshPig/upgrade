@@ -95,3 +95,24 @@ var GetImportance = function(employees, id) {
 
     return res
 };
+
+// 513. 找树左下角的值
+var findBottomLeftValue = function(root) {
+    const bfs = [root]
+
+    while (bfs.length) {
+        const len = bfs.length
+        const res = bfs[0].val
+
+        for (let i = 0; i < len; i++) {
+            const cur = bfs.shift()
+
+            cur.left && bfs.push(cur.left)
+            cur.right && bfs.push(cur.right)
+        }
+
+        if (bfs.length === 0) {
+            return res
+        }
+    }
+};
