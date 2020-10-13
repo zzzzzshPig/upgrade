@@ -21,4 +21,33 @@ var countNegatives = function(grid) {
 
     return res
 }
-console.log(countNegatives([[-1]]))
+
+// 1237. 找出给定方程的正整数解
+var findSolution = function(customfunction, z) {
+    const rule = Array.from({length: z}).map((a, i) => i + 1)
+    const res = []
+
+    let left = 1
+    let right = rule.length
+
+    while (left <= rule.length && right >= 1) {
+        const val = customfunction.f(left, right)
+
+        if (val > z) {
+            right--
+        } else if (val < z) {
+            left++
+        } else if (val === z) {
+            res.push([left, right])
+
+            if (left !== right) {
+                res.push([right, left])
+            }
+
+            left++
+            right--
+        }
+    }
+
+    return res
+}
