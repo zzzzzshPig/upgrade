@@ -92,4 +92,21 @@ var kWeakestRows = function(mat, k) {
         }
     }
 }
-console.log(kWeakestRows([[1,1,0,0,0],[1,1,1,1,0],[1,0,0,0,0],[1,1,0,0,0],[1,1,1,1,1]], 3))
+
+// 374. 猜数字大小 标准的二分查找，还有三分查找 详细可以查看官方题解
+var guessNumber = function(n) {
+    let left = 0
+
+    while (left <= n) {
+        const mid = Math.floor(left + (n - left) / 2)
+        const res = guess(mid)
+
+        if (res === 0) {
+            return mid
+        } else if (res === -1) {
+            n = mid - 1
+        } else if (res === 1) {
+            left = mid + 1
+        }
+    }
+}
