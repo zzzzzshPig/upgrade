@@ -51,3 +51,45 @@ var findSolution = function(customfunction, z) {
 
     return res
 }
+
+// 1337. 方阵中战斗力最弱的 K 行
+// 此题和二分的关系可能不是很大，不使用二分查找是可以的
+var kWeakestRows = function(mat, k) {
+    // 以1的数量为索引 行号为值
+    const rule = {}
+
+    mat.forEach((a, i) => {
+        // 使用二分查1有多少个
+        let left = 0
+        let right = a.length - 1
+
+        while (left <= right) {
+            const mid = Math.floor(left + (right - left) / 2)
+
+            if (a[mid] === 1) {
+                left = mid + 1
+            } else if (a[mid] === 0) {
+                right = mid - 1
+            }
+        }
+
+        if(rule[left]) {
+            rule[left].push(i)
+        } else {
+            rule[left] = [i]
+        }
+    })
+
+    const res = []
+    for (let key in rule) {
+        const value = rule[key]
+
+        for (let i = 0; i < value.length; i++) {
+            res.push(value[i])
+
+            k--
+            if (k === 0) return res
+        }
+    }
+}
+console.log(kWeakestRows([[1,1,0,0,0],[1,1,1,1,0],[1,0,0,0,0],[1,1,0,0,0],[1,1,1,1,1]], 3))
