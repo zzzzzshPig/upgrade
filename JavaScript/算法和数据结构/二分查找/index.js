@@ -110,3 +110,21 @@ var guessNumber = function(n) {
         }
     }
 }
+
+// 1111. 有效括号的嵌套深度
+// 语文题 答案不完美 可以优化
+var maxDepthAfterSplit = function(seq) {
+    const flag = [0]
+    const res = [0]
+
+    for (let i = 1; i < seq.length; i++) {
+        if (seq[i] === '(') {
+            flag.push(flag.length % 2)
+            res.push(flag[flag.length - 1])
+        } else if (seq[i] === ')') {
+            res.push(flag.pop())
+        }
+    }
+
+    return res
+}
