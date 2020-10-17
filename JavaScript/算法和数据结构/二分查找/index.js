@@ -156,3 +156,22 @@ var countNodes = function(root) {
         return Math.pow(2, right) + countNodes(root.left)
     }
 }
+
+// 230. 二叉搜索树中第K小的元素
+var kthSmallest = function(root, k) {
+    let res = null
+    let count = 0
+
+    function dg (root) {
+        if (res !== null || root === null) return
+
+        dg(root.left)
+
+        count++
+        if (count === k) res = root.val
+        else dg(root.right)
+    }
+
+    dg(root)
+    return res
+}
