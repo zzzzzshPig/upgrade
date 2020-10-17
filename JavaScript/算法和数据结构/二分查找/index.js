@@ -128,3 +128,31 @@ var maxDepthAfterSplit = function(seq) {
 
     return res
 }
+
+// 22. 完全二叉树的节点个数
+var countNodes = function(root) {
+    if (!root) return 0
+
+    function getLevel (root) {
+        if (!root) return 0
+
+        let res = 1
+
+        while (root.left) {
+            res++
+            root = root.left
+        }
+
+        return res
+    }
+
+    const left = getLevel(root.left)
+    const right = getLevel(root.right)
+
+
+    if (left === right) {
+        return Math.pow(2, left) + countNodes(root.right)
+    } else {
+        return Math.pow(2, right) + countNodes(root.left)
+    }
+}
