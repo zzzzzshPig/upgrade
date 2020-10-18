@@ -175,3 +175,40 @@ var kthSmallest = function(root, k) {
     dg(root)
     return res
 }
+
+// 378. 有序矩阵中第K小的元素
+// 参考官方教程
+var kthSmallest = function(matrix, k) {
+    let l = matrix[0][0]
+    let r = matrix[matrix.length - 1][matrix.length - 1]
+
+    function check (mid) {
+        let i = matrix.length - 1
+        let j = 0
+        let n = 0
+
+        while (i >= 0 && j < matrix.length) {
+            if (matrix[i][j] <= mid) {
+                n += i + 1
+                j++
+            } else {
+                i--
+            }
+        }
+
+        return n >= k
+    }
+
+    while (l < r) {
+        const mid = l + (r - l >> 1)
+
+        if (check(mid)) {
+            r = mid
+        } else {
+            l = mid + 1
+        }
+    }
+
+    return l
+}
+console.log(kthSmallest([[1,5,9],[10,11,13],[12,13,15]], 4))
