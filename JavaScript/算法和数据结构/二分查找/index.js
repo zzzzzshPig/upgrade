@@ -211,4 +211,36 @@ var kthSmallest = function(matrix, k) {
 
     return l
 }
-console.log(kthSmallest([[1,5,9],[10,11,13],[12,13,15]], 4))
+
+// 1011. 在 D 天内送达包裹的能力
+var shipWithinDays = function(weights, D) {
+    let left = Math.max(...weights)
+    let right = weights.reduce((a, b) => a + b)
+
+    function getCount (mid) {
+        let s = 0
+        let res = 1
+        for (let w of weights) {
+            s += w
+
+            if (s > mid) {
+                s = w
+                res++
+            }
+        }
+        return res
+    }
+
+    while (left < right) {
+        const mid = left + (right - left >> 1)
+
+        if (getCount(mid) > D) {
+            left = mid + 1
+        } else {
+            right = mid
+        }
+    }
+
+    return left
+}
+console.log(shipWithinDays([3,2,2,4,1,4], 3))
