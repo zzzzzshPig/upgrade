@@ -243,4 +243,22 @@ var shipWithinDays = function(weights, D) {
 
     return left
 }
-console.log(shipWithinDays([3,2,2,4,1,4], 3))
+
+// 153. 寻找旋转排序数组中的最小值
+var findMin = function(nums) {
+    let l = 0
+    let r = nums.length - 1
+
+    while (l < r) {
+        const m = l + (r - l >> 1)
+
+        if (nums[m] > nums[r]) {
+            l = m + 1
+        } else {
+            r = m
+        }
+    }
+
+    return nums[l]
+}
+console.log(findMin([2,1]))
