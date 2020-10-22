@@ -261,4 +261,39 @@ var findMin = function(nums) {
 
     return nums[l]
 }
-console.log(findMin([2,1]))
+
+// 1552. 两球之间的磁力
+var maxDistance = function(position, m) {
+    position.sort((a, b) => a - b)
+
+    let l = 1
+    let r = position[position.length - 1] - position[0]
+    let res = -1
+
+    function check (mid) {
+        let pre = position[0]
+        let res = 1
+
+        for (let i = 1; i < position.length; i++) {
+            if (position[i] - pre >= mid) {
+                res++
+                pre = position[i]
+            }
+        }
+
+        return res >= m
+    }
+
+    while (l <= r) {
+        const mid = (l + r) / 2
+
+        if (check(mid)) {
+            l = mid + 1
+            res = mid
+        } else {
+            r = mid - 1
+        }
+    }
+
+    return res
+}
