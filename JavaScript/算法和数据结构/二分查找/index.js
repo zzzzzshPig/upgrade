@@ -297,3 +297,21 @@ var maxDistance = function(position, m) {
 
     return res
 }
+
+// 162. 寻找峰值
+var findPeakElement = function(nums) {
+    let l = 0
+    let r = nums.length - 1
+
+    while (l < r) {
+        const m = l + (r - l >> 1)
+
+        if (nums[m] > nums[m + 1]) {
+            r = m
+        } else {
+            l = m + 1
+        }
+    }
+
+    return l
+}
