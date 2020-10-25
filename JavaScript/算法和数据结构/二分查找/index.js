@@ -315,3 +315,31 @@ var findPeakElement = function(nums) {
 
     return l
 }
+
+// 436. 寻找右区间
+var findRightInterval = function(intervals) {
+    // 记录下原始索引
+    intervals.forEach((a, i) => a.push(i))
+    intervals.sort((a, b) => a[0] - b[0])
+
+    const res = []
+    intervals.forEach((a, i) => {
+        let l = i + 1
+        let r = intervals.length - 1
+
+        while (l <= r) {
+            const m = l + (r - l >> 1)
+
+            if (intervals[m][0] >= a[1]) {
+                r = m - 1
+            } else {
+                l = m + 1
+            }
+        }
+
+        res[a[2]] = l === intervals.length ? -1 : intervals[l][2]
+    })
+
+    return res
+}
+console.log(findRightInterval([ [1,4], [2,3], [3,4] ]))
