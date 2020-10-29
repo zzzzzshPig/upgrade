@@ -3,7 +3,7 @@ export const enum trackKey {
     'clearFilterItem' = 'clearFilterItem'
 }
 
-type trackEffectData = {
+type triggerEffectData = {
     [trackKey.filterItemChange]: [{
         id: string
         text: string
@@ -14,10 +14,10 @@ type trackEffectData = {
 
 type trackEffectParams = {
     [trackKey.filterItemChange]: {
-        (...args: trackEffectData[trackKey.filterItemChange]): void
+        (...args: triggerEffectData[trackKey.filterItemChange]): void
     }
     [trackKey.clearFilterItem]: {
-        (...args: trackEffectData[trackKey.clearFilterItem]): void
+        (...args: triggerEffectData[trackKey.clearFilterItem]): void
     }
 }
 
@@ -35,7 +35,7 @@ export function track <T extends trackKey> (key: T, id: string, effect: trackEff
     effectMap.set(key, effectIds)
 }
 
-export function trigger <T extends trackKey> (key: T, id: string, ...data: trackEffectData[T]) {
+export function trigger <T extends trackKey> (key: T, id: string, ...data: triggerEffectData[T]) {
     const effectIds = effectMap.get(key)
     if (!effectIds) return
 
@@ -45,7 +45,7 @@ export function trigger <T extends trackKey> (key: T, id: string, ...data: track
     effects.forEach(a => a(...data))
 }
 
-export function deleteEffectsId (key: trackKey, id: string) {
+export function abort (key: trackKey, id: string) {
     const effectIds = effectMap.get(key)
     if (!effectIds) return
 

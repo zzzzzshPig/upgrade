@@ -1,5 +1,5 @@
 import {defineComponent, onBeforeUnmount, reactive} from 'vue'
-import {deleteEffectsId, track, trackKey} from '@/helpers/bus'
+import {abort, track, trackKey} from '@/helpers/bus'
 
 export default defineComponent({
     setup () {
@@ -15,7 +15,7 @@ export default defineComponent({
         })
 
         onBeforeUnmount(() => {
-            deleteEffectsId(trackKey.filterItemChange, '0')
+            abort(trackKey.filterItemChange, '0')
         })
 
         return {
