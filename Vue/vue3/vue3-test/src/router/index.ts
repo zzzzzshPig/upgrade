@@ -17,6 +17,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/vue-router-next/child/index.vue')
       }
     ]
+  },
+  {
+    path: '/vuex-next',
+    name: 'vuex-next',
+    component: () => import('@/views/vuex-next/index.vue')
   }
 ]
 
