@@ -22,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/vuex-next',
     name: 'vuex-next',
     component: () => import('@/views/vuex-next/index.vue')
+  },
+  {
+    path: '/helpers',
+    name: 'helpers',
+    component: () => import('@/views/helpers/index.vue')
   }
 ]
 
