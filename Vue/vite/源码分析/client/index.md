@@ -349,3 +349,9 @@ function removeStyle(id: string) {
 ```
 
 根据id删除掉对应的style，不同的style对应不同的删除方式
+
+
+
+# 总结
+
+client的vite主要是HMR部分，通过websocket的机制进行文件的更新
