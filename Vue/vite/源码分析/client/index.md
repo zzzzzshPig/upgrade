@@ -1,6 +1,6 @@
 ### 类型定义
 
-```js
+```tsx
 declare const __HMR_PROTOCOL__: string
 declare const __HMR_HOSTNAME__: string
 declare const __HMR_PORT__: string
@@ -27,7 +27,7 @@ interface HotCallback {
 
 ### `__DEFINES__`
 
-```js
+```tsx
 const defines = __DEFINES__
 Object.keys(defines).forEach((key) => {
   const segs = key.split('.')
@@ -49,7 +49,7 @@ Object.keys(defines).forEach((key) => {
 
 ### `__VUE__HMR__RUNTIME`
 
-```js
+```tsx
 declare var __VUE_HMR_RUNTIME__: HMRRuntime
 ```
 
@@ -59,7 +59,7 @@ declare var __VUE_HMR_RUNTIME__: HMRRuntime
 
 ### socket
 
-```js
+```tsx
 // use server configuration, then fallback to inference
 const socketProtocol =
   __HMR_PROTOCOL__ || (location.protocol === 'https:' ? 'wss' : 'ws')
@@ -73,7 +73,7 @@ const socket = new WebSocket(`${socketProtocol}://${socketHost}`, 'vite-hmr')
 
 ### onMessage
 
-```js
+```tsx
 // Listen for messages
 socket.addEventListener('message', async ({ data }) => {
   const payload = JSON.parse(data) as HMRPayload | MultiUpdatePayload
@@ -91,7 +91,7 @@ socket.addEventListener('message', async ({ data }) => {
 
 ### handleMessage
 
-```js
+```tsx
 async function handleMessage(payload: HMRPayload) {
   const { path, changeSrcPath, timestamp } = payload as UpdatePayload
   switch (payload.type) {
@@ -167,7 +167,7 @@ async function handleMessage(payload: HMRPayload) {
 
 ### updateModule
 
-```js
+```tsx
 async function updateModule(
   id: string,
   changedPath: string,
@@ -242,7 +242,7 @@ async function updateModule(
 
 ### onClose
 
-```js
+```tsx
 // ping server
 socket.addEventListener('close', () => {
   console.log(`[vite] server connection lost. polling for restart...`)
@@ -264,7 +264,7 @@ socket.addEventListener('close', () => {
 
 ### Style
 
-```js
+```tsx
 // https://wicg.github.io/construct-stylesheets
 const supportsConstructedSheet = (() => {
   try {
@@ -277,7 +277,7 @@ const supportsConstructedSheet = (() => {
 
 是否支持构造`cssStyleSheet`，如果支持即使用`new CSSStyleSheet`来创建`style`，不支持创建`style dom`
 
-```js
+```tsx
 const sheetsMap = new Map()
 ```
 
@@ -287,7 +287,7 @@ const sheetsMap = new Map()
 
 ### updateStyle
 
-```js
+```tsx
 export function updateStyle(id: string, content: string) {
   let style = sheetsMap.get(id)
   if (supportsConstructedSheet && !content.includes('@import')) {
@@ -329,7 +329,7 @@ export function updateStyle(id: string, content: string) {
 
 ### removeStyle
 
-```js
+```tsx
 function removeStyle(id: string) {
   let style = sheetsMap.get(id)
   if (style) {
