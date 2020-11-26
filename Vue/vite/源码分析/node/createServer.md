@@ -165,7 +165,7 @@ const context: ServerPluginContext = {
 }
 ```
 
-读取vite的配置项后，使用Koa创建实例，调用resolveServer创建对应的https或者http服务，默认是http。解这便创建watcher，用来监听文件变动，然后创建resolver加载器，用来加载各种资源
+读取vite的配置项后，使用Koa创建实例，调用resolveServer创建对应的https或者http服务，默认是http。接着便创建watcher，用来监听文件变动，然后创建resolver加载器，用来加载各种资源
 
 ```tsx
 // attach server context to koa context
@@ -242,7 +242,7 @@ server.once('listening', () => {
 return server
 ```
 
-代理listen并进行代码优化，压缩，清除无用代码减小体积
+代理listen并开启代码优化操作
 
 ### resolveServer
 
