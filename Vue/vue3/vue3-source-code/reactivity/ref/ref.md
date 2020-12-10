@@ -125,4 +125,4 @@ export const hasChanged = (value: any, oldValue: any): boolean =>
 
 ### hasChanged-end
 
-当`newVal`和`_rawValue`不相同的时候替换`_rawValue`和`_value`的值，替换`_value`值的时候，还会再次调用convert一次，对传入的值进行转换。trigger是debug相关，暂时不看
+当`newVal`和`_rawValue`不相同的时候替换`_rawValue`和`_value`的值，替换`_value`值的时候，还会再次调用convert一次，对传入的值进行转换。
