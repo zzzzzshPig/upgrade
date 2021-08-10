@@ -6,14 +6,7 @@ export function useActiveElement<T extends HTMLElement>(options: ConfigurableWin
 
 #### ConfigurableWindow
 
-```typescript
-export interface ConfigurableWindow {
-  /*
-   * Specify a custom `window` instance, e.g. working with iframes or in testing environments.
-   */
-  window?: Window
-}
-```
+参考`../types/index`
 
 ### Content
 
