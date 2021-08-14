@@ -1,0 +1,85 @@
+P17 - 18
+
+中文称一般进行时
+
+动词ing形式，一般情况下直接后面加ing，特殊情况参考P249 5.3
+
+> She's eating -> She + is + eating
+> She isn't reading -> She + is not + reading
+> It's raining -> It + is + raining
+> The sun isn't shining -> The sun + is not + shining
+> They're running -> They + are + running
+> They aren't walking -> They + are not + walking
+> I'm working -> I + am + working
+> I'm not watching TV -> I + am not + watching TV
+> Maria is reading a newspaper -> Maria + is + reading a newspaper
+> She isn't eating -> She + is not + eating
+> The bus is coming -> The bus + is + coming
+> We're having dinner -> We + are + having dinner
+> You're not listening to me -> You + are not + listening to me
+> The children are doing their homework -> The children + are + doing their homework
+> She's wearing a hat -> She + is + wearing a hat
+> They're playing football -> They + are + playing football
+> I'm not watching TV -> I + am not + watching TV
+
+### Exercises
+#### What are these people doing? Use these verbs to complete the sentences
+
+> He is waiting for a bus
+>
+> They are playing football
+>
+> He is lying on the floor
+>
+> They are having breakfast
+>
+> She is sitting on the table
+
+#### Complete the sentences. Use these verbs
+
+> He is cooking
+>
+> You are standing on my foot
+>
+> Somebody are swimming in the river -> is swimming
+>
+> We are staying at the Central Hotel
+>
+> She is having a shower
+>
+> They are building a new hotel
+>
+> I am going now. Goodbye
+
+#### Look at the picture. Write sentences about Jane. Use She's-ing or She isn't-ing
+
+> She is sitting on the floor
+>
+> She isn't reading a book
+>
+> She isn't playing the piano
+>
+> She's lauthing
+>
+> She's wearing a hat
+>
+> She isn't drinking coffee
+
+#### What's happening now? Write true sentences
+
+> I'm sitting on a chair | I'm not sitting on a chair
+>
+> I'm eating | I'm not eating
+>
+> It's rainning | It isn't rainning
+>
+> I'm learning English | I'm not learning English
+>
+> I'm listening to music | I'm not listening to music
+>
+> The sun is shining | The sun isn't shining
+>
+> I'm wearing shoes | I'm not wearing shoes
+>
+> I'm reading a newspaper | I'm not reading a newpaper
+
