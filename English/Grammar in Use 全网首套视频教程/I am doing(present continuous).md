@@ -71,7 +71,7 @@ P17 - 18
 >
 > I'm eating | I'm not eating
 >
-> It's rainning | It isn't rainning
+> It's raining | It isn't raining
 >
 > I'm learning English | I'm not learning English
 >
