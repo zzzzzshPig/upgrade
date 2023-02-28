@@ -1,4 +1,5 @@
-str1 = 'hello python'
+"""测试字符串"""
+STR1 = 'hello python'
 
 # 续行
 print('line1 \
@@ -29,13 +30,13 @@ print("\x48\x65\x6c\x6c\x6f\x20\x57\x6f\x72\x6c\x64\x21")
 print('xiatiao' * 2)
 
 # [] 截取运算
-print(str1[0:len(str1):2])
+print(STR1[0:len(STR1):2])
 
 # in 运算
-print('h' in str1, 'a' in str1)
+print('h' in STR1, 'a' in STR1)
 
 # not in 运算
-print('h' not in str1, 'a' not in str1)
+print('h' not in STR1, 'a' not in STR1)
 
 # r/R 所有的字符串都是直接按照字面的意思来使用，没有转义特殊或不能打印的字符
 print(r'1\n2\n3\n4')
@@ -55,10 +56,10 @@ print(r'1\n2\n3\n4')
 %g	 %f和%e的简写
 %G	 %f 和 %E 的简写
 '''
-print('%s' % (str1))  # hello python
+print('%s' % (STR1))  # hello python
 print('%c' % (72))  # H
 print('%d' % (123.123))  # 123
-print('%u' % (123.123))  # 123
+print('%u' % (+123.123))  # 123
 print('%o' % (72))  # 110
 print('%x' % (15))  # f
 print('%X' % (15))  # F
@@ -76,7 +77,7 @@ TAB ( \t )。
 """)
 
 # f'' 字符串模版
-print(f'{str1} ', f'{1+2=}')
+print(f'{STR1} ', f'{1+2=}')
 
 # 在Python3中，所有的字符串都是Unicode字符串
 print('👋')
