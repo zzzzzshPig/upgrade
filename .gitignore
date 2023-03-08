@@ -4,6 +4,7 @@ node_modules
 dist
 coverage
 .history
+__pycache__
 
 .DS_Store
 /dist
