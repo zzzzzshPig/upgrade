@@ -1,2 +1,3 @@
-import modules.c.c1
-modules.c.c1.c1()
+from modules.a.a1 import a1
+
+a1()
