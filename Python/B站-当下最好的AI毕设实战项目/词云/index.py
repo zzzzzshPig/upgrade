@@ -4,7 +4,7 @@ import jieba
 from PIL import Image
 import numpy as np
 
-text = " ".join(jieba.cut(open("dldd2.txt").read()))
+text = " ".join(jieba.cut(open("dldd2.txt", encoding="utf-8").read()))
 
 mask_image = np.array(Image.open("./mask.png"))
 
