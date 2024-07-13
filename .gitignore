@@ -25,3 +25,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# solidity
+solidity/artifacts
+solidity/cache
